@@ -207,6 +207,11 @@ function renderMealSections(day, dk) {
 
           <!-- TAB: Chercher (OpenFoodFacts) -->
           <div class="meal-tab-pane" data-pane="search" style="display:${activeTab==='search'?'':'none'}">
+            <button class="scan-barcode-btn" onclick="openScanner('${mk}')">
+              <span class="scan-ico">📷</span>
+              <span class="scan-lbl">Scanner un code-barres</span>
+            </button>
+            <div class="off-or">ou</div>
             <div class="off-input-row">
               <input type="text" id="off-q-${mk}" placeholder="Rechercher un aliment..." onkeydown="if(event.key==='Enter') searchOff('${mk}')"/>
               <button class="off-go-btn" onclick="searchOff('${mk}')">Chercher</button>
