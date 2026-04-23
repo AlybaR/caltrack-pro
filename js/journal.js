@@ -334,6 +334,8 @@ function renderFoodList(el, items, mk) {
     items.forEach((f, i) => {
         const isEditing = _editingFood && _editingFood.mk === mk && _editingFood.idx === i;
         const isFav = favs.some(fv => fv.n === f.n);
+        const qty = foodQty(f);
+        const effK = foodKcal(f);
 
         const div = document.createElement('div');
         div.className = 'food-item' + (isEditing ? ' editing' : '');
@@ -341,26 +343,39 @@ function renderFoodList(el, items, mk) {
 
         if (isEditing) {
             div.innerHTML = `
-              <div class="edit-mode-row">
-                 <input type="text" id="edit-n-${mk}-${i}" value="${f.n}" class="edit-input-n" />
-                 <input type="number" id="edit-k-${mk}-${i}" value="${f.k}" class="edit-input-k" />
-                 <button class="btn-save-edit" onclick="saveEdit('${mk}', ${i})">✓</button>
+              <div class="edit-mode-full">
+                 <input type="text" id="edit-n-${mk}-${i}" value="${f.n}" class="edit-input-n" placeholder="Nom" />
+                 <div class="edit-qty-picker">
+                    <span class="edit-qty-label">Quantité :</span>
+                    ${[0.5, 1, 1.5, 2, 3].map(m => `<button class="qty-pill ${qty === m ? 'active' : ''}" onclick="setQty('${mk}', ${i}, ${m})">×${m}</button>`).join('')}
+                    <input type="number" id="edit-q-${mk}-${i}" value="${qty}" step=".1" min=".1" max="20" class="edit-input-q" placeholder="×"
+                           oninput="previewEditKcal('${mk}', ${i})" />
+                 </div>
+                 <div class="edit-kcal-row">
+                    <span class="edit-kcal-label">kcal / unité :</span>
+                    <input type="number" id="edit-k-${mk}-${i}" value="${f.k}" class="edit-input-k" oninput="previewEditKcal('${mk}', ${i})" />
+                    <span class="edit-kcal-total">= <b id="edit-kcal-total-${mk}-${i}">${effK}</b> kcal</span>
+                 </div>
+                 <div class="edit-actions">
+                    <button class="btn-save-edit" onclick="saveEdit('${mk}', ${i})">✓ Valider</button>
+                    <button class="btn-cancel-edit" onclick="cancelEdit()">Annuler</button>
+                 </div>
               </div>`;
-            // auto-focus
             setTimeout(() => {
                 const input = document.getElementById(`edit-n-${mk}-${i}`);
                 if (input) { input.focus(); input.select(); }
             }, 10);
         } else {
             const macroStr = (f.p != null || f.l != null || f.g != null)
-                ? `<span class="food-macros">${f.p != null ? `P${f.p}g` : ''} ${f.l != null ? `L${f.l}g` : ''} ${f.g != null ? `G${f.g}g` : ''}</span>`
+                ? `<span class="food-macros">${f.p != null ? `P${Math.round(f.p * qty)}g` : ''} ${f.l != null ? `L${Math.round(f.l * qty)}g` : ''} ${f.g != null ? `G${Math.round(f.g * qty)}g` : ''}</span>`
                 : '';
+            const qtyBadge = qty !== 1 ? `<span class="qty-badge">×${qty}</span>` : '';
             div.innerHTML = `
               <span class="food-name-wrap" onclick="startEdit('${mk}', ${i})" title="Cliquer pour modifier">
-                <span class="food-name">${f.n}</span>${macroStr}
+                <span class="food-name">${f.n}${qtyBadge}</span>${macroStr}
               </span>
               <span class="food-right">
-                <span class="food-k" onclick="startEdit('${mk}', ${i})">${f.k}</span>
+                <span class="food-k" onclick="startEdit('${mk}', ${i})">${effK}</span>
                 <span class="food-kcal-lbl" onclick="startEdit('${mk}', ${i})">kcal</span>
                 <button class="food-fav ${isFav ? 'active' : ''}" title="Favori" onclick="toggleFav('${f.n}', ${f.k}, ${f.p ?? 'null'}, ${f.l ?? 'null'}, ${f.g ?? 'null'})">⭐</button>
                 <button class="food-del" title="Supprimer" onclick="delFood('${mk}',${i})">✕</button>
@@ -368,6 +383,31 @@ function renderFoodList(el, items, mk) {
         }
         el.appendChild(div);
     });
+}
+
+/* ---------- Quick qty pick (from edit mode) ---------- */
+function setQty(mk, idx, newQty) {
+    const qInput = document.getElementById(`edit-q-${mk}-${idx}`);
+    if (qInput) qInput.value = newQty;
+    // Update active pill state
+    document.querySelectorAll(`.edit-mode-full .qty-pill`).forEach(btn => {
+        btn.classList.toggle('active', parseFloat(btn.textContent.slice(1)) === newQty);
+    });
+    previewEditKcal(mk, idx);
+}
+
+/* ---------- Live preview of effective kcal in edit mode ---------- */
+function previewEditKcal(mk, idx) {
+    const q = parseFloat(document.getElementById(`edit-q-${mk}-${idx}`)?.value) || 1;
+    const k = parseFloat(document.getElementById(`edit-k-${mk}-${idx}`)?.value) || 0;
+    const total = Math.round(k * q);
+    const el = document.getElementById(`edit-kcal-total-${mk}-${idx}`);
+    if (el) el.textContent = total;
+}
+
+function cancelEdit() {
+    _editingFood = null;
+    renderJournal();
 }
 
 /* ---------- Add food ---------- */
@@ -387,13 +427,14 @@ function addFood(mk) {
     nameEl.focus();
 }
 
-function addFoodDirect(mk, n, k, p = null, l = null, g = null) {
+function addFoodDirect(mk, n, k, p = null, l = null, g = null, qty = 1) {
     const dk = getJournalKey();
     const day = getDay(dk);
     const food = { n, k };
     if (p !== null) food.p = p;
     if (l !== null) food.l = l;
     if (g !== null) food.g = g;
+    if (qty !== 1) food.qty = qty;
     day.meals[mk].push(food);
     saveDay(dk, day);
     _editingFood = null;
@@ -409,11 +450,14 @@ function startEdit(mk, idx) {
 function saveEdit(mk, idx) {
     const n = document.getElementById(`edit-n-${mk}-${idx}`).value.trim();
     const k = parseFloat(document.getElementById(`edit-k-${mk}-${idx}`).value);
+    const q = parseFloat(document.getElementById(`edit-q-${mk}-${idx}`).value) || 1;
 
     if (n && !isNaN(k) && k >= 0) {
         const dk = getJournalKey();
         const day = getDay(dk);
-        day.meals[mk][idx] = { n, k };
+        const existing = day.meals[mk][idx] || {};
+        // Preserve macros but don't scale (k stays per-unit)
+        day.meals[mk][idx] = { ...existing, n, k, qty: q };
         saveDay(dk, day);
     }
     _editingFood = null;
@@ -533,16 +577,26 @@ function mergeResults(local, remote) {
 function renderOffResults(el, products, mk) {
     if (!products.length) { el.innerHTML = '<div class="off-error">Aucun résultat.</div>'; return; }
     el.innerHTML = '';
-    products.forEach(p => {
-        const btn = document.createElement('button');
-        btn.className = 'off-result-btn';
-        btn.innerHTML = `<span class="off-r-name">${p.n}</span><span class="off-r-meta">${p.k} kcal · P${p.p}g L${p.l}g G${p.g}g</span>`;
-        btn.onclick = () => {
-            addFoodDirect(mk, p.n + ' (100g)', p.k, p.p, p.l, p.g);
-            const panel = document.getElementById('off-panel-' + mk);
-            if (panel) panel.style.display = 'none';
-        };
-        el.appendChild(btn);
+    products.forEach((p, idx) => {
+        const row = document.createElement('div');
+        row.className = 'off-result-row';
+        row.innerHTML = `
+            <div class="off-result-info">
+                <div class="off-r-name">${p.n}</div>
+                <div class="off-r-meta">${p.k} kcal · P${p.p}g L${p.l}g G${p.g}g <span class="off-r-per">/ 100g</span></div>
+            </div>
+            <div class="off-result-action">
+                <input type="number" class="off-g-input" id="off-g-${mk}-${idx}" value="100" min="1" max="2000" step="10" />
+                <span class="off-g-lbl">g</span>
+                <button class="off-add-btn" data-mk="${mk}" data-idx="${idx}">+ Ajouter</button>
+            </div>`;
+        row.querySelector('.off-add-btn').addEventListener('click', () => {
+            const g = parseFloat(document.getElementById(`off-g-${mk}-${idx}`).value) || 100;
+            const qty = g / 100;
+            // Store base (per 100g) and qty — totalKcal will multiply
+            addFoodDirect(mk, `${p.n} (${g}g)`, p.k, p.p, p.l, p.g, qty);
+        });
+        el.appendChild(row);
     });
 }
 

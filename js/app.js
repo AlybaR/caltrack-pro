@@ -29,8 +29,11 @@ function getDay(dk) {
   return d;
 }
 function saveDay(dk, data) { lsSave('day_' + dk, data); }
+// Portion helpers — qty defaults to 1 for backwards compatibility
+function foodQty(f) { return f.qty || 1; }
+function foodKcal(f) { return Math.round(f.k * foodQty(f)); }
 function totalKcal(day) {
-  return MEAL_KEYS.reduce((s, k) => s + (day.meals[k] || []).reduce((a, f) => a + f.k, 0), 0);
+  return MEAL_KEYS.reduce((s, k) => s + (day.meals[k] || []).reduce((a, f) => a + foodKcal(f), 0), 0);
 }
 function totalBurned(day) {
   return (day.exercises || []).reduce((s, e) => s + e.kcal, 0);
@@ -38,9 +41,10 @@ function totalBurned(day) {
 function totalMacros(day) {
   let p = 0, l = 0, g = 0, tracked = 0;
   MEAL_KEYS.forEach(k => (day.meals[k] || []).forEach(f => {
-    if (f.p != null) { p += f.p; tracked++; }
-    if (f.l != null) l += f.l;
-    if (f.g != null) g += f.g;
+    const q = foodQty(f);
+    if (f.p != null) { p += f.p * q; tracked++; }
+    if (f.l != null) l += f.l * q;
+    if (f.g != null) g += f.g * q;
   }));
   return { p: Math.round(p), l: Math.round(l), g: Math.round(g), tracked };
 }
