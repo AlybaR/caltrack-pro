@@ -372,7 +372,11 @@ button:focus-visible,
   display: flex;
   align-items: stretch;
   padding-bottom: env(safe-area-inset-bottom);
+  overflow-x: auto;
+  scrollbar-width: none;
 }
+.bot-nav::-webkit-scrollbar { display: none; }
+.nav-btn { min-width: 56px; }
 
 .nav-btn {
   flex: 1;
