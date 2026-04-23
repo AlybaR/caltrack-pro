@@ -205,6 +205,7 @@
         <button class="side-nav-btn active" id="sn-dash" onclick="showPage('dash')"><span class="ico">📊</span>Dashboard</button>
         <button class="side-nav-btn" id="sn-journal" onclick="showPage('journal')"><span class="ico">📋</span>Journal</button>
         <button class="side-nav-btn" id="sn-sport" onclick="showPage('sport')"><span class="ico">🏋️</span>Sport</button>
+        <button class="side-nav-btn" id="sn-corps" onclick="showPage('corps')"><span class="ico">📏</span>Corps</button>
         <button class="side-nav-btn" id="sn-poids" onclick="showPage('poids')"><span class="ico">⚖️</span>Poids</button>
         <button class="side-nav-btn" id="sn-suivi" onclick="showPage('suivi')"><span class="ico">📅</span>Suivi</button>
         <button class="side-nav-btn" id="sn-settings" onclick="showPage('settings')"><span class="ico">⚙️</span>Profil</button>
@@ -219,6 +220,7 @@
         <button class="nav-btn" id="nb-journal" onclick="showPage('journal')"> <span
                 class="ico">📋</span>Journal</button>
         <button class="nav-btn" id="nb-sport" onclick="showPage('sport')"> <span class="ico">🏋️</span>Sport</button>
+        <button class="nav-btn" id="nb-corps" onclick="showPage('corps')"> <span class="ico">📏</span>Corps</button>
         <button class="nav-btn" id="nb-poids" onclick="showPage('poids')"> <span class="ico">⚖️</span>Poids</button>
         <button class="nav-btn" id="nb-suivi" onclick="showPage('suivi')"> <span class="ico">📅</span>Suivi</button>
         <button class="nav-btn" id="nb-settings" onclick="showPage('settings')"><span
@@ -386,6 +388,14 @@
     </div>
 
     <!-- ================================================================
+     PAGE: CORPS (mensurations + photos + objectifs)
+     ================================================================ -->
+    <div class="page" id="page-corps">
+        <div class="page-hd"><h2>Corps & Objectifs</h2></div>
+        <div id="corps-section"></div>
+    </div>
+
+    <!-- ================================================================
      PAGE: POIDS
      ================================================================ -->
     <div class="page" id="page-poids">
@@ -550,6 +560,7 @@
     <script src="js/scanner.js"></script>
     <script src="js/recipes.js"></script>
     <script src="js/progression.js"></script>
+    <script src="js/body.js"></script>
     <script src="js/notifications.js"></script>
     <script src="js/app.js"></script>
     <script src="js/wizard.js"></script>
