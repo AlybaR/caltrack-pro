@@ -107,9 +107,18 @@ window.onload = () => {
     if (document.getElementById('page-poids').classList.contains('active')) renderPoids();
     if (document.getElementById('page-suivi').classList.contains('active')) renderSuivi();
   });
-  // PWA — register service worker
+  // PWA — register service worker (auto-reload on new version)
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('./sw.js').catch(() => { });
+    navigator.serviceWorker.register('./sw.js', { updateViaCache: 'none' }).then(reg => {
+      reg.addEventListener('updatefound', () => {
+        const nw = reg.installing;
+        if (!nw) return;
+        nw.addEventListener('statechange', () => {
+          if (nw.state === 'activated') window.location.reload();
+        });
+      });
+      reg.update();
+    }).catch(() => { });
   }
   // PWA — capture install prompt
   window._deferredInstall = null;
