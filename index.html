@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+    <meta name="description" content="CalTrack Pro — Suivi scientifique de calories, macros, poids et hydratation." />
+    <meta name="theme-color" content="#D4633A" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="CalTrack Pro" />
+    <link rel="manifest" href="manifest.json" />
+    <link rel="apple-touch-icon" href="icon-192.png" />
+    <title>🌿 CalTrack Pro</title>
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body>
+
+    <!-- ANIMATED MESH BACKGROUND -->
+    <div class="mesh-bg" aria-hidden="true">
+        <div class="orb orb1"></div>
+        <div class="orb orb2"></div>
+        <div class="orb orb3"></div>
+    </div>
+
+    <!-- ================================================================
+     LANDING PAGE
+     ================================================================ -->
+    <div id="landing">
+        <div class="landing-logo">🌿</div>
+        <h1 class="landing-title">Mange mieux,<br>perds du poids.</h1>
+        <p class="landing-sub">2 minutes par jour pour noter tes repas.<br>On s'occupe du reste — calories, macros, suivi de poids.</p>
+
+        <div class="landing-features">
+            <span class="feat-pill">⚡ Rapide à utiliser</span>
+            <span class="feat-pill">📴 100% hors-ligne</span>
+            <span class="feat-pill">🔒 Données locales</span>
+            <span class="feat-pill">🔥 Streak quotidien</span>
+            <span class="feat-pill">📈 Courbe de poids</span>
+        </div>
+
+        <button class="btn-landing" onclick="startWizard()">Démarrer gratuitement →</button>
+        <button class="btn-landing secondary" id="btn-install" style="display:none" onclick="installApp()">📱 Installer
+            l'application</button>
+        <p class="landing-legal">Aucune inscription. Aucune donnée envoyée. Tout reste sur ton appareil.</p>
+    </div>
+
+    <!-- ================================================================
+     WIZARD
+     ================================================================ -->
+    <div id="wizard" style="display:none;">
+
+        <div style="text-align:center;margin-bottom:20px;">
+            <div style="font-size:2rem;margin-bottom:4px;">🔥</div>
+            <div
+                style="font-family:'Outfit',sans-serif;font-size:1.2rem;font-weight:800;background:linear-gradient(135deg,#D4633A,#B59A82);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">
+                CalTrack Pro</div>
+        </div>
+
+        <div class="wiz-progress">
+            <div class="wiz-dot done current" id="wd1"></div>
+            <div class="wiz-dot" id="wd2"></div>
+            <div class="wiz-dot" id="wd3"></div>
+        </div>
+
+        <!-- STEP 1 — Profil -->
+        <div class="wiz-step active" id="ws1" style="max-width:480px;width:100%;">
+            <div class="wiz-hd">
+                <h2>👤 Ton profil</h2>
+                <p>Les bases pour calculer ton métabolisme</p>
+            </div>
+            <div class="card">
+                <div class="card-t">Informations</div>
+                <label class="lbl">Prénom</label>
+                <input type="text" id="w-name" placeholder="Thomas" />
+                <label class="lbl mt12">Sexe</label>
+                <div class="pills">
+                    <label class="pill-lbl"><input type="radio" name="sexe" value="h" checked><span
+                            class="pill">Homme</span></label>
+                    <label class="pill-lbl"><input type="radio" name="sexe" value="f"><span
+                            class="pill">Femme</span></label>
+                </div>
+                <div class="row2 mt12">
+                    <div>
+                        <label class="lbl">Âge</label>
+                        <input type="number" id="w-age" placeholder="28" min="10" max="100" />
+                        <div class="field-hint" id="hint-w-age"></div>
+                    </div>
+                    <div>
+                        <label class="lbl">Taille (cm)</label>
+                        <input type="number" id="w-height" placeholder="175" min="120" max="250" />
+                        <div class="field-hint" id="hint-w-height"></div>
+                    </div>
+                </div>
+                <div class="row2 mt12">
+                    <div>
+                        <label class="lbl">Poids actuel (kg)</label>
+                        <input type="number" id="w-weight" placeholder="85" step=".1" min="30" max="300" />
+                        <div class="field-hint" id="hint-w-weight"></div>
+                    </div>
+                    <div>
+                        <label class="lbl">Poids cible (kg)</label>
+                        <input type="number" id="w-goal" placeholder="75" step=".1" min="30" max="300" />
+                        <div class="field-hint" id="hint-w-goal"></div>
+                    </div>
+                </div>
+                <div id="imc-badge" class="imc-badge" style="display:none;margin-top:10px;"></div>
+                <label class="lbl mt12">% Masse grasse <span style="color:var(--mut);font-weight:400">(optionnel —
+                        formule Katch-McArdle)</span></label>
+                <input type="number" id="w-bf" placeholder="ex: 22" step=".1" min="3" max="60" />
+            </div>
+            <button class="btn btn-acc" onclick="wizGo2()">Suivant →</button>
+        </div>
+
+        <!-- STEP 2 — Activité -->
+        <div class="wiz-step" id="ws2" style="max-width:480px;width:100%;">
+            <div class="wiz-hd">
+                <h2>🏃 Ton activité</h2>
+                <p>Pour calculer ta dépense énergétique totale</p>
+            </div>
+            <div class="card">
+                <div class="card-t">Niveau d'activité</div>
+                <div class="pills" style="flex-direction:column;gap:8px;">
+                    <label class="pill-lbl" style="width:100%"><input type="radio" name="act" value="1.2"><span
+                            class="pill" style="display:block;border-radius:12px;padding:11px 14px;">🪑 Sédentaire —
+                            bureau, peu ou pas de sport</span></label>
+                    <label class="pill-lbl" style="width:100%"><input type="radio" name="act" value="1.375"><span
+                            class="pill" style="display:block;border-radius:12px;padding:11px 14px;">🚶 Légèrement actif
+                            — 1–2× / semaine</span></label>
+                    <label class="pill-lbl" style="width:100%"><input type="radio" name="act" value="1.55" checked><span
+                            class="pill" style="display:block;border-radius:12px;padding:11px 14px;">🏃 Modérément actif
+                            — 3–4× / semaine</span></label>
+                    <label class="pill-lbl" style="width:100%"><input type="radio" name="act" value="1.725"><span
+                            class="pill" style="display:block;border-radius:12px;padding:11px 14px;">💪 Très actif —
+                            5–6× intensif</span></label>
+                    <label class="pill-lbl" style="width:100%"><input type="radio" name="act" value="1.9"><span
+                            class="pill" style="display:block;border-radius:12px;padding:11px 14px;">🏆 Athlète — sport
+                            quotidien ou travail physique</span></label>
+                </div>
+            </div>
+            <button class="btn btn-acc" onclick="wizGo3()">Suivant →</button>
+            <button class="btn btn-ghost" onclick="wizGo(1,-1)">← Retour</button>
+        </div>
+
+        <!-- STEP 3 — Objectif + Recap -->
+        <div class="wiz-step" id="ws3" style="max-width:480px;width:100%;">
+            <div class="wiz-hd">
+                <h2>🎯 Ton objectif</h2>
+                <p>Calibre ton déficit et tes macros</p>
+            </div>
+            <div class="card">
+                <div class="card-t">Récapitulatif</div>
+                <div class="wiz-summary" id="wiz-recap"></div>
+                <div class="divider"></div>
+                <div class="card-t">Rythme de perte</div>
+                <div class="pills">
+                    <label class="pill-lbl"><input type="radio" name="rythme" value="250"><span class="pill">Doux
+                            −250</span></label>
+                    <label class="pill-lbl"><input type="radio" name="rythme" value="500" checked><span
+                            class="pill">Modéré −500</span></label>
+                    <label class="pill-lbl"><input type="radio" name="rythme" value="750"><span class="pill">Actif
+                            −750</span></label>
+                    <label class="pill-lbl"><input type="radio" name="rythme" value="1000"><span class="pill">Intensif
+                            −1000</span></label>
+                </div>
+                <div class="alert alert-warn" id="rythme-warn" style="display:none;">⚠️ −1000 kcal/j est élevé. Consulte
+                    ton médecin.</div>
+                <div class="divider"></div>
+                <div class="card-t">Répartition macros</div>
+                <div class="pills">
+                    <label class="pill-lbl"><input type="radio" name="mp" value="std" checked><span
+                            class="pill">Standard</span></label>
+                    <label class="pill-lbl"><input type="radio" name="mp" value="lc"><span
+                            class="pill">Low-Carb</span></label>
+                    <label class="pill-lbl"><input type="radio" name="mp" value="keto"><span
+                            class="pill">Keto</span></label>
+                    <label class="pill-lbl"><input type="radio" name="mp" value="hp"><span
+                            class="pill">High-Protein</span></label>
+                </div>
+                <div class="divider"></div>
+                <div class="card-t">Calorie Cycling</div>
+                <p style="font-size:.78rem;color:var(--mut);margin-bottom:8px;">Varie tes calories selon sport vs repos.
+                </p>
+                <div class="pills">
+                    <label class="pill-lbl"><input type="radio" name="cyc" value="off" checked><span
+                            class="pill">Désactivé</span></label>
+                    <label class="pill-lbl"><input type="radio" name="cyc" value="on"><span
+                            class="pill">Activé</span></label>
+                </div>
+            </div>
+            <button class="btn btn-acc" onclick="wizFinish()">🚀 Lancer CalTrack Pro !</button>
+            <button class="btn btn-ghost" onclick="wizGo(2,-1)">← Retour</button>
+        </div>
+    </div>
+
+    <!-- ================================================================
+     SIDE NAV — Desktop (≥1024px)
+     ================================================================ -->
+    <nav class="side-nav" id="side-nav" style="display:none;">
+        <div class="side-nav-logo">
+            <span class="side-nav-logo-icon">🔥</span>
+            <span class="side-nav-logo-text">CalTrack Pro</span>
+        </div>
+        <button class="side-nav-btn active" id="sn-dash" onclick="showPage('dash')"><span class="ico">📊</span>Dashboard</button>
+        <button class="side-nav-btn" id="sn-journal" onclick="showPage('journal')"><span class="ico">📋</span>Journal</button>
+        <button class="side-nav-btn" id="sn-poids" onclick="showPage('poids')"><span class="ico">⚖️</span>Poids</button>
+        <button class="side-nav-btn" id="sn-suivi" onclick="showPage('suivi')"><span class="ico">📅</span>Suivi</button>
+        <button class="side-nav-btn" id="sn-settings" onclick="showPage('settings')"><span class="ico">⚙️</span>Profil</button>
+    </nav>
+
+    <!-- ================================================================
+     BOTTOM NAV
+     ================================================================ -->
+    <nav class="bot-nav" id="bot-nav" style="display:none;">
+        <button class="nav-btn active" id="nb-dash" onclick="showPage('dash')"> <span
+                class="ico">📊</span>Dashboard</button>
+        <button class="nav-btn" id="nb-journal" onclick="showPage('journal')"> <span
+                class="ico">📋</span>Journal</button>
+        <button class="nav-btn" id="nb-poids" onclick="showPage('poids')"> <span class="ico">⚖️</span>Poids</button>
+        <button class="nav-btn" id="nb-suivi" onclick="showPage('suivi')"> <span class="ico">📅</span>Suivi</button>
+        <button class="nav-btn" id="nb-settings" onclick="showPage('settings')"><span
+                class="ico">⚙️</span>Profil</button>
+    </nav>
+
+    <!-- ================================================================
+     PAGE: DASHBOARD
+     ================================================================ -->
+    <div class="page" id="page-dash">
+        <div class="page-hd" style="flex-direction:column;align-items:flex-start;gap:4px;">
+            <div class="dash-greeting" id="dash-greeting"></div>
+            <div class="dash-hd-row">
+                <div class="date" id="dash-date"></div>
+                <div class="dash-streak-chip" id="dash-streak-chip"></div>
+            </div>
+        </div>
+
+        <!-- Calorie Ring hero -->
+        <div class="ring-hero-card card-glow-org" style="margin-bottom:12px;">
+            <div class="ring-outer">
+                <svg width="200" height="200" viewBox="0 0 200 200">
+                    <circle cx="100" cy="100" r="90" fill="none" stroke="rgba(200,81,42,.10)" stroke-width="16" />
+                    <circle cx="100" cy="100" r="90" fill="none" stroke="url(#rg)" stroke-width="16"
+                        stroke-linecap="round" id="ring-cal"
+                        style="stroke-dasharray:565.49;stroke-dashoffset:565.49;transition:stroke-dashoffset .9s cubic-bezier(.32,.72,0,1)" />
+                    <defs>
+                        <linearGradient id="rg" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#C8512A" />
+                            <stop offset="100%" stop-color="#B47420" />
+                        </linearGradient>
+                    </defs>
+                </svg>
+                <div class="ring-inner">
+                    <div class="ring-kcal-left" id="ring-kcal-left">—</div>
+                    <div class="ring-sub" id="ring-sub-txt">kcal restants</div>
+                </div>
+            </div>
+            <div class="stats-grid s4 mt8">
+                <div class="sbox">
+                    <div class="sv text-acc" id="d-target">—</div>
+                    <div class="sl">Objectif</div>
+                </div>
+                <div class="sbox">
+                    <div class="sv" id="d-eaten">0</div>
+                    <div class="sl">Consommé</div>
+                </div>
+                <div class="sbox">
+                    <div class="sv" id="d-burned" style="color:var(--mut)">0</div>
+                    <div class="sl">Brûlé 🔥</div>
+                </div>
+                <div class="sbox">
+                    <div class="sv" id="d-left" style="color:var(--grn)">—</div>
+                    <div class="sl">Restant</div>
+                </div>
+            </div>
+            <details class="dash-details">
+                <summary>Détails métaboliques</summary>
+                <div class="stats-grid s3 mt8">
+                    <div class="sbox">
+                        <div class="sv" id="d-bmr" style="color:var(--pur)">—</div>
+                        <div class="sl">BMR</div>
+                    </div>
+                    <div class="sbox">
+                        <div class="sv" id="d-tdee" style="color:var(--cyan)">—</div>
+                        <div class="sl">TDEE</div>
+                    </div>
+                    <div class="sbox">
+                        <div class="sv" id="d-deficit" style="color:var(--yel)">—</div>
+                        <div class="sl">Déficit</div>
+                    </div>
+                </div>
+            </details>
+        </div>
+
+        <!-- Quick-add shortcut -->
+        <button class="quick-add-btn" onclick="showPage('journal')" aria-label="Ajouter un repas">
+            <span>+</span> Ajouter un repas
+        </button>
+
+        <!-- Macros -->
+        <div class="card card-glow-cyn" style="margin-bottom:12px;">
+            <div class="card-t">🥩 Macros journalières</div>
+            <div class="mbars" id="dash-macros"></div>
+        </div>
+
+        <!-- Water -->
+        <div class="card" style="margin-bottom:12px;">
+            <div class="card-t">💧 Hydratation</div>
+            <div style="font-size:.75rem;color:var(--mut);" id="water-goal-ml"></div>
+            <div class="water-ctrl">
+                <div class="water-btns">
+                    <button class="wbtn" id="water-btn-minus">−</button>
+                    <div class="water-count" id="water-count">0</div>
+                    <button class="wbtn" id="water-btn-plus">+</button>
+                </div>
+                <div class="water-bar-wrap">
+                    <div class="water-bar-bg">
+                        <div class="water-bar-fg" id="water-bar-fg" style="width:0%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Score -->
+        <div class="card card-glow-grn" style="margin-bottom:12px;">
+            <div class="card-t">⭐ Score santé du jour</div>
+            <div class="score-wrap">
+                <div class="score-big" id="score-num">—</div>
+                <div class="score-items" id="score-items"></div>
+            </div>
+        </div>
+
+        <!-- Tip -->
+        <div class="card" style="margin-bottom:12px;">
+            <div class="tip-box" id="dash-tip"></div>
+        </div>
+
+        <!-- Calorie Cycling -->
+        <div class="card" id="cyc-card" style="margin-bottom:12px;display:none;">
+            <div class="card-t">🔄 Calorie Cycling</div>
+            <div class="cyc-scroll">
+                <div class="cyc-grid" id="cyc-grid"></div>
+            </div>
+        </div>
+
+        <div id="dash-alert"></div>
+    </div>
+
+    <!-- ================================================================
+     PAGE: JOURNAL
+     ================================================================ -->
+    <div class="page" id="page-journal">
+        <div class="page-hd">
+            <h2>Journal</h2>
+            <div class="date" id="jour-date"></div>
+        </div>
+        <div class="j-gauge">
+            <div class="j-gauge-num">
+                <div class="jval" id="jg-val">0</div>
+                <div class="jsub" id="jg-pct">0%</div>
+            </div>
+            <div class="j-bar-wrap">
+                <div class="j-bar-bg">
+                    <div class="j-bar-fg" id="jg-bar" style="width:0%"></div>
+                </div>
+                <div class="j-nums">
+                    <span id="jg-eaten">0 kcal</span>
+                    <span id="jg-left">— restants</span>
+                </div>
+            </div>
+        </div>
+        <div id="meals-container"></div>
+
+        <!-- Exercise section -->
+        <div class="ex-section-wrap card" style="margin-top:12px;padding:0;">
+            <div id="exercice-section"></div>
+        </div>
+    </div>
+
+    <!-- ================================================================
+     PAGE: POIDS
+     ================================================================ -->
+    <div class="page" id="page-poids">
+        <div class="page-hd">
+            <h2>Poids</h2>
+        </div>
+        <div class="stats-grid s3" id="poids-stats" style="margin-bottom:14px;"></div>
+        <div class="card" style="margin-bottom:14px;">
+            <div class="card-t">Enregistrer aujourd'hui</div>
+            <div class="w-entry-row">
+                <input type="number" id="w-today" step=".1" placeholder="ex: 84.2" />
+                <button class="btn btn-acc btn-sm" onclick="addWeight()">+ Ajouter</button>
+            </div>
+            <div class="period-btns-wrap">
+                <button class="period-btn active" data-period="7" onclick="setPoidsFilter('7')">7 jours</button>
+                <button class="period-btn" data-period="30" onclick="setPoidsFilter('30')">30 jours</button>
+                <button class="period-btn" data-period="all" onclick="setPoidsFilter('all')">Tout</button>
+            </div>
+            <canvas id="weight-canvas" style="height:240px;"></canvas>
+            <div class="imc-display" id="imc-display"></div>
+        </div>
+        <div class="card">
+            <div class="card-t">Historique</div>
+            <div id="weight-history"></div>
+        </div>
+    </div>
+
+    <!-- ================================================================
+     PAGE: SUIVI
+     ================================================================ -->
+    <div class="page" id="page-suivi">
+        <div class="page-hd">
+            <h2>Suivi</h2>
+        </div>
+        <div class="streak-banner" id="streak-banner"></div>
+        <div class="card" style="margin-bottom:12px;">
+            <div class="card-t">Cette semaine</div>
+            <div class="week-grid" id="week-grid"></div>
+        </div>
+        <div class="stat-big" id="weekly-stats"></div>
+        <div class="card" style="margin-bottom:12px;">
+            <div class="card-t">Calendrier du mois</div>
+            <div class="heatmap-grid" id="month-heatmap"></div>
+        </div>
+        <div class="card" style="margin-bottom:12px;">
+            <div class="card-t">📉 Projection vs Réel</div>
+            <canvas id="proj-canvas" style="height:180px;"></canvas>
+            <div style="display:flex;gap:14px;margin-top:8px;font-size:.7rem;color:var(--mut);">
+                <span>- - Programme théorique</span>
+                <span style="color:var(--acc);">── Réel</span>
+            </div>
+        </div>
+        <div class="card motivation-box">
+            <div class="mot-title">Message du jour</div>
+            <div class="mot-body" id="motivation-box"></div>
+        </div>
+    </div>
+
+    <!-- ================================================================
+     PAGE: SETTINGS
+     ================================================================ -->
+    <div class="page" id="page-settings">
+        <div class="page-hd">
+            <h2>Profil & Réglages</h2>
+        </div>
+
+        <!-- Profile chip -->
+        <div id="settings-profile"></div>
+
+        <!-- Edit -->
+        <div class="card" style="margin-bottom:10px;">
+            <div class="card-t">Mon profil</div>
+            <div class="settings-row" onclick="resetWizard()">
+                <div class="sr-left">
+                    <div class="sr-icon">✏️</div>
+                    <div class="sr-info">
+                        <div class="sr-label">Modifier mon profil</div>
+                        <div class="sr-sub">Poids, objectif, macros, activité</div>
+                    </div>
+                </div>
+                <div class="sr-right">›</div>
+            </div>
+        </div>
+
+        <!-- Data -->
+        <div class="card" style="margin-bottom:10px;">
+            <div class="card-t">Mes données</div>
+            <div class="settings-row" onclick="exportData()">
+                <div class="sr-left">
+                    <div class="sr-icon">📦</div>
+                    <div class="sr-info">
+                        <div class="sr-label">Exporter mes données</div>
+                        <div class="sr-sub">Télécharge un fichier .json de sauvegarde</div>
+                    </div>
+                </div>
+                <div class="sr-right">↓</div>
+            </div>
+            <div class="settings-row" onclick="importData()">
+                <div class="sr-left">
+                    <div class="sr-icon">📂</div>
+                    <div class="sr-info">
+                        <div class="sr-label">Importer une sauvegarde</div>
+                        <div class="sr-sub">Restaure depuis un fichier .json</div>
+                    </div>
+                </div>
+                <div class="sr-right">↑</div>
+            </div>
+        </div>
+
+        <!-- Notifications -->
+        <div class="card" style="margin-bottom:10px;">
+            <div class="card-t">Rappels</div>
+            <div style="font-size:.82rem;color:var(--mut);margin-bottom:12px;">Rappels repas et hydratation (8h → 21h).</div>
+            <div class="settings-row">
+                <div class="sr-left">
+                    <div class="sr-icon">🔔</div>
+                    <div class="sr-info">
+                        <div class="sr-label">Activer les rappels</div>
+                        <div class="sr-sub" id="notif-status">Chargement...</div>
+                    </div>
+                </div>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="notif-toggle" onchange="setNotifEnabled(this.checked)"/>
+                    <span class="toggle-track"></span>
+                </label>
+            </div>
+        </div>
+
+        <!-- Privacy -->
+        <div class="card" style="margin-bottom:10px;">
+            <div class="card-t">Confidentialité</div>
+            <div style="font-size:.82rem;color:var(--mut);line-height:1.6;padding:4px 0;">
+                🔒 Toutes tes données sont stockées <strong style="color:var(--txt)">uniquement sur ton
+                    appareil</strong> (localStorage). Aucune donnée n'est envoyée vers un serveur. Aucune inscription
+                requise.
+            </div>
+        </div>
+
+        <!-- Danger zone -->
+        <div class="card" style="margin-bottom:10px;">
+            <div class="card-t">Zone de danger</div>
+            <button class="btn btn-danger" onclick="resetAllData()">🗑 Effacer toutes mes données</button>
+        </div>
+
+        <!-- PWA Install if available -->
+        <div class="card" id="install-card" style="margin-bottom:10px;display:none;">
+            <div class="card-t">Installation</div>
+            <div style="font-size:.82rem;color:var(--mut);margin-bottom:12px;">Installe CalTrack Pro sur ton écran
+                d'accueil pour l'utiliser comme une vraie app, même sans connexion.</div>
+            <button class="btn btn-acc" onclick="installApp()">📱 Installer l'application</button>
+        </div>
+
+        <div class="app-version">CalTrack Pro v3.0.0 — Toutes tes données restent chez toi 🔒</div>
+    </div>
+
+    <!-- ================================================================
+     SCRIPTS
+     ================================================================ -->
+    <script src="js/foods.js"></script>
+    <script src="js/exercice.js"></script>
+    <script src="js/notifications.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/wizard.js"></script>
+    <script src="js/dashboard.js"></script>
+    <script src="js/journal.js"></script>
+    <script src="js/poids.js"></script>
+    <script src="js/suivi.js"></script>
+    <script src="js/settings.js"></script>
+    <script>
+        // Wire wizard listeners
+        window.addEventListener('DOMContentLoaded', initWizardListeners);
+
+        // Landing → Wizard
+        function startWizard() {
+            document.getElementById('landing').style.display = 'none';
+            document.getElementById('wizard').style.display = 'flex';
+        }
+
+        // PWA install
+        function installApp() {
+            if (!window._deferredInstall) return;
+            window._deferredInstall.prompt();
+            window._deferredInstall.userChoice.then(() => { window._deferredInstall = null; });
+        }
+
+        // Show install card in settings when prompt available
+        window.addEventListener('beforeinstallprompt', () => {
+            const card = document.getElementById('install-card');
+            if (card) card.style.display = '';
+        });
+    </script>
+</body>
+
+</html>
