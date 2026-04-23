@@ -39,7 +39,6 @@ function renderSuivi() {
   renderWeeklyStats(week, dow);
   renderMonthHeatmap(now);
   renderProjectionGraph();
-  if (typeof renderProgression === 'function') renderProgression();
   renderMotivation(streak);
 }
 

@@ -83,7 +83,6 @@ function renderJournal() {
     renderJournalNav(dk);
     renderJournalGauge(eaten, todayTarget);
     renderMealSections(day, dk);
-    if (typeof renderExercice === 'function') renderExercice();
 }
 
 /* ---------- Date Navigation ---------- */

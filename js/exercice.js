@@ -415,8 +415,9 @@ function addExEntry(entry) {
         ? `🏋️ ${entry.sets.length} série${entry.sets.length > 1 ? 's' : ''} · ${strengthVolume(entry.sets)}kg`
         : `🔥 ${entry.kcal} kcal brûlées`;
     showToast(msg);
-    renderJournal();
+    renderSport();
     if (document.getElementById('page-dash').classList.contains('active')) renderDash();
+    if (document.getElementById('page-journal').classList.contains('active')) renderJournal();
 }
 
 function deleteEx(idx) {
@@ -425,8 +426,9 @@ function deleteEx(idx) {
     if (!day.exercises) return;
     day.exercises.splice(idx, 1);
     saveDay(dk, day);
-    renderJournal();
+    renderSport();
     if (document.getElementById('page-dash').classList.contains('active')) renderDash();
+    if (document.getElementById('page-journal').classList.contains('active')) renderJournal();
 }
 
 /* ---------------------------------------------------------------
@@ -474,4 +476,10 @@ function renderExList(exList) {
 function toggleExSection() {
     _exSectionOpen = !_exSectionOpen;
     renderExercice();
+}
+
+/* ---------- Sport page dispatcher (called by showPage) ---------- */
+function renderSport() {
+    renderExercice();
+    if (typeof renderProgression === 'function') renderProgression();
 }

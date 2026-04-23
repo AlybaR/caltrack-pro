@@ -204,6 +204,7 @@
         </div>
         <button class="side-nav-btn active" id="sn-dash" onclick="showPage('dash')"><span class="ico">📊</span>Dashboard</button>
         <button class="side-nav-btn" id="sn-journal" onclick="showPage('journal')"><span class="ico">📋</span>Journal</button>
+        <button class="side-nav-btn" id="sn-sport" onclick="showPage('sport')"><span class="ico">🏋️</span>Sport</button>
         <button class="side-nav-btn" id="sn-poids" onclick="showPage('poids')"><span class="ico">⚖️</span>Poids</button>
         <button class="side-nav-btn" id="sn-suivi" onclick="showPage('suivi')"><span class="ico">📅</span>Suivi</button>
         <button class="side-nav-btn" id="sn-settings" onclick="showPage('settings')"><span class="ico">⚙️</span>Profil</button>
@@ -217,6 +218,7 @@
                 class="ico">📊</span>Dashboard</button>
         <button class="nav-btn" id="nb-journal" onclick="showPage('journal')"> <span
                 class="ico">📋</span>Journal</button>
+        <button class="nav-btn" id="nb-sport" onclick="showPage('sport')"> <span class="ico">🏋️</span>Sport</button>
         <button class="nav-btn" id="nb-poids" onclick="showPage('poids')"> <span class="ico">⚖️</span>Poids</button>
         <button class="nav-btn" id="nb-suivi" onclick="showPage('suivi')"> <span class="ico">📅</span>Suivi</button>
         <button class="nav-btn" id="nb-settings" onclick="showPage('settings')"><span
@@ -370,11 +372,17 @@
             </div>
         </div>
         <div id="meals-container"></div>
+    </div>
 
-        <!-- Exercise section -->
-        <div class="ex-section-wrap card" style="margin-top:12px;padding:0;">
+    <!-- ================================================================
+     PAGE: SPORT (exercice + progression)
+     ================================================================ -->
+    <div class="page" id="page-sport">
+        <div class="page-hd"><h2>Sport</h2></div>
+        <div class="ex-section-wrap card" style="padding:0;margin-bottom:12px;">
             <div id="exercice-section"></div>
         </div>
+        <div class="card" id="progression-section" style="margin-bottom:12px;"></div>
     </div>
 
     <!-- ================================================================
@@ -430,9 +438,6 @@
                 <span style="color:var(--acc);">── Réel</span>
             </div>
         </div>
-
-        <!-- Progression sport (S3) -->
-        <div class="card" id="progression-section" style="margin-bottom:12px;"></div>
 
         <div class="card motivation-box">
             <div class="mot-title">Message du jour</div>

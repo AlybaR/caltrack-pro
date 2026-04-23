@@ -6,7 +6,7 @@
    - Install: allSettled so one missing asset doesn't break everything
    ==================================================== */
 
-const CACHE = 'caltrack-v6';
+const CACHE = 'caltrack-v7';
 const CORE_ASSETS = [
     './',
     './index.html',
@@ -19,6 +19,10 @@ const CORE_ASSETS = [
     './js/suivi.js',
     './js/settings.js',
     './js/foods.js',
+    './js/exercice.js',
+    './js/scanner.js',
+    './js/recipes.js',
+    './js/progression.js',
     './js/notifications.js',
     './manifest.json',
     './icon-192.png',
