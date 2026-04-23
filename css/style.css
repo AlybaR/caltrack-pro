@@ -3179,3 +3179,394 @@ button:focus-visible,
   padding: 10px 16px !important;
   font-size: .88rem !important;
 }
+
+/* ============================================================
+   EXERCISE v2 — Detail panel (cardio + strength forms)
+   ============================================================ */
+
+.ex-detail-panel {
+  background: rgba(200, 81, 42, .06);
+  border: 1px solid rgba(200, 81, 42, .2);
+  border-radius: 14px;
+  padding: 14px 14px 12px;
+  margin: 10px 0;
+  animation: ex-panel-slide .2s ease;
+}
+
+@keyframes ex-panel-slide {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.ex-form-title {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--txt);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.ex-form-muscle {
+  font-size: .72rem;
+  font-weight: 500;
+  color: var(--mut);
+  text-transform: uppercase;
+  letter-spacing: .4px;
+}
+
+.ex-form-hint {
+  font-size: .78rem;
+  color: var(--mut);
+  background: rgba(180, 116, 32, .1);
+  padding: 6px 10px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  border-left: 3px solid #B47420;
+}
+
+.ex-form-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+}
+
+.ex-form-lbl {
+  flex: 0 0 auto;
+  min-width: 110px;
+  font-size: .82rem;
+  font-weight: 600;
+  color: var(--txt);
+}
+
+.ex-form-lbl-sm {
+  display: block;
+  font-size: .68rem;
+  font-weight: 600;
+  color: var(--mut);
+  text-transform: uppercase;
+  letter-spacing: .4px;
+  margin-bottom: 2px;
+}
+
+.ex-form-opt {
+  font-weight: 400;
+  font-size: .7rem;
+  color: var(--mut);
+}
+
+.ex-form-input {
+  flex: 1;
+  min-width: 80px;
+  max-width: 140px;
+  padding: 8px 10px;
+  border: 1px solid rgba(0, 0, 0, .1);
+  border-radius: 10px;
+  background: var(--bg);
+  font-family: 'Outfit', sans-serif;
+  font-weight: 600;
+  font-size: .9rem;
+  color: var(--txt);
+  outline: none;
+  font-variant-numeric: tabular-nums;
+  transition: border-color .15s ease, box-shadow .15s ease;
+}
+
+.ex-form-input:focus {
+  border-color: var(--acc);
+  box-shadow: 0 0 0 3px rgba(200, 81, 42, .15);
+}
+
+.ex-form-unit {
+  font-size: .8rem;
+  color: var(--mut);
+  font-weight: 600;
+  min-width: 30px;
+}
+
+.ex-form-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+
+.ex-form-actions .btn {
+  flex: 1;
+  min-width: 120px;
+}
+
+/* ---------- Strength-specific: set builder ---------- */
+.ex-set-row {
+  background: rgba(255, 255, 255, .5);
+  border: 1px dashed rgba(200, 81, 42, .3);
+  border-radius: 12px;
+  padding: 10px;
+  margin-top: 4px;
+  align-items: flex-end;
+}
+
+.ex-set-input-group {
+  flex: 1;
+  min-width: 80px;
+}
+
+.ex-form-input-sm {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid rgba(0, 0, 0, .1);
+  border-radius: 10px;
+  background: var(--bg);
+  font-family: 'Outfit', sans-serif;
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--txt);
+  outline: none;
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+  transition: border-color .15s ease, box-shadow .15s ease;
+}
+
+.ex-form-input-sm:focus {
+  border-color: var(--acc);
+  box-shadow: 0 0 0 3px rgba(200, 81, 42, .15);
+}
+
+.ex-set-x {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--mut);
+  padding-bottom: 6px;
+}
+
+.ex-add-set-btn {
+  min-width: 40px;
+  padding: 10px 14px !important;
+  font-size: 1.1rem !important;
+  align-self: flex-end;
+}
+
+.ex-sets-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 10px;
+}
+
+.ex-sets-hd {
+  font-size: .72rem;
+  font-weight: 700;
+  color: var(--acc);
+  text-transform: uppercase;
+  letter-spacing: .4px;
+  margin-bottom: 4px;
+}
+
+.ex-set-pill {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255, 255, 255, .7);
+  border-radius: 10px;
+  padding: 6px 12px;
+  font-size: .85rem;
+}
+
+.ex-set-n {
+  font-size: .7rem;
+  font-weight: 700;
+  color: var(--mut);
+  min-width: 22px;
+}
+
+.ex-set-val {
+  flex: 1;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 700;
+  color: var(--txt);
+  font-variant-numeric: tabular-nums;
+}
+
+.ex-set-del {
+  background: rgba(220, 38, 38, .08);
+  border: none;
+  color: #DC2626;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  font-size: .7rem;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.ex-set-del:hover {
+  background: rgba(220, 38, 38, .2);
+}
+
+/* ---------- Exercise list: type-specific details ---------- */
+.ex-item-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.ex-item-sub {
+  font-size: .72rem;
+  color: var(--mut);
+  font-variant-numeric: tabular-nums;
+}
+
+.ex-item-muscle {
+  display: inline-block;
+  background: rgba(180, 116, 32, .15);
+  color: #B47420;
+  font-size: .65rem;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 6px;
+  margin-left: 4px;
+  vertical-align: middle;
+  text-transform: uppercase;
+  letter-spacing: .3px;
+}
+
+/* ============================================================
+   PROGRESSION (S3) — Charts section in Suivi
+   ============================================================ */
+
+.prog-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  gap: 10px;
+}
+
+.prog-period-btns {
+  display: flex;
+  gap: 4px;
+  background: rgba(0, 0, 0, .04);
+  padding: 3px;
+  border-radius: 10px;
+}
+
+.prog-p-btn {
+  background: transparent;
+  border: none;
+  padding: 5px 12px;
+  border-radius: 8px;
+  font-size: .78rem;
+  font-weight: 700;
+  color: var(--mut);
+  cursor: pointer;
+  transition: all .15s ease;
+  font-family: 'Outfit', sans-serif;
+}
+
+.prog-p-btn.active {
+  background: var(--acc);
+  color: #fff;
+  box-shadow: 0 2px 6px rgba(200, 81, 42, .3);
+}
+
+.prog-stats-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.prog-stat {
+  background: rgba(200, 81, 42, .06);
+  border: 1px solid rgba(200, 81, 42, .15);
+  border-radius: 12px;
+  padding: 8px 6px;
+  text-align: center;
+}
+
+.prog-stat-v {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 800;
+  font-size: 1.1rem;
+  color: var(--acc);
+  font-variant-numeric: tabular-nums;
+  line-height: 1.1;
+}
+
+.prog-stat-v small {
+  font-size: .6rem;
+  font-weight: 600;
+  color: var(--mut);
+  margin-left: 1px;
+}
+
+.prog-stat-l {
+  font-size: .65rem;
+  color: var(--mut);
+  text-transform: uppercase;
+  letter-spacing: .3px;
+  margin-top: 2px;
+}
+
+.prog-chart-wrap {
+  position: relative;
+  height: 160px;
+  margin-bottom: 14px;
+}
+
+.prog-prs-title {
+  font-size: .82rem;
+  font-weight: 700;
+  color: var(--txt);
+  margin: 14px 0 8px;
+}
+
+.prog-prs-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.prog-pr-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(180, 116, 32, .08);
+  border-radius: 10px;
+  padding: 7px 12px;
+  font-size: .85rem;
+}
+
+.prog-pr-name {
+  font-weight: 600;
+  color: var(--txt);
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.prog-pr-val {
+  font-family: 'Outfit', sans-serif;
+  color: var(--mut);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.prog-pr-val b {
+  color: #B47420;
+  font-size: 1rem;
+}
+
+.prog-pr-val small {
+  font-size: .72rem;
+  color: var(--mut);
+}
