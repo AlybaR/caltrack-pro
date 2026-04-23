@@ -162,6 +162,7 @@ function renderMealSections(day, dk) {
         </div>
         <div class="meal-hd-right" onclick="event.stopPropagation()">
           ${mkc > 0 ? `<span class="meal-kcal-badge">${mkc} kcal</span>` : ''}
+          ${items.length > 0 ? `<button class="save-recipe-btn" onclick="saveRecipeFromMeal('${mk}')" title="Sauvegarder comme recette">💾</button>` : ''}
           <button class="copy-yesterday-btn" onclick="copyFromYesterday('${mk}')" title="Copier depuis hier">📋</button>
         </div>
       </div>
@@ -229,6 +230,7 @@ function renderMealSections(day, dk) {
             if (activeTab === 'quick') {
                 const catsEl = sec.querySelector('#qcats-' + mk);
                 renderCatTab(catsEl, '⭐ Favoris', mk);
+                renderCatTab(catsEl, '📖 Recettes', mk);
                 Object.keys(QUICK_BY_CAT).forEach(cat => renderCatTab(catsEl, cat, mk));
                 renderQuickGrid(mk);
             }
@@ -281,6 +283,13 @@ function setMealTab(mk, tab) {
 function renderQuickGrid(mk) {
     const qg = document.getElementById('qg-' + mk);
     if (!qg) return;
+
+    // Recipes category → delegate to recipes module
+    if (_activeCat === '📖 Recettes' && !_qaSearch) {
+        if (typeof renderRecipesGrid === 'function') renderRecipesGrid(mk);
+        return;
+    }
+
     qg.innerHTML = '';
     const search = (_qaSearch || '').toLowerCase();
 
