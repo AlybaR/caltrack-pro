@@ -169,11 +169,25 @@ function renderMealSections(day, dk) {
 
       <div class="meal-body" style="display: ${isOpen ? 'block' : 'none'}">
 
+          <!-- Meal history (visible FIRST — what you ate) -->
+          <div class="meal-history">
+            ${items.length > 0 ? `<div class="meal-history-label">🍽 ${items.length} aliment${items.length > 1 ? 's' : ''} dans ce repas</div>` : ''}
+            <div id="food-list-${mk}"></div>
+          </div>
+
+          ${items.length > 0 ? `<div class="meal-divider"><span>Ajouter plus</span></div>` : ''}
+
+          <!-- Scanner quick-action (always visible) -->
+          <button class="scan-barcode-btn meal-scan-cta" onclick="openScanner('${mk}')">
+            <span class="scan-ico">📷</span>
+            <span class="scan-lbl">Scanner un code-barres</span>
+          </button>
+
           <!-- Add interface — 3 tabs -->
           <div class="meal-tabs">
-            <button class="meal-tab ${activeTab==='quick'?'active':''}" data-tab="quick" onclick="setMealTab('${mk}','quick')">Rapide</button>
-            <button class="meal-tab ${activeTab==='manual'?'active':''}" data-tab="manual" onclick="setMealTab('${mk}','manual')">Manuel</button>
+            <button class="meal-tab ${activeTab==='quick'?'active':''}" data-tab="quick" onclick="setMealTab('${mk}','quick')">⚡ Rapide</button>
             <button class="meal-tab ${activeTab==='search'?'active':''}" data-tab="search" onclick="setMealTab('${mk}','search')">🌐 Chercher</button>
+            <button class="meal-tab ${activeTab==='manual'?'active':''}" data-tab="manual" onclick="setMealTab('${mk}','manual')">✍️ Manuel</button>
           </div>
 
           <!-- TAB: Rapide -->
@@ -185,6 +199,15 @@ function renderMealSections(day, dk) {
             </div>
             <div class="quick-cats" id="qcats-${mk}"></div>
             <div class="quick-grid" id="qg-${mk}"></div>
+          </div>
+
+          <!-- TAB: Chercher (OpenFoodFacts) -->
+          <div class="meal-tab-pane" data-pane="search" style="display:${activeTab==='search'?'':'none'}">
+            <div class="off-input-row">
+              <input type="text" id="off-q-${mk}" placeholder="Rechercher un aliment..." onkeydown="if(event.key==='Enter') searchOff('${mk}')"/>
+              <button class="off-go-btn" onclick="searchOff('${mk}')">Chercher</button>
+            </div>
+            <div class="off-results" id="off-results-${mk}"></div>
           </div>
 
           <!-- TAB: Manuel -->
@@ -205,23 +228,6 @@ function renderMealSections(day, dk) {
               </div>
             </details>
           </div>
-
-          <!-- TAB: Chercher (OpenFoodFacts) -->
-          <div class="meal-tab-pane" data-pane="search" style="display:${activeTab==='search'?'':'none'}">
-            <button class="scan-barcode-btn" onclick="openScanner('${mk}')">
-              <span class="scan-ico">📷</span>
-              <span class="scan-lbl">Scanner un code-barres</span>
-            </button>
-            <div class="off-or">ou</div>
-            <div class="off-input-row">
-              <input type="text" id="off-q-${mk}" placeholder="Rechercher un aliment..." onkeydown="if(event.key==='Enter') searchOff('${mk}')"/>
-              <button class="off-go-btn" onclick="searchOff('${mk}')">Chercher</button>
-            </div>
-            <div class="off-results" id="off-results-${mk}"></div>
-          </div>
-
-          <!-- Food list -->
-          <div id="food-list-${mk}" style="margin-top:10px;"></div>
       </div>
     `;
         container.appendChild(sec);
@@ -338,7 +344,7 @@ function filterQuickAdd(mk, val) {
 function renderFoodList(el, items, mk) {
     if (!el) return;
     if (items.length === 0) {
-        el.innerHTML = `<div class="empty-state">Aucun aliment — utilise la recherche ou le formulaire.</div>`;
+        el.innerHTML = `<div class="empty-state meal-empty">🍽 Aucun aliment encore<br><small>Scanne un code-barres ou utilise les options ci-dessous ↓</small></div>`;
         return;
     }
     el.innerHTML = '';

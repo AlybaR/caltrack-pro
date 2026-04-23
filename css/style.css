@@ -3106,3 +3106,76 @@ button:focus-visible,
   padding: 10px 16px;
   font-size: .88rem;
 }
+
+/* ============================================================
+   MEAL LAYOUT IMPROVEMENTS — History first + Scanner visible
+   ============================================================ */
+
+/* History block at top of meal body */
+.meal-history {
+  margin-bottom: 4px;
+}
+
+.meal-history-label {
+  font-size: .72rem;
+  font-weight: 700;
+  color: var(--mut);
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  margin-bottom: 8px;
+  padding: 0 2px;
+}
+
+/* Empty meal state (more inviting) */
+.meal-empty {
+  text-align: center;
+  padding: 18px 14px !important;
+  background: rgba(200, 81, 42, .04);
+  border: 1px dashed rgba(200, 81, 42, .22);
+  border-radius: 12px;
+  color: var(--txt);
+  font-size: .88rem;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.meal-empty small {
+  display: block;
+  margin-top: 4px;
+  font-size: .74rem;
+  font-weight: 400;
+  color: var(--mut);
+}
+
+/* Divider between history and "add more" */
+.meal-divider {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 14px 0 10px;
+  color: var(--mut);
+  font-size: .72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .6px;
+}
+
+.meal-divider::before,
+.meal-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(0, 0, 0, .08), transparent);
+}
+
+.meal-divider span {
+  padding: 0 4px;
+  background: transparent;
+}
+
+/* Scanner CTA (always visible, above tabs) */
+.meal-scan-cta {
+  margin-bottom: 10px !important;
+  padding: 10px 16px !important;
+  font-size: .88rem !important;
+}
