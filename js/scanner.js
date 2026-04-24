@@ -115,6 +115,7 @@ async function onBarcodeDetected(barcode) {
                 return;
             }
 
+            const salt = nut['salt_100g'] != null ? nut['salt_100g'] : (nut['sodium_100g'] != null ? nut['sodium_100g'] * 2.5 : null);
             const product = {
                 n: (p.product_name_fr || p.product_name || 'Produit').slice(0, 60),
                 brand: (p.brands || '').split(',')[0].trim(),
@@ -122,6 +123,10 @@ async function onBarcodeDetected(barcode) {
                 p: Math.round(nut['proteins_100g'] || 0),
                 l: Math.round(nut['fat_100g'] || 0),
                 g: Math.round(nut['carbohydrates_100g'] || 0),
+                fib: nut['fiber_100g'] != null ? +(+nut['fiber_100g']).toFixed(1) : undefined,
+                suc: nut['sugars_100g'] != null ? +(+nut['sugars_100g']).toFixed(1) : undefined,
+                sat: nut['saturated-fat_100g'] != null ? +(+nut['saturated-fat_100g']).toFixed(1) : undefined,
+                sel: salt != null ? +(+salt).toFixed(2) : undefined,
                 barcode,
             };
             showProductConfirm(product);
@@ -175,7 +180,9 @@ function confirmScannedProduct(product) {
     if (g < 1) { showToast('⚠️ Quantité invalide'); return; }
     const qty = g / 100;
     const name = `${product.n}${product.brand ? ' — ' + product.brand : ''} (${g}g)`;
-    addFoodDirect(_scannerMealKey, name, product.k, product.p, product.l, product.g, qty);
+    const extras = {};
+    ['fib', 'suc', 'sel', 'sat'].forEach(k => { if (product[k] != null) extras[k] = product[k]; });
+    addFoodDirect(_scannerMealKey, name, product.k, product.p, product.l, product.g, qty, extras);
     showToast(`✅ ${product.n} ajouté`);
     closeScanner();
 }

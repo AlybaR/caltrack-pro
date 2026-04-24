@@ -79,6 +79,9 @@ function computeAnalytics() {
     // Wellness (B1/B2) — optional
     const wellness = typeof computeWellnessStats === 'function' ? computeWellnessStats(days) : null;
 
+    // Micronutrients (N5) — optional
+    const micros = typeof computeMicrosStats === 'function' ? computeMicrosStats(days) : null;
+
     return {
         daysLogged, daysInTarget, daysOver, daysUnder,
         avgKcal, avgBurn, avgDeficit, target,
@@ -92,6 +95,7 @@ function computeAnalytics() {
         avgG: macrosTracked > 0 && daysLogged > 0 ? Math.round(totalG / daysLogged) : 0,
         adherencePct: daysLogged > 0 ? Math.round(daysInTarget / daysLogged * 100) : 0,
         wellness,
+        micros,
     };
 }
 
@@ -137,6 +141,20 @@ function computeInsights(a) {
         if (w.moodDays >= 5 && w.avgMood < 2.8) insights.push({ ico: '😕', tone: 'info', txt: `Humeur moyenne ${w.avgMood}/5 — vérifie sommeil, stress, ou un déficit trop agressif.` });
         else if (w.moodDays >= 5 && w.avgMood >= 4) insights.push({ ico: '😊', tone: 'good', txt: `Humeur moyenne ${w.avgMood}/5 — bon signe que ton plan est soutenable.` });
         if (w.energyDays >= 5 && w.avgEnergy < 2.8) insights.push({ ico: '🪫', tone: 'warn', txt: `Énergie basse (${w.avgEnergy}/5) — pense glucides, hydratation, micronutriments.` });
+    }
+
+    // Micronutrients insights (N5) — needs 5+ days of tracked micros
+    const m = a.micros;
+    if (m && m.days >= 5) {
+        if (m.avgFib < 18) insights.push({ ico: '🌾', tone: 'warn', txt: `Fibres : ${m.avgFib} g/j — vise 25 g (légumes, légumineuses, avoine, fruits avec peau).` });
+        else if (m.avgFib >= 25) insights.push({ ico: '🌾', tone: 'good', txt: `Fibres : ${m.avgFib} g/j — au-dessus de la recommandation 👏` });
+
+        if (m.avgSel > 5) insights.push({ ico: '🧂', tone: 'warn', txt: `Sel : ${m.avgSel} g/j — > 5 g OMS. Attention aux plats préparés et charcuteries.` });
+
+        if (m.avgSuc > 60) insights.push({ ico: '🍬', tone: 'warn', txt: `Sucres : ${m.avgSuc} g/j — réduis boissons et produits ultra-transformés.` });
+        else if (m.avgSuc < 25 && m.days >= 10) insights.push({ ico: '🍬', tone: 'good', txt: `Sucres contrôlés (${m.avgSuc} g/j) — excellent.` });
+
+        if (m.avgSat > 22) insights.push({ ico: '🥓', tone: 'warn', txt: `Graisses saturées : ${m.avgSat} g/j — limite > 20 g dépassée. Remplace beurre/charcuterie par huile d'olive/poisson.` });
     }
 
     return insights;

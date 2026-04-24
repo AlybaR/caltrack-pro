@@ -3803,3 +3803,42 @@ html[data-theme="dark"] .eta-card { background:rgba(255,255,255,.03); }
 html[data-theme="dark"] .wl-row { border-bottom-color:rgba(255,255,255,.05); }
 html[data-theme="dark"] .wl-emoji { background:rgba(255,255,255,.04); }
 html[data-theme="dark"] .wl-emoji.active { background:rgba(232,107,61,.18); }
+
+/* ============================================================
+   N5 — MICRONUTRIMENTS CARD
+   ============================================================ */
+.micros-card { padding:14px 16px; }
+.micros-card .card-t { display:flex; justify-content:space-between; align-items:baseline; gap:8px; flex-wrap:wrap; }
+.micros-sub { font-size:.7rem; color:var(--mut); font-weight:500; letter-spacing:.2px; }
+.micros-empty { font-size:.82rem; color:var(--mut); padding:8px 0; line-height:1.5; }
+
+.micro-row { padding:8px 0; border-bottom:1px solid rgba(0,0,0,.04); }
+.micro-row:last-of-type { border-bottom:none; }
+.micro-hd {
+    display:flex; align-items:baseline; gap:8px; margin-bottom:6px;
+    font-size:.86rem;
+}
+.micro-ico { font-size:1.05rem; }
+.micro-name { font-family:'Outfit',sans-serif; font-weight:600; flex:1; }
+.micro-val { font-variant-numeric:tabular-nums; font-weight:700; font-size:.82rem; }
+.micro-val.micro-good  { color:var(--grn); }
+.micro-val.micro-warn  { color:var(--yel); }
+.micro-val.micro-over,
+.micro-val.micro-under { color:var(--red); }
+
+.micro-bar {
+    height:6px; border-radius:999px;
+    background:rgba(0,0,0,.06);
+    overflow:hidden;
+}
+.micro-bar-fg {
+    height:100%; border-radius:999px;
+    transition:width .5s var(--ease);
+}
+.micro-bar-fg.micro-good  { background:linear-gradient(90deg, var(--grn), var(--cyan)); }
+.micro-bar-fg.micro-warn  { background:linear-gradient(90deg, var(--yel), var(--acc)); }
+.micro-bar-fg.micro-over,
+.micro-bar-fg.micro-under { background:linear-gradient(90deg, var(--red), var(--acc)); }
+
+html[data-theme="dark"] .micro-row { border-bottom-color:rgba(255,255,255,.05); }
+html[data-theme="dark"] .micro-bar { background:rgba(255,255,255,.06); }

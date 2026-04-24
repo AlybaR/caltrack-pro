@@ -446,7 +446,7 @@ function addFood(mk) {
     nameEl.focus();
 }
 
-function addFoodDirect(mk, n, k, p = null, l = null, g = null, qty = 1) {
+function addFoodDirect(mk, n, k, p = null, l = null, g = null, qty = 1, extras = null) {
     const dk = getJournalKey();
     const day = getDay(dk);
     const food = { n, k };
@@ -454,6 +454,9 @@ function addFoodDirect(mk, n, k, p = null, l = null, g = null, qty = 1) {
     if (l !== null) food.l = l;
     if (g !== null) food.g = g;
     if (qty !== 1) food.qty = qty;
+    if (extras) {
+        ['fib', 'suc', 'sel', 'sat'].forEach(k2 => { if (extras[k2] != null) food[k2] = extras[k2]; });
+    }
     day.meals[mk].push(food);
     saveDay(dk, day);
     _editingFood = null;
@@ -575,13 +578,21 @@ async function searchOff(mk) {
         const offResults = (data.products || [])
             .filter(p => p.product_name && p.nutriments)
             .slice(0, 8)
-            .map(p => ({
-                n: (p.product_name_fr || p.product_name).slice(0, 60),
-                k: Math.round(p.nutriments['energy-kcal_100g'] || p.nutriments['energy-kcal'] || 0),
-                p: Math.round(p.nutriments['proteins_100g'] || 0),
-                l: Math.round(p.nutriments['fat_100g'] || 0),
-                g: Math.round(p.nutriments['carbohydrates_100g'] || 0),
-            }))
+            .map(p => {
+                const n = p.nutriments;
+                const salt = n['salt_100g'] != null ? n['salt_100g'] : (n['sodium_100g'] != null ? n['sodium_100g'] * 2.5 : null);
+                return {
+                    n: (p.product_name_fr || p.product_name).slice(0, 60),
+                    k: Math.round(n['energy-kcal_100g'] || n['energy-kcal'] || 0),
+                    p: Math.round(n['proteins_100g'] || 0),
+                    l: Math.round(n['fat_100g'] || 0),
+                    g: Math.round(n['carbohydrates_100g'] || 0),
+                    fib: n['fiber_100g'] != null ? +(+n['fiber_100g']).toFixed(1) : undefined,
+                    suc: n['sugars_100g'] != null ? +(+n['sugars_100g']).toFixed(1) : undefined,
+                    sat: n['saturated-fat_100g'] != null ? +(+n['saturated-fat_100g']).toFixed(1) : undefined,
+                    sel: salt != null ? +(+salt).toFixed(2) : undefined,
+                };
+            })
             .filter(p => p.k > 0);
         try { lsSave(cacheKey, offResults); } catch {}
         const merged = mergeResults(localResults, offResults);
@@ -618,8 +629,10 @@ function renderOffResults(el, products, mk) {
         row.querySelector('.off-add-btn').addEventListener('click', () => {
             const g = parseFloat(document.getElementById(`off-g-${mk}-${idx}`).value) || 100;
             const qty = g / 100;
+            const extras = {};
+            ['fib', 'suc', 'sel', 'sat'].forEach(k => { if (p[k] != null) extras[k] = p[k]; });
             // Store base (per 100g) and qty — totalKcal will multiply
-            addFoodDirect(mk, `${p.n} (${g}g)`, p.k, p.p, p.l, p.g, qty);
+            addFoodDirect(mk, `${p.n} (${g}g)`, p.k, p.p, p.l, p.g, qty, extras);
         });
         el.appendChild(row);
     });

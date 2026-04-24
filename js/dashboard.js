@@ -35,6 +35,9 @@ function renderDash() {
     // Wellness card (B1 sommeil + B2 humeur/énergie)
     if (typeof renderWellnessCard === 'function') renderWellnessCard();
 
+    // Micronutriments card (N5)
+    if (typeof renderMicrosCard === 'function') renderMicrosCard();
+
     // Greeting
     document.getElementById('dash-greeting').innerHTML = getGreeting(S.name || 'Toi');
 
