@@ -98,10 +98,23 @@ function launchApp() {
 
 // ---------- INIT ----------
 window.onload = () => {
-  const saved = lsLoad('settings');
-  if (saved && saved.target) {
-    S = saved;
-    launchApp();
+  // If Firebase is configured → let auth.js drive the launch flow
+  // (onUserReady in sync.js will call launchApp once cloud state is resolved).
+  const firebaseMode = (typeof FIREBASE_ENABLED !== 'undefined') && FIREBASE_ENABLED;
+  if (firebaseMode && typeof initAuth === 'function') {
+    const ok = initAuth();
+    // If Firebase init failed for any reason → fall back to local auto-launch
+    if (!ok) {
+      const saved = lsLoad('settings');
+      if (saved && saved.target) { S = saved; launchApp(); }
+    }
+  } else {
+    // Local-only mode (no Firebase config) — legacy behaviour
+    const saved = lsLoad('settings');
+    if (saved && saved.target) {
+      S = saved;
+      launchApp();
+    }
   }
   // Resize weight graph
   window.addEventListener('resize', () => {

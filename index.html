@@ -13,6 +13,11 @@
     <link rel="apple-touch-icon" href="icon-192.png" />
     <title>🌿 CalTrack Pro</title>
     <link rel="stylesheet" href="css/style.css" />
+
+    <!-- Firebase SDK (compat — global `firebase.*`) -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 </head>
 
 <body>
@@ -236,6 +241,7 @@
             <div class="dash-hd-row">
                 <div class="date" id="dash-date"></div>
                 <div class="dash-streak-chip" id="dash-streak-chip"></div>
+                <div class="sync-status" id="sync-status" style="display:none;"></div>
             </div>
         </div>
 
@@ -583,6 +589,7 @@
     <!-- ================================================================
      SCRIPTS
      ================================================================ -->
+    <script src="js/firebase-config.js"></script>
     <script src="js/foods.js"></script>
     <script src="js/exercice.js"></script>
     <script src="js/scanner.js"></script>
@@ -600,6 +607,8 @@
     <script src="js/poids.js"></script>
     <script src="js/suivi.js"></script>
     <script src="js/settings.js"></script>
+    <script src="js/sync.js"></script>
+    <script src="js/auth.js"></script>
     <script>
         // Wire wizard listeners
         window.addEventListener('DOMContentLoaded', initWizardListeners);

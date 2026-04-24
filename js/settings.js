@@ -42,17 +42,53 @@ function renderSettings() {
         const lastW = wh.length ? wh.sort((a, b) => b.d.localeCompare(a.d))[0].v : S.w;
         const imcData = calcIMC(lastW, S.h);
         const imc = imcData ? imcData.val.toFixed(1) : '—';
+        const email = (typeof currentAuthUser !== 'undefined' && currentAuthUser) ? currentAuthUser.email : '';
         el.innerHTML = `
       <div class="profile-chip">
         <div class="profile-avatar">${initials}</div>
         <div class="profile-info">
           <div class="profile-name">${S.name || 'Mon profil'}</div>
           <div class="profile-stats">${S.w} kg → ${S.g} kg · IMC ${imc} · ${S.target} kcal/j</div>
+          ${email ? `<div class="profile-stats" style="font-size:.72rem;opacity:.75;">☁️ ${email}</div>` : ''}
         </div>
         <span class="profile-edit" onclick="resetWizard()">Modifier ✏️</span>
       </div>
     `;
     }
+
+    // Sign-out row (Firebase only, when logged in)
+    renderSignOutRow();
+}
+
+function renderSignOutRow() {
+    const firebaseMode = (typeof FIREBASE_ENABLED !== 'undefined') && FIREBASE_ENABLED;
+    const authed = (typeof currentAuthUser !== 'undefined') && currentAuthUser;
+    let card = document.getElementById('signout-card');
+    if (!firebaseMode || !authed) { if (card) card.remove(); return; }
+    if (card) return; // already rendered
+    const page = document.getElementById('page-settings');
+    if (!page) return;
+    card = document.createElement('div');
+    card.id = 'signout-card';
+    card.className = 'card';
+    card.style.marginBottom = '10px';
+    card.innerHTML = `
+        <div class="card-t">Compte</div>
+        <div class="settings-row" onclick="signOutUser()">
+            <div class="sr-left">
+                <div class="sr-icon">🚪</div>
+                <div class="sr-info">
+                    <div class="sr-label">Se déconnecter</div>
+                    <div class="sr-sub">Tes données restent sur cet appareil</div>
+                </div>
+            </div>
+            <div class="sr-right">›</div>
+        </div>
+    `;
+    // Insert just before the "Zone de danger" card
+    const dangerCard = [...page.querySelectorAll('.card-t')].find(t => t.textContent.includes('Zone de danger'));
+    if (dangerCard) page.insertBefore(card, dangerCard.parentElement);
+    else page.appendChild(card);
 }
 
 /* ---------- Export JSON ---------- */

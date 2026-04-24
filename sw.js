@@ -6,7 +6,7 @@
    - Install: allSettled so one missing asset doesn't break everything
    ==================================================== */
 
-const CACHE = 'caltrack-v13';
+const CACHE = 'caltrack-v14';
 const CORE_ASSETS = [
     './',
     './index.html',
@@ -28,6 +28,9 @@ const CORE_ASSETS = [
     './js/micros.js',
     './js/intelligence.js',
     './js/notifications.js',
+    './js/firebase-config.js',
+    './js/auth.js',
+    './js/sync.js',
     './manifest.json',
     './icon-192.png',
     './icon-512.png',
@@ -60,7 +63,19 @@ self.addEventListener('fetch', e => {
     if (e.request.method !== 'GET') return;
 
     const url = new URL(e.request.url);
+
     const isFont = url.hostname === 'fonts.googleapis.com' || url.hostname === 'fonts.gstatic.com';
+
+    // Skip Firebase SDK CDN + API calls — let browser handle them directly.
+    // (Auth / Firestore need fresh, authenticated responses — never cached here.)
+    const isFirebase = !isFont && (
+        url.hostname === 'www.gstatic.com'
+        || url.hostname.endsWith('.googleapis.com')
+        || url.hostname.endsWith('.firebaseio.com')
+        || url.hostname.endsWith('.firebaseapp.com')
+    );
+    if (isFirebase) return; // default network behaviour
+
     const isCore = url.pathname.startsWith('/') && !isFont;
 
     if (isFont) {
