@@ -504,24 +504,30 @@ function toggleFav(n, k, p = null, l = null, g = null) {
 
 /* ---------- Delete with slide-out animation ---------- */
 function delFood(mk, idx) {
-    const itemEl = document.getElementById(`fi-${mk}-${idx}`);
-    if (itemEl) {
-        itemEl.classList.add('removing');
-        setTimeout(() => {
-            const dk = getJournalKey();
-            const day = getDay(dk);
-            day.meals[mk].splice(idx, 1);
-            saveDay(dk, day);
-            _editingFood = null;
-            renderJournal();
-        }, 280);
-    } else {
+    const doDelete = () => {
         const dk = getJournalKey();
         const day = getDay(dk);
+        const removed = day.meals[mk][idx];
         day.meals[mk].splice(idx, 1);
         saveDay(dk, day);
         _editingFood = null;
         renderJournal();
+        if (removed) {
+            showToast(`🗑 ${(removed.n||'Aliment').slice(0,24)} supprimé`, () => {
+                const d2 = getDay(dk);
+                if (!d2.meals[mk]) d2.meals[mk] = [];
+                d2.meals[mk].splice(idx, 0, removed);
+                saveDay(dk, d2);
+                renderJournal();
+            });
+        }
+    };
+    const itemEl = document.getElementById(`fi-${mk}-${idx}`);
+    if (itemEl) {
+        itemEl.classList.add('removing');
+        setTimeout(doDelete, 280);
+    } else {
+        doDelete();
     }
 }
 

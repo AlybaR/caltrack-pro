@@ -144,11 +144,32 @@ function calcIMC(w, h) {
 }
 
 // ---------- TOAST (shared) ----------
-function showToast(msg) {
+function showToast(msg, undoFn) {
   let t = document.getElementById('app-toast');
   if (!t) { t = document.createElement('div'); t.id = 'app-toast'; t.className = 'toast'; document.body.appendChild(t); }
-  t.textContent = msg;
+  t.innerHTML = '';
+  const span = document.createElement('span'); span.textContent = msg; t.appendChild(span);
+  if (typeof undoFn === 'function') {
+    const btn = document.createElement('button');
+    btn.className = 'toast-undo'; btn.textContent = 'Annuler';
+    btn.onclick = () => { clearTimeout(t._t); t.classList.remove('show'); try { undoFn(); } catch(e){} };
+    t.appendChild(btn);
+  }
   t.classList.add('show');
   clearTimeout(t._t);
-  t._t = setTimeout(() => t.classList.remove('show'), 2800);
+  t._t = setTimeout(() => t.classList.remove('show'), undoFn ? 5000 : 2800);
 }
+
+// ---------- THEME ----------
+function applyTheme(theme) {
+  const t = theme === 'dark' ? 'dark' : 'light';
+  document.documentElement.setAttribute('data-theme', t);
+  lsSave('theme', t);
+}
+function toggleTheme() {
+  const cur = lsLoad('theme') || 'light';
+  applyTheme(cur === 'dark' ? 'light' : 'dark');
+  if (typeof renderSettings === 'function') renderSettings();
+}
+// Apply saved theme ASAP (before first paint if possible)
+applyTheme(lsLoad('theme') || 'light');

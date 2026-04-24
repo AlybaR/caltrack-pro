@@ -31,9 +31,18 @@ function addWeight() {
 /** Delete a weight entry by date key */
 function deleteWeight(dk) {
     let wh = lsLoad('weight-history') || [];
+    const removed = wh.find(x => x.d === dk);
     wh = wh.filter(x => x.d !== dk);
     lsSave('weight-history', wh);
     renderPoids();
+    if (removed) {
+        showToast(`🗑 ${removed.v} kg supprimé`, () => {
+            const cur = lsLoad('weight-history') || [];
+            cur.push(removed);
+            lsSave('weight-history', cur);
+            renderPoids();
+        });
+    }
 }
 
 /** Set period filter and re-render */
@@ -62,6 +71,57 @@ function renderPoids() {
     drawWeightGraph(filterWh(wh));
     renderWeightHistory(wh);
     renderImcDisplay();
+    renderEta(wh);
+}
+
+/* ---------- O5 — ETA prediction ---------- */
+function renderEta(wh) {
+    const el = document.getElementById('eta-card');
+    if (!el) return;
+    if (wh.length < 3 || !S.g) { el.style.display = 'none'; return; }
+    // Use last 14 days (or all if <14) — linear regression slope (kg/day)
+    const recent = wh.slice(-14);
+    const t0 = new Date(recent[0].d + 'T12:00:00').getTime();
+    const pts = recent.map(x => ({
+        x: (new Date(x.d + 'T12:00:00').getTime() - t0) / 86400000,
+        y: x.v,
+    }));
+    const n = pts.length;
+    const sx = pts.reduce((s,p)=>s+p.x,0);
+    const sy = pts.reduce((s,p)=>s+p.y,0);
+    const sxy = pts.reduce((s,p)=>s+p.x*p.y,0);
+    const sxx = pts.reduce((s,p)=>s+p.x*p.x,0);
+    const denom = n*sxx - sx*sx;
+    const slope = denom !== 0 ? (n*sxy - sx*sy) / denom : 0;  // kg/day
+
+    const current = recent[recent.length-1].v;
+    const toLose = current - S.g;
+
+    let html, cls = '';
+    if (Math.abs(slope) < 0.005) {
+        html = `<div class="eta-line"><span>📊 Tendance stable</span><b>—</b></div>
+                <div class="eta-sub">Pas assez de variation pour estimer (plateau ?)</div>`;
+        cls = 'eta-neutral';
+    } else if (toLose <= 0 && slope <= 0) {
+        html = `<div class="eta-line"><span>🎯 Objectif atteint</span><b>✓</b></div>
+                <div class="eta-sub">${current.toFixed(1)} kg · objectif ${S.g} kg</div>`;
+        cls = 'eta-good';
+    } else if ((toLose > 0 && slope >= 0) || (toLose < 0 && slope <= 0)) {
+        html = `<div class="eta-line"><span>⚠️ Tu t'éloignes de l'objectif</span><b>—</b></div>
+                <div class="eta-sub">Tendance ${slope>0?'+':''}${(slope*7).toFixed(2)} kg/sem sur 14j</div>`;
+        cls = 'eta-warn';
+    } else {
+        const daysNeeded = Math.ceil(toLose / slope);
+        const eta = new Date(); eta.setDate(eta.getDate() + daysNeeded);
+        const etaLabel = eta.toLocaleDateString('fr-FR', { day:'numeric', month:'long', year:'numeric' });
+        const weekly = Math.abs(slope * 7).toFixed(2);
+        html = `<div class="eta-line"><span>🎯 Objectif ${S.g} kg atteint</span><b>${etaLabel}</b></div>
+                <div class="eta-sub">À ce rythme · ${weekly} kg/sem · encore ${daysNeeded} j</div>`;
+        cls = 'eta-good';
+    }
+    el.className = 'card eta-card ' + cls;
+    el.innerHTML = `<div class="card-t">🔮 Prédiction</div>${html}`;
+    el.style.display = '';
 }
 
 /* ---------- Stats bar ---------- */

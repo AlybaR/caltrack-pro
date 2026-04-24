@@ -1109,6 +1109,9 @@ select option { background: var(--card); color: var(--txt); }
   transition: transform var(--mid) var(--ease), opacity var(--mid);
   white-space: nowrap;
   box-shadow: var(--shadow-lg);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .toast.show { transform: translateX(-50%) translateY(0); }
@@ -3740,3 +3743,32 @@ html[data-theme="dark"] .mesh-bg .orb { opacity: .25; }
 
 /* Settings row toggle (for dark mode) */
 .settings-row .toggle-switch { margin-left:auto; }
+
+/* ============================================================
+   PHASE 5 — POLISH (toast-undo, ETA card)
+   ============================================================ */
+.toast-undo {
+    margin-left:14px; padding:6px 12px; border:none; border-radius:8px;
+    background:var(--acc); color:#fff; font-family:'Outfit',sans-serif;
+    font-weight:600; font-size:.78rem; cursor:pointer;
+    letter-spacing:.3px; text-transform:uppercase;
+    transition:transform .12s var(--ease), filter .12s;
+}
+.toast-undo:hover { filter:brightness(1.1); }
+.toast-undo:active { transform:scale(.95); }
+
+.eta-card {
+    padding:14px 16px; border-radius:var(--r);
+    background:linear-gradient(135deg, rgba(46,126,150,.06), rgba(101,87,160,.06));
+    border-left:3px solid var(--cyan);
+}
+.eta-card.eta-good { border-left-color:var(--grn); background:linear-gradient(135deg, rgba(61,122,64,.08), rgba(61,122,64,.02)); }
+.eta-card.eta-warn { border-left-color:var(--red); background:linear-gradient(135deg, rgba(188,53,53,.07), rgba(188,53,53,.02)); }
+.eta-card.eta-neutral { border-left-color:var(--mut); }
+.eta-line { display:flex; justify-content:space-between; align-items:baseline; gap:12px; margin-top:8px; font-size:.92rem; }
+.eta-line b { font-family:'Outfit',sans-serif; font-weight:700; font-size:1.05rem; color:var(--acc); }
+.eta-card.eta-good .eta-line b { color:var(--grn); }
+.eta-card.eta-warn .eta-line b { color:var(--red); }
+.eta-sub { font-size:.76rem; color:var(--mut); margin-top:4px; }
+
+html[data-theme="dark"] .eta-card { background:rgba(255,255,255,.03); }

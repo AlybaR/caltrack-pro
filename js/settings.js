@@ -7,6 +7,15 @@
 const APP_VERSION = '3.0.0';
 
 function renderSettings() {
+    // Theme toggle
+    const tTog = document.getElementById('theme-toggle');
+    const tStat = document.getElementById('theme-status');
+    if (tTog && tStat) {
+        const theme = lsLoad('theme') || 'light';
+        tTog.checked = theme === 'dark';
+        tStat.textContent = theme === 'dark' ? 'Sombre' : 'Clair';
+    }
+
     // Notifications toggle
     const toggle = document.getElementById('notif-toggle');
     const status = document.getElementById('notif-status');

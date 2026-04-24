@@ -417,6 +417,7 @@
             <canvas id="weight-canvas" style="height:240px;"></canvas>
             <div class="imc-display" id="imc-display"></div>
         </div>
+        <div class="card eta-card" id="eta-card" style="display:none;margin-bottom:14px;"></div>
         <div class="card">
             <div class="card-t">Historique</div>
             <div id="weight-history"></div>
@@ -506,6 +507,24 @@
                     </div>
                 </div>
                 <div class="sr-right">↑</div>
+            </div>
+        </div>
+
+        <!-- Apparence -->
+        <div class="card" style="margin-bottom:10px;">
+            <div class="card-t">Apparence</div>
+            <div class="settings-row">
+                <div class="sr-left">
+                    <div class="sr-icon">🌙</div>
+                    <div class="sr-info">
+                        <div class="sr-label">Mode sombre</div>
+                        <div class="sr-sub" id="theme-status">Clair</div>
+                    </div>
+                </div>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="theme-toggle" onchange="toggleTheme()"/>
+                    <span class="toggle-track"></span>
+                </label>
             </div>
         </div>
 
