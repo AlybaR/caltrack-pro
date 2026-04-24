@@ -3640,3 +3640,103 @@ button:focus-visible,
 .milestone-ico { font-size:1.1rem; }
 .milestone-txt { flex:1; font-size:.85rem; font-weight:600; color:var(--txt); }
 .milestone-date { font-size:.7rem; color:var(--mut); font-variant-numeric:tabular-nums; }
+
+/* ============================================================
+   PHASE 4 — INTELLIGENCE (analytics + insights)
+   ============================================================ */
+.intel-stats { display:grid; grid-template-columns:repeat(4,1fr); gap:6px; margin-bottom:10px; }
+.intel-stat { background:rgba(200,81,42,.06); border:1px solid rgba(200,81,42,.12); border-radius:10px; padding:7px 4px; text-align:center; }
+.intel-stat-v { font-family:'Outfit',sans-serif; font-weight:800; font-size:1.05rem; color:var(--txt); font-variant-numeric:tabular-nums; line-height:1.1; }
+.intel-stat-v small { font-size:.6rem; font-weight:600; color:var(--mut); margin-left:1px; }
+.intel-stat-l { font-size:.6rem; color:var(--mut); text-transform:uppercase; letter-spacing:.3px; margin-top:2px; }
+.intel-stat-v.text-grn { color:#0E7C66; } .intel-stat-v.text-red { color:#DC2626; }
+
+.intel-macro-row { display:grid; grid-template-columns:repeat(4,1fr); gap:6px; margin-bottom:14px; }
+.intel-macro { background:rgba(180,116,32,.08); border-radius:10px; padding:6px 4px; text-align:center; }
+.intel-macro b { font-family:'Outfit',sans-serif; font-weight:800; font-size:.95rem; color:var(--yel); font-variant-numeric:tabular-nums; }
+.intel-macro small { display:block; font-size:.6rem; color:var(--mut); text-transform:uppercase; letter-spacing:.3px; margin-top:1px; }
+
+.intel-insights-title { font-size:.82rem; font-weight:700; color:var(--txt); margin:14px 0 8px; }
+.intel-insights { display:flex; flex-direction:column; gap:6px; }
+.intel-insight { display:flex; gap:10px; align-items:flex-start; background:rgba(0,0,0,.03); border-radius:10px; padding:9px 12px; border-left:3px solid transparent; font-size:.82rem; line-height:1.4; }
+.intel-insight.intel-good { background:rgba(14,124,102,.08); border-left-color:#0E7C66; }
+.intel-insight.intel-warn { background:rgba(220,38,38,.06); border-left-color:#DC2626; }
+.intel-insight.intel-info { background:rgba(46,126,150,.08); border-left-color:#2E7E96; }
+.intel-insight.intel-neutral { background:rgba(0,0,0,.04); border-left-color:var(--mut); }
+.intel-ins-ico { font-size:1.05rem; flex-shrink:0; }
+.intel-ins-txt { flex:1; color:var(--txt); }
+
+.intel-top-foods { display:flex; flex-direction:column; gap:4px; }
+.intel-food-row { display:flex; align-items:center; gap:10px; background:rgba(200,81,42,.05); border-radius:8px; padding:6px 10px; font-size:.85rem; }
+.intel-food-rank { font-family:'Outfit',sans-serif; font-weight:800; color:var(--acc); min-width:24px; }
+.intel-food-name { flex:1; color:var(--txt); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.intel-food-count { font-family:'Outfit',sans-serif; font-weight:700; color:var(--mut); font-variant-numeric:tabular-nums; }
+
+/* ============================================================
+   PHASE 4 — DARK MODE (toggled via data-theme="dark" on <html>)
+   ============================================================ */
+html[data-theme="dark"] {
+  --bg:    #13100D;
+  --bg2:   #1C1814;
+  --card:  #221D17;
+  --bdr:   #332A22;
+  --bdr2:  #453828;
+  --acc:      #E06B3D;
+  --acc2:     #B85425;
+  --acc-bg:   rgba(224,107,61,.10);
+  --acc-glow: rgba(224,107,61,.30);
+  --grn:     #4FB066;
+  --grn-bg:  rgba(79,176,102,.12);
+  --red:     #E05E5E;
+  --red-bg:  rgba(224,94,94,.12);
+  --yel:     #E9A441;
+  --cyan:    #4DB5CC;
+  --pur:     #9C8FD6;
+  --txt:   #F2EAE0;
+  --txt2:  #D4C9B8;
+  --mut:   #8A7D6E;
+  --faint: #5A5045;
+  --shadow-xs: 0 1px 2px rgba(0,0,0,.3);
+  --shadow-sm: 0 1px 3px rgba(0,0,0,.35), 0 4px 12px rgba(0,0,0,.3);
+  --shadow-md: 0 2px 8px rgba(0,0,0,.4), 0 12px 32px rgba(0,0,0,.35);
+  --shadow-lg: 0 4px 16px rgba(0,0,0,.5), 0 24px 56px rgba(0,0,0,.4);
+  --glow-acc: rgba(224,107,61,.3);
+  --glow-grn: rgba(79,176,102,.25);
+  --sable:    #8A7B68;
+}
+html[data-theme="dark"] body { background: var(--bg); color: var(--txt); }
+html[data-theme="dark"] .bot-nav,
+html[data-theme="dark"] .side-nav { background: rgba(28,24,20,.85); border-color: rgba(255,255,255,.06); }
+html[data-theme="dark"] .card,
+html[data-theme="dark"] .ring-hero-card,
+html[data-theme="dark"] .meal-section,
+html[data-theme="dark"] .ex-section-wrap { background: var(--card); border-color: var(--bdr); }
+html[data-theme="dark"] input,
+html[data-theme="dark"] select,
+html[data-theme="dark"] textarea { background: var(--bg2); color: var(--txt); border-color: var(--bdr); }
+html[data-theme="dark"] .qbtn,
+html[data-theme="dark"] .ex-preset-btn,
+html[data-theme="dark"] .qcat-btn,
+html[data-theme="dark"] .ex-cat-btn { background: var(--bg2); color: var(--txt); border-color: var(--bdr); }
+html[data-theme="dark"] .food-item,
+html[data-theme="dark"] .ex-item,
+html[data-theme="dark"] .mes-row,
+html[data-theme="dark"] .intel-food-row,
+html[data-theme="dark"] .intel-insight.intel-neutral,
+html[data-theme="dark"] .milestone-row,
+html[data-theme="dark"] .ex-set-pill { background: rgba(255,255,255,.04); }
+html[data-theme="dark"] .mesh-bg .orb { opacity: .25; }
+
+/* ============================================================
+   PHASE 4 — SOMMEIL (small card on dashboard)
+   ============================================================ */
+.sleep-card-row { display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+.sleep-input { width:70px; padding:8px 10px; border:1px solid rgba(0,0,0,.1); border-radius:10px; background:var(--bg); font-family:'Outfit',sans-serif; font-weight:700; font-size:1rem; color:var(--txt); outline:none; text-align:center; font-variant-numeric:tabular-nums; }
+.sleep-input:focus { border-color:var(--acc); box-shadow:0 0 0 3px var(--acc-glow); }
+.sleep-stars { display:flex; gap:4px; }
+.sleep-star { background:none; border:none; font-size:1.3rem; cursor:pointer; opacity:.35; transition:opacity .15s, transform .15s; }
+.sleep-star.active { opacity:1; transform:scale(1.1); }
+.sleep-summary { font-size:.78rem; color:var(--mut); margin-top:6px; }
+
+/* Settings row toggle (for dark mode) */
+.settings-row .toggle-switch { margin-left:auto; }
