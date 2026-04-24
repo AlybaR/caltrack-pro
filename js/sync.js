@@ -18,25 +18,34 @@ const META_KEYS = ['settings', 'weight-history', 'theme', 'best-streak'];
 
 /** Called by auth.js when user is authenticated. */
 async function onUserReady(user) {
+    console.log('[sync] onUserReady uid=', user.uid);
     _syncUid = user.uid;
     _syncDb = firebase.firestore();
     setSyncStatus('syncing');
 
     // Migration flow: if cloud has no settings, push local. Otherwise pull.
     const metaRef = _syncDb.collection('users').doc(_syncUid).collection('meta');
-    const settingsSnap = await metaRef.doc('settings').get().catch(() => null);
+    let settingsSnap = null;
+    try {
+        settingsSnap = await metaRef.doc('settings').get();
+        console.log('[sync] cloud settings exists?', settingsSnap.exists);
+    } catch (e) {
+        console.error('[sync] failed to read cloud settings:', e);
+        setSyncStatus('error');
+    }
 
     if (!settingsSnap || !settingsSnap.exists) {
-        // Cloud empty → push whatever is in localStorage (may be nothing → fresh account)
+        console.log('[sync] cloud empty → pushing local to cloud');
         await pushAllLocalToCloud();
     } else {
-        // Cloud exists → pull and overwrite local
+        console.log('[sync] cloud has data → pulling to local');
         await pullAllFromCloud();
     }
 
     subscribeRealtime();
     _syncReady = true;
     setSyncStatus('ok');
+    console.log('[sync] ready — realtime listeners active');
 
     // Decide landing destination
     const saved = lsLoad('settings');
@@ -68,7 +77,13 @@ async function pushAllLocalToCloud() {
         const v = lsLoad(key);
         if (v) batch.set(daysRef.doc(dk), wrap(v));
     }
-    await batch.commit().catch(e => console.warn('Push failed:', e));
+    try {
+        await batch.commit();
+        console.log('[sync] push OK');
+    } catch (e) {
+        console.error('[sync] push failed:', e);
+        setSyncStatus('error');
+    }
 }
 
 /* ---------- Pull all cloud → local (first login on new device) ---------- */
@@ -171,8 +186,8 @@ function pushKey(k, v) {
     } else {
         return;
     }
-    p.then(() => setSyncStatus('ok'))
-     .catch(e => { console.warn('Sync push failed:', e); setSyncStatus('error'); });
+    p.then(() => { console.log('[sync] pushed key:', k); setSyncStatus('ok'); })
+     .catch(e => { console.error('[sync] push failed for key', k, e); setSyncStatus('error'); });
 }
 
 function wrap(v) {
@@ -191,6 +206,7 @@ function setSyncStatus(state) {
     };
     const s = map[state] || map.ok;
     el.className = 'sync-status ' + s.cls;
+    el.style.display = 'inline-flex';        // force visible once auth is active
     el.innerHTML = `<span class="sync-ico">${s.ico}</span>${s.txt}`;
 }
 
