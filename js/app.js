@@ -19,7 +19,13 @@ let S = {};
 
 // ---------- STORAGE ----------
 const lsLoad = k => { try { return JSON.parse(localStorage.getItem(k)); } catch { return null; } };
-const lsSave = (k, v) => localStorage.setItem(k, JSON.stringify(v));
+const lsSave = (k, v) => {
+  localStorage.setItem(k, JSON.stringify(v));
+  // Sync hook — sync.js sets window._onLsWrite to mirror writes to Firestore.
+  if (typeof window._onLsWrite === 'function') {
+    try { window._onLsWrite(k, v); } catch (e) { console.error('[sync] hook err:', e); }
+  }
+};
 
 const todayKey = () => { const d = new Date(); const off = d.getTimezoneOffset() * 60000; return new Date(d.getTime() - off).toISOString().slice(0, 10); };
 function getDay(dk) {

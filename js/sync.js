@@ -162,15 +162,13 @@ function refreshActivePage() {
     if (fn && typeof window[fn] === 'function') window[fn]();
 }
 
-/* ---------- Write wrapper (monkey-patch lsSave) ---------- */
-(function () {
-    const origLsSave = window.lsSave;
-    window.lsSave = function (k, v) {
-        origLsSave(k, v);
-        if (!_syncReady || _syncBusy || !_syncUid) return;
-        pushKey(k, v);
-    };
-})();
+/* ---------- Write hook ----------
+   Installed on window; invoked by lsSave() in app.js after every local write.
+   Skips while we're applying a remote update, or before auth is ready. */
+window._onLsWrite = function (k, v) {
+    if (!_syncReady || _syncBusy || !_syncUid) return;
+    pushKey(k, v);
+};
 
 function pushKey(k, v) {
     if (!_syncDb) return;
