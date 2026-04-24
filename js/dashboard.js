@@ -32,6 +32,9 @@ function renderDash() {
     const { target, tdee, bmr, water, rythme, mp, cyc } = S;
     const effectiveTarget = target + burned; // exercise expands the budget
 
+    // Wellness card (B1 sommeil + B2 humeur/énergie)
+    if (typeof renderWellnessCard === 'function') renderWellnessCard();
+
     // Greeting
     document.getElementById('dash-greeting').innerHTML = getGreeting(S.name || 'Toi');
 

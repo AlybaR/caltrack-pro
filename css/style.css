@@ -3772,3 +3772,34 @@ html[data-theme="dark"] .mesh-bg .orb { opacity: .25; }
 .eta-sub { font-size:.76rem; color:var(--mut); margin-top:4px; }
 
 html[data-theme="dark"] .eta-card { background:rgba(255,255,255,.03); }
+
+/* ============================================================
+   PHASE 6 — WELLNESS (B1 sommeil + B2 humeur/énergie)
+   ============================================================ */
+.wellness-card { padding:14px 16px; }
+.wl-row {
+    display:flex; align-items:center; gap:10px;
+    padding:8px 0; border-bottom:1px solid rgba(0,0,0,.04);
+    flex-wrap:wrap;
+}
+.wl-row:last-of-type { border-bottom:none; }
+.wl-label {
+    font-family:'Outfit',sans-serif; font-weight:600; font-size:.85rem;
+    min-width:90px; color:var(--txt);
+}
+.wl-unit { font-size:.78rem; color:var(--mut); margin-right:4px; }
+.wl-emoji-row { display:flex; gap:4px; flex-wrap:wrap; }
+.wl-emoji {
+    background:rgba(0,0,0,.03); border:1px solid transparent; border-radius:10px;
+    font-size:1.1rem; padding:4px 8px; cursor:pointer;
+    transition:transform .12s var(--ease), background .12s, border-color .12s;
+    opacity:.55;
+}
+.wl-emoji:hover { transform:scale(1.1); opacity:.85; }
+.wl-emoji.active {
+    opacity:1; background:var(--acc-glow, rgba(200,81,42,.12));
+    border-color:var(--acc); transform:scale(1.12);
+}
+html[data-theme="dark"] .wl-row { border-bottom-color:rgba(255,255,255,.05); }
+html[data-theme="dark"] .wl-emoji { background:rgba(255,255,255,.04); }
+html[data-theme="dark"] .wl-emoji.active { background:rgba(232,107,61,.18); }

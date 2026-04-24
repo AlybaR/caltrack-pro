@@ -76,6 +76,9 @@ function computeAnalytics() {
     const avgBurn = days.length > 0 ? Math.round(sumBurn / days.length) : 0;
     const avgDeficit = daysLogged > 0 ? Math.round((target + avgBurn - avgKcal)) : 0;
 
+    // Wellness (B1/B2) — optional
+    const wellness = typeof computeWellnessStats === 'function' ? computeWellnessStats(days) : null;
+
     return {
         daysLogged, daysInTarget, daysOver, daysUnder,
         avgKcal, avgBurn, avgDeficit, target,
@@ -88,6 +91,7 @@ function computeAnalytics() {
         avgL: macrosTracked > 0 && daysLogged > 0 ? Math.round(totalL / daysLogged) : 0,
         avgG: macrosTracked > 0 && daysLogged > 0 ? Math.round(totalG / daysLogged) : 0,
         adherencePct: daysLogged > 0 ? Math.round(daysInTarget / daysLogged * 100) : 0,
+        wellness,
     };
 }
 
@@ -122,6 +126,18 @@ function computeInsights(a) {
     const streak = typeof calcStreak === 'function' ? calcStreak() : 0;
     if (streak >= 7) insights.push({ ico: '🔥', tone: 'good', txt: `${streak} jours consécutifs dans l'objectif — tu es en feu !` });
     else if (streak >= 3) insights.push({ ico: '✨', tone: 'info', txt: `${streak} jours consécutifs — l'habitude se forme (vise 7).` });
+
+    // Wellness insights (B1/B2)
+    const w = a.wellness;
+    if (w) {
+        if (w.sleepDays >= 5) {
+            if (w.avgSleep < 6.5) insights.push({ ico: '😴', tone: 'warn', txt: `Sommeil moyen : ${w.avgSleep} h — sous 7h, la satiété et les fringales empirent.` });
+            else if (w.avgSleep >= 7.5) insights.push({ ico: '💤', tone: 'good', txt: `Sommeil solide (${w.avgSleep} h/j) — ton corps récupère bien.` });
+        }
+        if (w.moodDays >= 5 && w.avgMood < 2.8) insights.push({ ico: '😕', tone: 'info', txt: `Humeur moyenne ${w.avgMood}/5 — vérifie sommeil, stress, ou un déficit trop agressif.` });
+        else if (w.moodDays >= 5 && w.avgMood >= 4) insights.push({ ico: '😊', tone: 'good', txt: `Humeur moyenne ${w.avgMood}/5 — bon signe que ton plan est soutenable.` });
+        if (w.energyDays >= 5 && w.avgEnergy < 2.8) insights.push({ ico: '🪫', tone: 'warn', txt: `Énergie basse (${w.avgEnergy}/5) — pense glucides, hydratation, micronutriments.` });
+    }
 
     return insights;
 }
