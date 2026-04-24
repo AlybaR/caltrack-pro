@@ -16,6 +16,12 @@ Effort : S (<1h) · M (2-4h) · L (journée+)
 - Suivi : streak, heatmap, projection vs réel
 - PWA hors-ligne, notifications, export/import
 - Mis en ligne sur GitHub Pages ✨
+- **Phase 1 (nutrition)** : N1 portions, N2 scanner code-barres, N3 recettes ✅
+- **Phase 2 (sport)** : S1 muscu séries/reps/charge, S2 cardio distance/FC, S3 progression + PR 1RM ✅
+- **Phase 3 (corps & objectifs)** : C1 mensurations, C2 %MG Navy, O1 deadline, O2 jalons ✅
+- **Refonte ergo** : onglets dédiés Journal / Sport / Corps / Poids / Suivi ✅
+- **Phase 4 (analytics)** : A1 bilan intelligent 30j, A2 top foods + trends, O5 ETA prediction ✅
+- **Phase 5 (polish)** : P1 dark mode, P3 undo toast ✅
 
 ---
 
