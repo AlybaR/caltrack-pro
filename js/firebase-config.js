@@ -4,12 +4,13 @@
    ============================================================ */
 
 const firebaseConfig = {
-    apiKey: "",           // ← paste from Firebase console
-    authDomain: "",
-    projectId: "",
-    storageBucket: "",
-    messagingSenderId: "",
-    appId: "",
+  apiKey: "AIzaSyASlPcGnmkzMWA0f-3e9R8pZLkJnF2k2Is",
+  authDomain: "caltrack-pro-bec1b.firebaseapp.com",
+  projectId: "caltrack-pro-bec1b",
+  storageBucket: "caltrack-pro-bec1b.firebasestorage.app",
+  messagingSenderId: "675742866141",
+  appId: "1:675742866141:web:632dc94fbdd0d803ff9934",
+  measurementId: "G-8CHJ8KQF8L"
 };
 
 // Set to `true` to force local-only mode even if config is present (for debug).
