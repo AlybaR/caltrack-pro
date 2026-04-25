@@ -25,6 +25,8 @@
 
 <body>
 
+    <a href="#page-dash" class="skip-link">Aller au contenu principal</a>
+
     <!-- ANIMATED MESH BACKGROUND -->
     <div class="mesh-bg" aria-hidden="true">
         <div class="orb orb1"></div>
@@ -243,17 +245,17 @@
     <!-- ================================================================
      BOTTOM NAV
      ================================================================ -->
-    <nav class="bot-nav" id="bot-nav" style="display:none;">
-        <button class="nav-btn active" id="nb-dash" onclick="showPage('dash')"> <span
-                class="ico">📊</span>Accueil</button>
-        <button class="nav-btn" id="nb-journal" onclick="showPage('journal')"> <span
-                class="ico">📋</span>Journal</button>
-        <button class="nav-btn" id="nb-sport" onclick="showPage('sport')"> <span class="ico">🏋️</span>Sport</button>
-        <button class="nav-btn" id="nb-corps" onclick="showPage('corps')"> <span class="ico">📏</span>Corps</button>
-        <button class="nav-btn" id="nb-poids" onclick="showPage('poids')"> <span class="ico">⚖️</span>Poids</button>
-        <button class="nav-btn" id="nb-suivi" onclick="showPage('suivi')"> <span class="ico">📅</span>Suivi</button>
-        <button class="nav-btn" id="nb-settings" onclick="showPage('settings')"><span
-                class="ico">⚙️</span>Profil</button>
+    <nav class="bot-nav" id="bot-nav" style="display:none;" aria-label="Navigation principale">
+        <button class="nav-btn active" id="nb-dash" onclick="showPage('dash')" aria-label="Accueil"> <span
+                class="ico" aria-hidden="true">📊</span>Accueil</button>
+        <button class="nav-btn" id="nb-journal" onclick="showPage('journal')" aria-label="Journal alimentaire"> <span
+                class="ico" aria-hidden="true">📋</span>Journal</button>
+        <button class="nav-btn" id="nb-sport" onclick="showPage('sport')" aria-label="Sport"> <span class="ico" aria-hidden="true">🏋️</span>Sport</button>
+        <button class="nav-btn" id="nb-corps" onclick="showPage('corps')" aria-label="Mensurations"> <span class="ico" aria-hidden="true">📏</span>Corps</button>
+        <button class="nav-btn" id="nb-poids" onclick="showPage('poids')" aria-label="Poids"> <span class="ico" aria-hidden="true">⚖️</span>Poids</button>
+        <button class="nav-btn" id="nb-suivi" onclick="showPage('suivi')" aria-label="Suivi hebdomadaire"> <span class="ico" aria-hidden="true">📅</span>Suivi</button>
+        <button class="nav-btn" id="nb-settings" onclick="showPage('settings')" aria-label="Profil et réglages"><span
+                class="ico" aria-hidden="true">⚙️</span>Profil</button>
     </nav>
 
     <!-- ================================================================
@@ -351,9 +353,9 @@
             <div style="font-size:.75rem;color:var(--mut);" id="water-goal-ml"></div>
             <div class="water-ctrl">
                 <div class="water-btns">
-                    <button class="wbtn" id="water-btn-minus" data-haptic="tap">−</button>
-                    <div class="water-count" id="water-count">0</div>
-                    <button class="wbtn" id="water-btn-plus" data-haptic="tap">+</button>
+                    <button class="wbtn" id="water-btn-minus" data-haptic="tap" aria-label="Retirer un verre d'eau">−</button>
+                    <div class="water-count" id="water-count" aria-live="polite">0</div>
+                    <button class="wbtn" id="water-btn-plus" data-haptic="tap" aria-label="Ajouter un verre d'eau">+</button>
                 </div>
                 <div class="water-bar-wrap">
                     <div class="water-bar-bg">

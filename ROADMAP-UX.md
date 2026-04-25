@@ -57,7 +57,7 @@ Effort : XS (<15min) · S (<1h) · M (1-3h) · L (>3h)
 | UX14 | Haptic feedback mobile (vibration courte sur tap clé) | S | ✅ |
 | UX15 | Skeleton loaders (au lieu de "Chargement...") | S | ⏳ |
 | UX16 | `inputmode=decimal` sur tous les champs numériques | XS | ✅ |
-| UX17 | Pull-to-refresh sur dashboard | S | ⏳ |
+| UX17 | Pull-to-refresh sur dashboard | S | ✅ |
 | UX22 | Empty states guidés (CTA + visuel) | S | ✅ |
 | UX23 | `prefers-color-scheme` auto-détecté au 1er launch | XS | ✅ |
 
@@ -67,6 +67,6 @@ Effort : XS (<15min) · S (<1h) · M (1-3h) · L (>3h)
 
 | # | Item | Effort | Statut |
 |---|------|--------|--------|
-| UX18 | Swipe gauche/droite dans journal = jour précédent/suivant | M | ⏳ |
+| UX18 | Swipe gauche/droite dans journal = jour précédent/suivant | M | ✅ |
 | UX20 | FAB "+" persistant sur dashboard | S | ⏳ |
 | UX21 | Tuto 30s après wizard (3 bulles pointées) | M | ⏳ |

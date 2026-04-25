@@ -92,6 +92,30 @@ function showPage(name) {
   if (name === 'settings') renderSettings();
   refreshNavBadges();
   applyNumericInputmode();
+  attachPageGestures(name);
+}
+
+/** Wire up swipe + pull-to-refresh on the active page (idempotent). */
+function attachPageGestures(name) {
+  // UX18 — swipe left/right on Journal page = change day
+  if (name === 'journal') {
+    const journalPage = document.getElementById('page-journal');
+    attachHSwipe(journalPage,
+      () => { if (typeof changeJournalDate === 'function') changeJournalDate(1); },   // ← swipe left = next day
+      () => { if (typeof changeJournalDate === 'function') changeJournalDate(-1); }   // → swipe right = previous day
+    );
+  }
+  // UX17 — pull-to-refresh on Dashboard
+  if (name === 'dash') {
+    const dashPage = document.getElementById('page-dash');
+    attachPullToRefresh(dashPage, () => {
+      // Re-render + try to pull from cloud if signed in
+      renderDash();
+      if (typeof pullAllFromCloud === 'function' && typeof _syncUid !== 'undefined' && _syncUid) {
+        pullAllFromCloud().then(renderDash);
+      }
+    });
+  }
 }
 
 /* ----------------------------------------------------------
@@ -235,6 +259,83 @@ function toggleTheme() {
   const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
   applyTheme(prefersDark ? 'dark' : 'light');
 })();
+
+// ---------- HORIZONTAL SWIPE (UX18 — change day in Journal) ----------
+/** Attach left/right swipe handlers to a target element.
+ *  onLeft = swipe to the left (go forward in time / next day).
+ *  onRight = swipe to the right (go backward / previous day).
+ *  Triggers only if horizontal travel > 60px and dominant axis is horizontal. */
+function attachHSwipe(el, onLeft, onRight) {
+  if (!el || el._hSwipeBound) return;
+  el._hSwipeBound = true;
+  let sx = 0, sy = 0, t0 = 0, active = false;
+  el.addEventListener('touchstart', (e) => {
+    const t = e.touches[0];
+    sx = t.clientX; sy = t.clientY; t0 = Date.now(); active = true;
+  }, { passive: true });
+  el.addEventListener('touchend', (e) => {
+    if (!active) return;
+    active = false;
+    const t = e.changedTouches[0];
+    const dx = t.clientX - sx;
+    const dy = t.clientY - sy;
+    const dt = Date.now() - t0;
+    if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.6 && dt < 600) {
+      if (dx < 0 && typeof onLeft === 'function')  onLeft();
+      if (dx > 0 && typeof onRight === 'function') onRight();
+    }
+  }, { passive: true });
+}
+
+// ---------- PULL-TO-REFRESH (UX17 — dashboard refresh) ----------
+function attachPullToRefresh(el, onRefresh) {
+  if (!el || el._ptrBound) return;
+  el._ptrBound = true;
+  let sy = 0, dy = 0, pulling = false, indicator = null;
+  el.addEventListener('touchstart', (e) => {
+    if (window.scrollY > 0) return;
+    sy = e.touches[0].clientY;
+    pulling = true;
+    if (!indicator) {
+      indicator = document.createElement('div');
+      indicator.className = 'ptr-indicator';
+      indicator.innerHTML = '<span class="ptr-icon">↓</span><span class="ptr-text">Tire pour rafraîchir</span>';
+      document.body.appendChild(indicator);
+    }
+  }, { passive: true });
+  el.addEventListener('touchmove', (e) => {
+    if (!pulling) return;
+    dy = e.touches[0].clientY - sy;
+    if (dy > 0 && window.scrollY === 0) {
+      const pct = Math.min(dy / 100, 1);
+      indicator.style.opacity = pct;
+      indicator.style.transform = `translateX(-50%) translateY(${Math.min(dy * 0.6, 70)}px)`;
+      const ico = indicator.querySelector('.ptr-icon');
+      if (ico) ico.style.transform = `rotate(${pct * 180}deg)`;
+      const txt = indicator.querySelector('.ptr-text');
+      if (txt) txt.textContent = dy > 80 ? 'Lâche pour rafraîchir' : 'Tire pour rafraîchir';
+    }
+  }, { passive: true });
+  el.addEventListener('touchend', () => {
+    if (!pulling) return;
+    pulling = false;
+    if (dy > 80) {
+      if (indicator) {
+        indicator.querySelector('.ptr-text').textContent = '↻ Rafraîchissement…';
+        indicator.querySelector('.ptr-icon').style.animation = 'spin 0.6s linear infinite';
+      }
+      if (typeof onRefresh === 'function') onRefresh();
+      if (typeof haptic === 'function') haptic('success');
+      setTimeout(() => { if (indicator) indicator.style.opacity = 0; }, 600);
+    } else {
+      if (indicator) {
+        indicator.style.opacity = 0;
+        indicator.style.transform = 'translateX(-50%) translateY(0)';
+      }
+    }
+    dy = 0;
+  });
+}
 
 // ---------- HAPTIC FEEDBACK (UX14) ----------
 /** Short vibration for critical taps. Falls back to no-op if unsupported. */
