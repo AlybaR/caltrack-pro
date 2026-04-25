@@ -15,7 +15,7 @@ const EX_CATS = {
         { n: 'Rameur',           kcal_h: 500, type: 'cardio' },
         { n: 'HIIT',             kcal_h: 640, type: 'cardio' },
     ],
-    '🏋️ Muscu — Exercices': [
+    '🏋️ Muscu détaillée': [
         { n: 'Développé couché',     type: 'strength', muscle: 'Pectoraux' },
         { n: 'Squat',                type: 'strength', muscle: 'Jambes' },
         { n: 'Soulevé de terre',     type: 'strength', muscle: 'Dos' },
@@ -31,7 +31,7 @@ const EX_CATS = {
         { n: 'Gainage (s)',          type: 'strength', muscle: 'Core', unit: 's' },
         { n: 'Abdos crunch',         type: 'strength', muscle: 'Core' },
     ],
-    '💪 Muscu — Séance': [
+    '💪 Muscu globale': [
         { n: 'Musculation légère',   kcal_h: 260, type: 'session' },
         { n: 'Musculation intense',  kcal_h: 380, type: 'session' },
         { n: 'Crossfit',             kcal_h: 500, type: 'session' },
@@ -55,11 +55,78 @@ const EX_CATS = {
     ],
 };
 
-let _exActiveCat = '🏃 Cardio';
+let _exActiveCat = '🕒 Récents';
 let _exManualOpen = false;
 let _exSectionOpen = true;
 let _selectedPreset = null;
 let _pendingSets = []; // Working set list for strength entries
+
+/* ----------------------------------------------------------
+   Recent exercises tracker — top activities by recency × frequency.
+   Stored in localStorage 'recent_exercises' as [{n, type, kcal_h?, muscle?, ts, count}].
+   ---------------------------------------------------------- */
+function trackRecentExercise(ex) {
+    if (!ex || !ex.n) return;
+    let recents = lsLoad('recent_exercises') || [];
+    const now = Date.now();
+    const idx = recents.findIndex(r => r.n === ex.n);
+    if (idx >= 0) {
+        recents[idx].count = (recents[idx].count || 1) + 1;
+        recents[idx].ts = now;
+    } else {
+        const rec = { n: ex.n, type: ex.type, ts: now, count: 1 };
+        if (ex.kcal_h) rec.kcal_h = ex.kcal_h;
+        if (ex.muscle) rec.muscle = ex.muscle;
+        if (ex.unit) rec.unit = ex.unit;
+        recents.push(rec);
+    }
+    recents.sort((a, b) => b.ts - a.ts);
+    if (recents.length > 30) recents = recents.slice(0, 30);
+    lsSave('recent_exercises', recents);
+}
+
+function getRecentExercises(limit = 8) {
+    const recents = lsLoad('recent_exercises') || [];
+    const now = Date.now();
+    const DAY = 86400000;
+    return recents
+        .map(r => {
+            const ageDays = (now - (r.ts || 0)) / DAY;
+            const recencyW = Math.max(0.1, 1 - ageDays / 30);
+            return { ...r, score: (r.count || 1) * recencyW };
+        })
+        .sort((a, b) => b.score - a.score)
+        .slice(0, limit);
+}
+
+/** Get yesterday's exercises for "Repeat last session" CTA */
+function getYesterdayExercises() {
+    const yesterday = new Date(_journalDate || new Date());
+    yesterday.setDate(yesterday.getDate() - 1);
+    const off = yesterday.getTimezoneOffset() * 60000;
+    const yKey = new Date(yesterday.getTime() - off).toISOString().slice(0, 10);
+    const day = getDay(yKey);
+    return day.exercises || [];
+}
+
+/** Recopier la séance d'hier (excluding manual entries to avoid duplicates) */
+function copySessionFromYesterday() {
+    const yEx = getYesterdayExercises();
+    if (yEx.length === 0) { showToast('📋 Aucun exercice hier'); return; }
+    const dk = getJournalKey();
+    const day = getDay(dk);
+    if (!day.exercises) day.exercises = [];
+    yEx.forEach(e => {
+        const copy = { ...e };
+        delete copy._copyOf;
+        day.exercises.push(copy);
+    });
+    saveDay(dk, day);
+    if (typeof haptic === 'function') haptic('success');
+    showToast(`✅ ${yEx.length} exercice${yEx.length > 1 ? 's' : ''} recopié${yEx.length > 1 ? 's' : ''}`);
+    renderSport();
+    if (document.getElementById('page-dash')?.classList.contains('active')) renderDash();
+}
 
 /* ---------------------------------------------------------------
    Helpers
@@ -144,9 +211,14 @@ function renderExercice() {
         </div>
     `;
 
-    // Render category tabs
+    // Render category tabs — '🕒 Récents' first, then EX_CATS
     const catsEl = document.getElementById('ex-cats');
-    Object.keys(EX_CATS).forEach(cat => {
+    const recents = getRecentExercises(8);
+    // If on Récents but no recents → fall back to Cardio
+    if (_exActiveCat === '🕒 Récents' && recents.length === 0) _exActiveCat = '🏃 Cardio';
+    const allCats = ['🕒 Récents', ...Object.keys(EX_CATS)];
+    allCats.forEach(cat => {
+        if (cat === '🕒 Récents' && recents.length === 0) return; // hide if empty
         const b = document.createElement('button');
         b.className = 'ex-cat-btn' + (cat === _exActiveCat ? ' active' : '');
         b.textContent = cat;
@@ -161,13 +233,19 @@ function renderExercice() {
 function renderExerciceGrid() {
     const grid = document.getElementById('ex-preset-grid');
     if (!grid) return;
-    const presets = EX_CATS[_exActiveCat] || [];
+    let presets;
+    if (_exActiveCat === '🕒 Récents') {
+        presets = getRecentExercises(8);
+    } else {
+        presets = EX_CATS[_exActiveCat] || [];
+    }
     grid.innerHTML = '';
     presets.forEach(ex => {
         const b = document.createElement('button');
         b.className = 'ex-preset-btn';
         const rate = ex.kcal_h ? `<span class="ex-p-rate">~${ex.kcal_h} kcal/h</span>`
                    : ex.muscle ? `<span class="ex-p-rate">${ex.muscle}</span>`
+                   : ex.type === 'strength' ? `<span class="ex-p-rate">Muscu</span>`
                    : '';
         b.innerHTML = `<span class="ex-p-name">${ex.n}</span>${rate}`;
         b.onclick = () => selectExPreset(ex);
@@ -411,6 +489,7 @@ function addExEntry(entry) {
     if (!day.exercises) day.exercises = [];
     day.exercises.push(entry);
     saveDay(dk, day);
+    trackRecentExercise(entry);
     const msg = entry.type === 'strength' && entry.sets
         ? `🏋️ ${entry.sets.length} série${entry.sets.length > 1 ? 's' : ''} · ${strengthVolume(entry.sets)}kg`
         : `🔥 ${entry.kcal} kcal brûlées`;
@@ -438,11 +517,22 @@ function renderExList(exList) {
     const el = document.getElementById('ex-list');
     if (!el) return;
     if (!exList || exList.length === 0) {
+        const yEx = getYesterdayExercises();
+        const hasYesterday = yEx.length > 0;
+        const yLabel = hasYesterday
+            ? yEx.slice(0, 3).map(e => e.name || e.n || 'Exercice').join(', ') + (yEx.length > 3 ? '…' : '')
+            : '';
         el.innerHTML = `
             <div class="empty-state empty-state-compact">
                 <i data-lucide="dumbbell" class="empty-state-ico"></i>
                 <div class="empty-state-title">Aucun exercice encore</div>
-                <div class="empty-state-desc">Choisis une activité ci-dessous pour démarrer.</div>
+                <div class="empty-state-desc">${hasYesterday
+                    ? `Hier : ${yLabel}. Recopier en 1 tap ?`
+                    : 'Choisis une activité ci-dessous pour démarrer.'}</div>
+                ${hasYesterday ? `
+                    <button class="empty-state-cta" data-haptic="success" onclick="copySessionFromYesterday()">
+                        <i data-lucide="copy"></i>Recommencer la séance d'hier
+                    </button>` : ''}
             </div>`;
         if (typeof refreshIcons === 'function') refreshIcons();
         return;
