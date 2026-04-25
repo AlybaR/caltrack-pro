@@ -792,6 +792,21 @@ select option { background: var(--card); color: var(--txt); }
 .quick-add-btn:hover  { background: var(--acc2); box-shadow: 0 6px 20px rgba(200,81,42,.36); }
 .quick-add-btn:active { transform: scale(.98); }
 
+/* Quick-scan button (UX4 — direct camera from dashboard) */
+.quick-add-row { display:flex; gap:10px; align-items:stretch; margin-bottom:14px; }
+.quick-add-row .quick-add-btn { flex:1; margin-bottom:0; }
+.quick-scan-btn {
+    width:60px; flex-shrink:0;
+    display:flex; align-items:center; justify-content:center;
+    background:var(--panel); color:var(--txt);
+    border:1px solid var(--line); border-radius:var(--r-md);
+    font-size:1.5rem; cursor:pointer;
+    transition:transform .12s var(--ease), background .15s, border-color .15s;
+}
+.quick-scan-btn:hover  { background:rgba(212,99,58,.06); border-color:var(--acc); }
+.quick-scan-btn:active { transform:scale(.94); }
+html[data-theme="dark"] .quick-scan-btn { background:rgba(255,255,255,.04); }
+
 /* Details/summary for metabolic info */
 .dash-details {
   margin-top: 8px;

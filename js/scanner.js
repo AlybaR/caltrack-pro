@@ -234,6 +234,18 @@ function showScannerView(view) {
     });
 }
 
+/* ---------- Quick scan from dashboard (UX4) ----------
+   Auto-picks the meal based on time of day, then opens scanner. */
+function quickScanFromDash() {
+    const h = new Date().getHours();
+    let mk;
+    if (h >= 5 && h < 11)       mk = 'breakfast';
+    else if (h >= 11 && h < 15) mk = 'lunch';
+    else if (h >= 15 && h < 18) mk = 'snack';
+    else                        mk = 'dinner';
+    openScanner(mk);
+}
+
 /* ---------- Modal factory ---------- */
 function ensureScannerModal() {
     let modal = document.getElementById('scanner-modal');

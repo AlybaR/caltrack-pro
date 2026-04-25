@@ -302,10 +302,15 @@
             </details>
         </div>
 
-        <!-- Quick-add shortcut -->
-        <button class="quick-add-btn" onclick="showPage('journal')" aria-label="Ajouter un repas">
-            <span>+</span> Ajouter un repas
-        </button>
+        <!-- Quick-add shortcuts -->
+        <div class="quick-add-row">
+            <button class="quick-add-btn" onclick="showPage('journal')" aria-label="Ajouter un repas">
+                <span>+</span> Ajouter un repas
+            </button>
+            <button class="quick-scan-btn" onclick="quickScanFromDash()" aria-label="Scanner un code-barres">
+                📷
+            </button>
+        </div>
 
         <!-- Macros -->
         <div class="card card-glow-cyn" style="margin-bottom:12px;">
@@ -418,7 +423,8 @@
         <div class="card" style="margin-bottom:14px;">
             <div class="card-t">Enregistrer aujourd'hui</div>
             <div class="w-entry-row">
-                <input type="number" id="w-today" step=".1" placeholder="ex: 84.2" />
+                <input type="number" id="w-today" step=".1" inputmode="decimal" placeholder="ex: 84.2"
+                       onkeydown="if(event.key==='Enter') addWeight()"/>
                 <button class="btn btn-acc btn-sm" onclick="addWeight()">+ Ajouter</button>
             </div>
             <div class="period-btns-wrap">
