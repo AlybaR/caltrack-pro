@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>🧪 CalTrack Pro — Test Runner</title>
+<style>
+:root {
+  --bg:#0F0E0C; --bg2:#1A1714; --card:#221D17; --bdr:#2C2722;
+  --acc:#E06B3D; --acc2:#C8512A; --well:#9DBFA6; --red:#E05E5E; --warn:#E9A441;
+  --txt:#F5F0EA; --txt2:#C9C0B5; --mut:#8C7F71;
+}
+* { box-sizing:border-box; margin:0; padding:0; }
+html, body { height:100%; }
+body {
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  background:var(--bg); color:var(--txt); display:grid;
+  grid-template-columns:340px 1fr; grid-template-rows:auto 1fr 200px;
+  grid-template-areas:'header header' 'sidebar main' 'sidebar console';
+  gap:1px; background:var(--bdr);
+}
+header {
+  grid-area:header; background:var(--bg2); padding:14px 20px;
+  display:flex; align-items:center; gap:14px; border-bottom:1px solid var(--bdr);
+}
+header h1 { font-size:1.05rem; font-weight:800; letter-spacing:-.01em; }
+header .sub { color:var(--mut); font-size:.78rem; }
+header .actions { margin-left:auto; display:flex; gap:8px; }
+header button {
+  background:var(--card); color:var(--txt); border:1px solid var(--bdr);
+  padding:7px 14px; border-radius:8px; font-weight:600; font-size:.82rem;
+  cursor:pointer; transition:all .12s; font-family:inherit;
+}
+header button:hover { background:var(--bdr); border-color:var(--acc); color:var(--acc); }
+header button.primary { background:var(--acc); color:#fff; border-color:transparent; }
+header button.primary:hover { background:var(--acc2); }
+header button:disabled { opacity:.4; cursor:not-allowed; }
+
+aside {
+  grid-area:sidebar; background:var(--bg2); overflow-y:auto;
+  padding:10px 8px; display:flex; flex-direction:column; gap:4px;
+}
+.test-item {
+  background:var(--card); border:1px solid var(--bdr); border-radius:8px;
+  padding:10px 12px; cursor:pointer; transition:all .12s;
+  display:grid; grid-template-columns:24px 1fr auto; gap:10px; align-items:center;
+}
+.test-item:hover { border-color:var(--acc); }
+.test-item.running { border-color:var(--warn); background:rgba(233,164,65,.08); }
+.test-item.pass { border-color:var(--well); }
+.test-item.fail { border-color:var(--red); background:rgba(224,94,94,.06); }
+.test-status {
+  width:22px; height:22px; border-radius:50%; display:flex; align-items:center;
+  justify-content:center; font-size:.85rem; flex-shrink:0;
+  background:var(--bdr);
+}
+.test-item.running .test-status { background:var(--warn); color:#000; animation:spin 1s linear infinite; }
+.test-item.pass .test-status { background:var(--well); color:#000; }
+.test-item.fail .test-status { background:var(--red); color:#fff; }
+@keyframes spin { to { transform:rotate(360deg); } }
+.test-name { font-size:.84rem; font-weight:600; line-height:1.3; }
+.test-meta { font-size:.7rem; color:var(--mut); margin-top:2px; }
+.test-time { font-size:.72rem; color:var(--mut); font-variant-numeric:tabular-nums; white-space:nowrap; }
+
+main {
+  grid-area:main; background:#000; position:relative; display:flex;
+  align-items:center; justify-content:center;
+}
+#app-frame {
+  width:414px; height:100%; max-width:100%;
+  border:none; background:#000;
+  box-shadow:0 0 60px rgba(0,0,0,.7);
+}
+.frame-overlay {
+  position:absolute; inset:0; display:flex; align-items:center;
+  justify-content:center; background:rgba(0,0,0,.7); pointer-events:none;
+  opacity:0; transition:opacity .2s;
+}
+.frame-overlay.show { opacity:1; }
+.frame-overlay-content {
+  background:var(--card); border:1px solid var(--acc); border-radius:14px;
+  padding:18px 24px; font-weight:600;
+}
+
+.console {
+  grid-area:console; background:var(--bg2); padding:10px 14px;
+  overflow-y:auto; font-family:'JetBrains Mono', 'SF Mono', monospace;
+  font-size:.75rem; line-height:1.6; color:var(--txt2);
+}
+.console .log-info { color:var(--txt2); }
+.console .log-step { color:var(--acc); }
+.console .log-pass { color:var(--well); }
+.console .log-fail { color:var(--red); font-weight:600; }
+.console .log-warn { color:var(--warn); }
+.console .timestamp { color:var(--mut); margin-right:6px; }
+
+.summary {
+  display:flex; gap:18px; align-items:center; padding-left:14px;
+  font-size:.78rem; color:var(--mut);
+}
+.summary b { color:var(--txt); font-weight:700; font-variant-numeric:tabular-nums; }
+.summary .stat-pass { color:var(--well); }
+.summary .stat-fail { color:var(--red); }
+
+@media (max-width:900px) {
+  body { grid-template-columns:1fr; grid-template-areas:'header' 'sidebar' 'main' 'console'; grid-template-rows:auto auto 50vh 30vh; }
+  aside { max-height:30vh; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🧪 Test Runner</h1>
+  <span class="sub">CalTrack Pro · journey simulation</span>
+  <div class="summary" id="summary">
+    <span><b id="stat-total">0</b> tests</span>
+    <span class="stat-pass">✓ <b id="stat-pass">0</b></span>
+    <span class="stat-fail">✕ <b id="stat-fail">0</b></span>
+    <span><b id="stat-time">0</b> ms total</span>
+  </div>
+  <div class="actions">
+    <button id="btn-reset" title="Reset iframe state">🔄 Reset</button>
+    <button id="btn-run-all" class="primary">▶ Run All</button>
+  </div>
+</header>
+
+<aside id="test-list">
+  <!-- populated by runner.js -->
+</aside>
+
+<main>
+  <iframe id="app-frame" src="../index.html"></iframe>
+  <div class="frame-overlay" id="frame-overlay">
+    <div class="frame-overlay-content" id="frame-overlay-text">Running…</div>
+  </div>
+</main>
+
+<div class="console" id="console"></div>
+
+<script src="scenarios.js"></script>
+<script src="runner.js"></script>
+
+</body>
+</html>
