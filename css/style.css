@@ -4778,3 +4778,36 @@ textarea:focus-visible,
 }
 .skip-link:focus { top: 0; }
 
+/* =================================================================
+   POIDS v2 — hero stats grid
+   The current weight is the most important number on this page.
+   Make it visually dominant.
+   ================================================================= */
+.poids-hero {
+    grid-column: span 1;
+    background: linear-gradient(135deg, var(--card) 0%, var(--acc-bg) 100%);
+    border: 1px solid rgba(200,81,42,.12);
+}
+html[data-theme="dark"] .poids-hero {
+    background: linear-gradient(135deg, var(--card) 0%, rgba(224,107,61,.06) 100%);
+    border-color: rgba(224,107,61,.18);
+}
+.poids-hero-num {
+    font-family: var(--font-display) !important;
+    font-size: 1.75rem !important;
+    font-weight: 800 !important;
+    letter-spacing: -.02em;
+    color: var(--acc) !important;
+    font-variant-numeric: tabular-nums;
+    line-height: 1.1;
+}
+.poids-hero-unit {
+    font-size: .92rem;
+    font-weight: 600;
+    color: var(--mut);
+    letter-spacing: 0;
+}
+@media (max-width: 480px) {
+    .poids-hero-num { font-size: 1.55rem !important; }
+}
+

@@ -124,25 +124,70 @@ function renderEta(wh) {
     el.style.display = '';
 }
 
-/* ---------- Stats bar ---------- */
+/* ---------- Stats bar — Poids v2 ---------- */
 function renderPoidsStats(wh) {
     const el = document.getElementById('poids-stats');
     if (!el) return;
-    if (wh.length === 0) { el.innerHTML = ''; return; }
+    if (wh.length === 0) {
+        el.innerHTML = '';
+        // Also hide the period buttons when no data
+        document.querySelectorAll('.period-btn').forEach(b => b.style.display = 'none');
+        return;
+    }
+
+    // Show period buttons when we have ≥ 2 entries
+    document.querySelectorAll('.period-btn').forEach(b => b.style.display = wh.length >= 2 ? '' : 'none');
+
     const vals = wh.map(x => x.v);
     const first = vals[0];
     const last = vals[vals.length - 1];
-    const lost = (first - last).toFixed(1);
-    const min = Math.min(...vals).toFixed(1);
-    const max = Math.max(...vals).toFixed(1);
+    const totalDelta = first - last; // positive = lost, negative = gained
+
+    // Weekly delta — find entry from ~7 days ago
+    const lastDate = new Date(wh[wh.length - 1].d + 'T12:00:00').getTime();
+    const weekAgoTarget = lastDate - 7 * 86400000;
+    let weekDelta = null;
+    for (let i = wh.length - 2; i >= 0; i--) {
+        const t = new Date(wh[i].d + 'T12:00:00').getTime();
+        if (t <= weekAgoTarget + 86400000) { // within 1 day of 7 days ago
+            weekDelta = wh[i].v - last;
+            break;
+        }
+    }
+    // If no entry far enough back, use first entry
+    if (weekDelta === null && wh.length >= 2) {
+        weekDelta = first - last;
+    }
+
+    // Sense direction: are we losing (good if goal < start) or gaining (good if goal > start)?
+    const direction = (S.g && S.w) ? Math.sign(S.g - S.w) : -1; // -1 = loss target (default)
+    const isProgress = (delta) => direction < 0 ? delta > 0 : direction > 0 ? delta < 0 : Math.abs(delta) < 0.2;
+    const colorOf = (delta) => {
+        if (Math.abs(delta) < 0.1) return 'var(--mut)';
+        return isProgress(delta) ? 'var(--well)' : 'var(--red)';
+    };
+    const fmtDelta = (d) => {
+        if (Math.abs(d) < 0.05) return '±0';
+        return (d > 0 ? '−' : '+') + Math.abs(d).toFixed(1);
+    };
+
     el.innerHTML = `
-    <div class="sbox"><div class="sv text-acc">${last} kg</div><div class="sl">Poids actuel</div></div>
-    <div class="sbox"><div class="sv text-grn">${lost > 0 ? '−' + lost : '+' + Math.abs(lost)} kg</div><div class="sl">Depuis le début</div></div>
-    <div class="sbox"><div class="sv">${min} → ${max}</div><div class="sl">Min / Max</div></div>
-  `;
+        <div class="sbox poids-hero">
+            <div class="sv poids-hero-num">${last.toFixed(1)} <span class="poids-hero-unit">kg</span></div>
+            <div class="sl">Poids actuel</div>
+        </div>
+        <div class="sbox">
+            <div class="sv" style="color:${colorOf(weekDelta || 0)}">${fmtDelta(weekDelta || 0)} kg</div>
+            <div class="sl">7 derniers jours</div>
+        </div>
+        <div class="sbox">
+            <div class="sv" style="color:${colorOf(totalDelta)}">${fmtDelta(totalDelta)} kg</div>
+            <div class="sl">Depuis le début</div>
+        </div>
+    `;
 }
 
-/* ---------- IMC display ---------- */
+/* ---------- IMC display — Poids v2 (less alarmist) ---------- */
 function renderImcDisplay() {
     const el = document.getElementById('imc-display');
     if (!el) return;
@@ -150,13 +195,25 @@ function renderImcDisplay() {
     const lastW = wh.length ? wh.sort((a, b) => b.d.localeCompare(a.d))[0].v : S.w;
     const imc = calcIMC(lastW, S.h);
     if (!imc) { el.innerHTML = ''; return; }
-    el.style.background = imc.bg;
+
+    // Soft semantic colors (no more alarmist orange-saturated bg)
+    let accent;
+    if (imc.val < 18.5)      accent = 'var(--info)';      // sous-poids — info, not alarm
+    else if (imc.val < 25)   accent = 'var(--well)';      // normal — sage
+    else if (imc.val < 30)   accent = 'var(--warn)';      // surpoids — warm gold
+    else                     accent = 'var(--red)';       // obésité — red (legitimate alarm)
+
+    // Label — drop the warning emojis from calcIMC
+    const cleanLabel = imc.label.replace(/[⚠️💚]/g, '').trim();
+
+    el.style.background = 'transparent';
+    el.style.borderLeft = `3px solid ${accent}`;
     el.innerHTML = `
-    <div class="imc-val">${imc.val.toFixed(1)}</div>
-    <div>
-      <div class="imc-label fw7">${imc.label}</div>
-      <div style="font-size:.72rem;color:var(--mut)">IMC · normale 18.5–24.9</div>
-    </div>`;
+        <div class="imc-val" style="color:${accent}">${imc.val.toFixed(1)}</div>
+        <div>
+            <div class="imc-label fw7">${cleanLabel}</div>
+            <div style="font-size:.72rem;color:var(--mut)">IMC · zone saine 18.5–24.9</div>
+        </div>`;
 }
 
 /* ---------- Bézier-smoothed Canvas graph ---------- */
@@ -177,9 +234,25 @@ function drawWeightGraph(wh) {
     const CH = H - PAD.t - PAD.b;
 
     if (wh.length < 2) {
-        ctx.fillStyle = 'rgba(139,143,168,.5)';
-        ctx.font = '13px Inter'; ctx.textAlign = 'center';
-        ctx.fillText('Ajoute au moins 2 mesures pour voir le graphe', W / 2, H / 2);
+        // Soft empty state — minimal grid + reassuring text
+        ctx.strokeStyle = 'rgba(154,133,120,.18)';
+        ctx.lineWidth = 1;
+        ctx.setLineDash([4, 4]);
+        for (let i = 0; i <= 4; i++) {
+            const y = PAD.t + (CH / 4) * i;
+            ctx.beginPath(); ctx.moveTo(PAD.l, y); ctx.lineTo(W - PAD.r, y); ctx.stroke();
+        }
+        ctx.setLineDash([]);
+        ctx.fillStyle = 'rgba(154,133,120,.7)';
+        ctx.font = '600 13px Outfit, Inter';
+        ctx.textAlign = 'center';
+        const msg = wh.length === 0
+            ? 'Pèse-toi pour démarrer ta courbe'
+            : 'Une 2ᵉ pesée et la courbe apparaît';
+        ctx.fillText(msg, W / 2, H / 2 - 6);
+        ctx.font = '11px Inter';
+        ctx.fillStyle = 'rgba(154,133,120,.5)';
+        ctx.fillText('Idéalement le matin, sortie de douche', W / 2, H / 2 + 14);
         return;
     }
 
