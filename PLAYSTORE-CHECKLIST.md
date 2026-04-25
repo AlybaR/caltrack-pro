@@ -152,7 +152,7 @@
 ### D5. Store settings
 - [ ] App category: Health & Fitness
 - [ ] Tags: Calorie counter, Weight loss, Fitness tracker
-- [ ] Contact: caltrack.app@gmail.com + website URL
+- [ ] Contact: caltrack.app1@gmail.com + website URL
 
 ---
 

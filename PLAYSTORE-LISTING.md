@@ -224,7 +224,7 @@ https://alybar.github.io/caltrack-pro/terms.html
 
 ## 📧 Contact email (Play Console)
 ```
-caltrack.app@gmail.com
+caltrack.app1@gmail.com
 ```
 
 ## 🌐 Website
