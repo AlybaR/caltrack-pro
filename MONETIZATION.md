@@ -1,114 +1,174 @@
-# 💛 La philosophie financière de CalTrack Pro
+# 💰 Stratégie de monétisation — CalTrack Pro
 
-> Promesse simple : **gratuit pour tout le monde, pour toujours, sans pub, sans paywall.**
-> Cette page explique comment je peux tenir cette promesse et continuer à développer l'app.
-
----
-
-## ❌ Ce que CalTrack Pro ne fera JAMAIS
-
-- ❌ **Aucune publicité** — ni bandeau, ni interstitielle, ni native, jamais
-- ❌ **Aucun tracker tiers** — pas de Facebook Pixel, pas de Google Analytics, rien
-- ❌ **Aucune vente de données** — tes données sont à toi, point
-- ❌ **Aucun paywall** sur les 3 promesses (calories, sport, poids) — toujours gratuit
-- ❌ **Aucune fonctionnalité "Pro"** qui bloque l'usage normal
-- ❌ **Aucun abonnement obligatoire** — pas de free trial qui se transforme en débit auto
-
-Si tu vois une de ces choses dans CalTrack Pro un jour, c'est que je me suis vendu. Tu peux légitimement demander un fork open-source.
+> **Posture** : un dev solo qui veut **une app qui rapporte sans gérer de gens**.
+> Zero customer support live. Zero community management. Zero B2B sales call.
+> Tout doit fonctionner en mode "set & forget".
 
 ---
 
-## 🌱 Comment l'app survit alors ?
+## 🎯 Principes directeurs
 
-CalTrack Pro est un **side-project soutenable**, pas une startup à investisseurs.
-
-Mes coûts mensuels :
-- Firebase free tier (couvre largement les 1ers milliers d'utilisateurs) : **0€/mois**
-- GitHub Pages (hébergement) : **0€/mois**
-- Domaine (optionnel) : **~1€/mois**
-- Mon temps : **5-10h/semaine** (passion)
-
-**Total : ~1€/mois de coût direct + des heures non rémunérées.**
-
-Quand l'app passera 10k+ utilisateurs actifs, Firebase commencera à coûter (~5-30€/mois). C'est le seuil où les dons deviennent utiles.
+1. **Zéro management de personnes** — pas de Discord à modérer, pas d'emails à répondre en masse, pas d'appels client
+2. **L'app reste utilisable gratuitement** sur les 3 promesses (calories, sport, poids)
+3. **Pas de pubs, pas de trackers, pas de vente de données** — non négociable
+4. **Multi-mois pour mûrir** : on monétise sérieusement quand la traction est là (~5-10k MAU)
+5. **Tout passe par Stripe / plateformes** qui gèrent la facturation, la TVA, les remboursements
 
 ---
 
-## ☕ Pourquoi tu peux soutenir (si tu veux)
+## 💸 Les 7 leviers possibles (filtre "zero management")
 
-Tu peux contribuer financièrement de 2 manières :
+| # | Levier | Compatible "zéro people management" | Revenu potentiel | Effort dev |
+|---|---|---|---|---|
+| **1** | **Donations** (BMAC + GH Sponsors) | ✅ Total — plateformes gèrent tout | Faible (€0–500/mo) | XS |
+| **2** | **Pro Lifetime €29 one-time** | ✅ Stripe Checkout, zéro support | **Moyen-élevé (€2k-15k/an)** | S-M |
+| **3** | **Pro Subscription €4.99/mo** | ✅ Stripe gère churn/billing | **Élevé (€500-5000/mo récurrent)** | M |
+| **4** | **Affiliate links discrets** (Amazon balance, livre nutrition) | ✅ Liens passifs, 0 contact | Faible (€20-200/mo) | XS |
+| **5** | **App Store iOS €4.99 one-time** | ✅ Apple gère tout, paiement passif | Moyen (~€500-2k/mo si traction) | L (port) |
+| **6** | **Theme packs cosmetic €2.99** | ✅ Stripe one-time | Faible (€50-300/mo) | M |
+| **7** | **Anchor sponsor annuel** (1 partenaire/an, ex: marque de protéines éthique) | 🟡 Demande 1 négo/an | Élevé (€2-10k/an) | XS |
 
-### 1. Buy me a coffee
-- 🔗 https://buymeacoffee.com/kouceila
-- Don ponctuel, à partir de €3
-- Idéal si l'app t'a aidé à atteindre un objectif
-
-### 2. GitHub Sponsors
-- 🔗 https://github.com/sponsors/AlybaR
-- Don récurrent (mensuel) ou ponctuel
-- 0% de commission de plateforme (vs 5% chez BMAC)
-- Pour ceux qui veulent supporter le développement long terme
-
-### Ce que ton don finance
-
-- **Hébergement** Firebase + domaine
-- **Développement** continu (~5h/sem maintenu)
-- **Maintenance** (mises à jour Android, fixs sécurité)
-- **Pas de bonus en retour** — c'est purement du soutien
-
-Si tu n'as pas envie ou pas les moyens de donner, **utilise l'app librement**. C'est exactement comme ça que c'est conçu.
+**Rejected** (incompatible avec "zéro management") :
+- ❌ B2B coachs/diététiciens → trop de sales calls
+- ❌ Newsletter → écrire chaque mois = effort continu
+- ❌ Cours/ebooks payants → contenu à produire
+- ❌ Communauté Discord → modération
+- ❌ Customer support email → demande chronophage
 
 ---
 
-## 📊 Transparence radicale
+## 📅 Plan en 4 phases (12-18 mois jusqu'à €1-2k/mois)
 
-Une fois la traction installée, je publierai trimestriellement :
-- Le **nombre d'utilisateurs actifs**
-- Les **revenus** (donations reçues)
-- Les **coûts** (Firebase, domaine, etc.)
-- Le **temps** consacré au projet
+### **Phase 0 — Maintenant (M0–M3) : pas de monétisation**
 
-Pourquoi ? Parce que la confiance ne se déclare pas, elle se prouve.
+> Objectif : atteindre **2-5k installs**. Construire la confiance.
+
+À faire :
+- ✅ **Settings → Soutenir le projet** (BMAC + GH Sponsors visible mais discret)
+- ✅ Documenter ouvertement **MONETIZATION.md** (transparence = trust)
+- ❌ Aucun paywall, aucun Pro tier, aucune pub
+- 📈 Track quotidien : Play Store installs, ★ ratings, MAU Firebase
+
+Revenus attendus : **€0–50/mois** (donations early supporters)
+
+### **Phase 1 — M3–M6 : préparer Pro en silencieux**
+
+> Objectif : **5-10k installs**, ★4.5+ Play Store, retours réguliers.
+
+À faire :
+- 🛠 Coder en silencieux les **3-4 features Pro** (cf. backlog ci-dessous)
+- 🛠 Setup **Stripe** (compte FR, comptes auto-entrepreneur si nécessaire)
+- 🛠 Préparer **Pro paywall doux** (jamais bloquant, "Découvre Pro" non-intrusif)
+- 📣 Annoncer en avance : "Pro arrive M6 — early access €19 lifetime"
+
+Revenus attendus : **€50–200/mois** (donations qui montent)
+
+### **Phase 2 — M6–M12 : LANCEMENT Pro Lifetime €29**
+
+> Le moment où ça commence à rapporter.
+
+Lancement :
+- 🚀 **Pro Lifetime €29** (promo first 500 → €19)
+- 🚀 OU formule double : **€4.99/mo subscription OU €29 lifetime** (laisse l'utilisateur choisir)
+- 🛠 **Stripe Checkout** pur passif — l'app vérifie le statut Pro via Firestore custom claim
+- 📣 Comm transparence : "Voilà pourquoi je passe payant. L'app de base reste gratuite."
+
+Conversions visées (industrie standard 1-3% sur freemium honnête) :
+- 10k installs × 1.5% conversion × €29 = **€4 350 one-time**
+- + recurring 2-3% des nouveaux installs/mois
+
+Revenus attendus M12 : **€300-1000/mois** (mix lifetime + sub)
+
+### **Phase 3 — M12–M18 : diversification passive**
+
+> Si traction continue (15-30k MAU), on diversifie sans ajouter de management.
+
+À ajouter :
+- 🛠 **Theme packs cosmetic €2.99** (sage / océan / forêt) → Stripe one-time
+- 🛠 **Section "Outils que j'utilise"** dans Settings avec **affiliates discrets** (balance connectée, livre nutrition, rouleau massage) — disclaimer visible
+- 🤝 **Anchor sponsor annuel** : 1 marque éthique (protéines bio, app de méditation) qui sponsorise discrètement (mention en bas de Settings) → €2-5k/an signed annually
+- 🛠 **Port iOS App Store** payant €4.99 one-time (si la PWA performe sur Android)
+
+Revenus attendus M18 : **€1500–3000/mois** (vision A atteinte ✅)
 
 ---
 
-## 🎯 Engagements long terme
+## 🛠 Pro Features Backlog (pour Phase 2)
 
-Voici ce à quoi je m'engage :
+Le pack Pro doit avoir **3-4 features** que l'utilisateur free veut clairement, sans rendre l'app free amputée.
 
-1. **Si je dois un jour monétiser au-delà des dons**, je communiquerai 3 mois en avance avec :
-   - La raison économique précise
-   - Les options envisagées
-   - L'engagement de **garder les 3 promesses gratuites pour toujours**
+### Top candidates (effort × valeur)
 
-2. **Si je dois arrêter le projet**, je m'engage à :
-   - Open-source toutes les fonctionnalités payantes (s'il y en a un jour)
-   - Documenter comment self-host
-   - Donner 6 mois de préavis aux utilisateurs cloud
+| Feature | Valeur user | Effort dev | Compat zéro support |
+|---|---|---|---|
+| **Sync Apple Health / Google Fit** | 🔥 Très élevée | M | ✅ |
+| **Export PDF mensuel** (récap macros + photos progress) | 🟢 Élevée | S | ✅ |
+| **AI weekly review** (LLM analyse semaine, conseils perso) | 🔥 Très élevée | M | ⚠️ Coûts API |
+| **Custom recipes** (import URL, recipe.json-ld) | 🟢 Élevée | M | ✅ |
+| **Multi-profil famille** (1 compte = 4 profils) | 🟡 Moyenne | M | ✅ |
+| **Plateau auto-fix** (algorithme reco refeed/déficit) | 🟢 Élevée | M | ✅ |
+| **Wearable sync** (Garmin, Fitbit, Polar) | 🔥 Si user en a un | L | ✅ |
 
-3. **Si je suis racheté par une grosse boîte** :
-   - Je partirai si la nouvelle direction veut casser le pacte
-   - Je documenterai publiquement les changements
+### Mon pack Pro recommandé (pack v1)
+1. **Sync santé** (Apple Health + Google Fit) → vrai différenciateur
+2. **Export PDF mensuel** → tangible, partageable
+3. **Plateau auto-fix** → vrai service intelligent
+4. **Custom recipes** import → utilité quotidienne
+
+→ Ce pack coûte ~3-4 semaines de dev. Lifetime €29 le finance après ~150 ventes.
 
 ---
 
-## 🧠 Pourquoi cette posture ?
+## 🚫 Ce qu'on ne fera JAMAIS
 
-Parce que j'en ai marre du modèle SaaS extractif. MyFitnessPal me montre 5 pubs pour logger une banane. Yazio me demande 80€/an pour des fonctions de base. Lifesum vend mes données à des partenaires non-divulgués.
+- ❌ Pubs (AdMob, Google AdSense, etc.)
+- ❌ Vente de données (anonymisées ou non)
+- ❌ Trackers tiers (Facebook Pixel, GA, etc.)
+- ❌ Paywall sur les 3 promesses (calories / sport / poids)
+- ❌ Free trial qui devient débit auto sans clic explicite
+- ❌ Push notifications marketing
+- ❌ Email marketing à la base utilisateurs (sauf si opt-in explicite)
+- ❌ Coach virtuel "achète ce supplément"
 
-Je crois qu'il y a une place pour des **outils numériques honnêtes** : payés par les gens qui peuvent / veulent, libres pour les autres. Comme NPR, Wikipedia, ou Signal.
+---
 
-CalTrack Pro est mon expérience personnelle dans ce modèle.
+## 💡 Setup légal minimal (FR)
+
+Pour vendre proprement et sans surprise :
+
+- **Statut auto-entrepreneur** (micro-BNC) — gratuit, déclaration en ligne, max €77 700/an de CA, plafond largement OK
+- **Stripe Atlas** ou Stripe FR — gère paiements + TVA EU automatique (Stripe Tax payant si > €100k CA)
+- **No website T&Cs personnel** : l'app a déjà `terms.html` et `privacy.html`
+- **Compta** : 1 fichier Excel + déclaration trimestrielle URSSAF — pas besoin de comptable jusqu'à €30k+/an
+- **Banque** : compte pro Qonto / Shine (~€7-15/mois) ou compte perso séparé pour les premiers €
+
+---
+
+## 📊 Transparence publique (engagement)
+
+Tous les **3 mois**, je publie sur GitHub un fichier `STATS.md` :
+- Nombre d'installs Play Store
+- MAU (Monthly Active Users)
+- Revenus du trimestre (donations + sales)
+- Coûts (Firebase, domaine, etc.)
+- Heures consacrées au projet
+
+Pourquoi : la confiance ne se déclare pas, elle se prouve.
+
+---
+
+## ⚖️ Engagements long terme
+
+1. **Si je dois monétiser au-delà du plan ci-dessus**, j'annonce 3 mois en avance avec rationale.
+2. **Si je rachète / suis racheté** : préavis 6 mois pour les utilisateurs cloud, open-source des features Pro si shutdown.
+3. **Les 3 promesses (calories / sport / poids) restent gratuites pour toujours** — sur l'honneur.
 
 ---
 
 ## 💬 Questions ?
 
-📧 kouceila.moussaoui@ifjrpc.org
-
-Si tu lis ce document et que tu as des questions sur la viabilité financière, n'hésite pas. Je préfère les conversations honnêtes aux rumeurs.
-
----
+📧 caltrack.support@proton.me
+🐙 [Issues GitHub](https://github.com/AlybaR/caltrack-pro/issues)
 
 *Dernière mise à jour : 25 avril 2026*
-*Cette page est versionnée publiquement sur [GitHub](https://github.com/AlybaR/caltrack-pro/blob/main/MONETIZATION.md). Toute modification est traçable.*
+*Versionné publiquement — toute modification est traçable.*

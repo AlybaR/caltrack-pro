@@ -152,7 +152,7 @@
 ### D5. Store settings
 - [ ] App category: Health & Fitness
 - [ ] Tags: Calorie counter, Weight loss, Fitness tracker
-- [ ] Contact: kouceila.moussaoui@ifjrpc.org + website URL
+- [ ] Contact: caltrack.support@proton.me + website URL
 
 ---
 

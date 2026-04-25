@@ -224,7 +224,7 @@ https://alybar.github.io/caltrack-pro/terms.html
 
 ## 📧 Contact email (Play Console)
 ```
-kouceila.moussaoui@ifjrpc.org
+caltrack.support@proton.me
 ```
 
 ## 🌐 Website

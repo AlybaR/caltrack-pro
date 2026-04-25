@@ -12,8 +12,8 @@
 - **Bundle ID** : `io.github.alybar.caltrack`
 - **Website** : https://alybar.github.io/caltrack-pro/
 - **Privacy** : https://alybar.github.io/caltrack-pro/privacy.html
-- **Contact** : kouceila.moussaoui@ifjrpc.org
-- **Made by** : Kouceila Moussaoui (France 🇫🇷)
+- **Contact** : caltrack.support@proton.me
+- **Made by** : indie dev — France 🇫🇷
 - **Tech** : Progressive Web App vanilla JS · Firebase Auth + Firestore (optional sync)
 
 ## 🎨 Brand assets
@@ -338,8 +338,8 @@ Privacy : https://alybar.github.io/caltrack-pro/privacy.html
 
 Ouvert à interview / article. Merci pour votre temps.
 
-Kouceila Moussaoui
-[contact]
+CalTrack Pro
+caltrack.support@proton.me
 ```
 
 ---
