@@ -6,7 +6,7 @@
    - Install: allSettled so one missing asset doesn't break everything
    ==================================================== */
 
-const CACHE = 'caltrack-v20';
+const CACHE = 'caltrack-v21';
 const CORE_ASSETS = [
     './',
     './index.html',
@@ -35,6 +35,8 @@ const CORE_ASSETS = [
     './manifest.json',
     './icon-192.png',
     './icon-512.png',
+    './privacy.html',
+    './terms.html',
 ];
 
 const FONT_URL = 'https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800&display=swap';

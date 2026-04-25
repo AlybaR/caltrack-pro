@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Politique de confidentialité — CalTrack Pro</title>
+<meta name="theme-color" content="#D4633A">
+<link rel="icon" href="icon-192.png">
+<style>
+:root { --acc:#C8512A; --txt:#15110E; --txt2:#4A3C30; --mut:#9A8578; --bg:#F9F7F4; --card:#FFFFFF; --bdr:#EDE5DB; }
+* { box-sizing:border-box; margin:0; padding:0; }
+html { font-size:16px; }
+body { font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; background:var(--bg); color:var(--txt); line-height:1.6; padding:32px 20px 60px; max-width:760px; margin:0 auto; }
+h1 { font-family:'Outfit',sans-serif; font-size:1.75rem; font-weight:800; color:var(--acc); margin-bottom:6px; letter-spacing:-.01em; }
+h2 { font-family:'Outfit',sans-serif; font-size:1.18rem; font-weight:700; margin-top:28px; margin-bottom:8px; }
+h3 { font-size:1.02rem; font-weight:600; margin-top:18px; margin-bottom:4px; color:var(--txt2); }
+p, li { font-size:.95rem; color:var(--txt2); margin-bottom:8px; }
+ul { padding-left:22px; margin-bottom:12px; }
+a { color:var(--acc); }
+.meta { font-size:.85rem; color:var(--mut); margin-bottom:24px; }
+.card { background:var(--card); border:1px solid var(--bdr); border-radius:14px; padding:18px 20px; margin:18px 0; }
+.back { display:inline-block; margin-bottom:18px; color:var(--mut); font-size:.85rem; text-decoration:none; }
+.back:hover { color:var(--acc); }
+strong { color:var(--txt); }
+</style>
+</head>
+<body>
+
+<a href="index.html" class="back">← Retour à l'app</a>
+
+<h1>🔒 Politique de confidentialité</h1>
+<p class="meta"><strong>CalTrack Pro</strong> · Dernière mise à jour : 25 avril 2026</p>
+
+<div class="card">
+<p>Ta vie privée nous tient à cœur. Cette politique explique <strong>quelles données nous collectons</strong>, <strong>pourquoi</strong>, et <strong>comment tu gardes le contrôle</strong>.</p>
+</div>
+
+<h2>1. Modes d'utilisation</h2>
+<p>CalTrack Pro fonctionne dans deux modes :</p>
+
+<h3>Mode local (sans compte)</h3>
+<ul>
+  <li><strong>Aucune donnée n'est envoyée vers un serveur.</strong></li>
+  <li>Tout est stocké dans le <code>localStorage</code> de ton navigateur, sur ton appareil.</li>
+  <li>Aucune inscription n'est requise.</li>
+  <li>Si tu désinstalles l'app ou vides ton navigateur, tes données sont perdues.</li>
+</ul>
+
+<h3>Mode connecté (avec compte)</h3>
+<ul>
+  <li>Tes données sont chiffrées en transit (HTTPS) et stockées sur <strong>Google Firebase (Cloud Firestore + Firebase Auth)</strong> — serveurs Union Européenne.</li>
+  <li>Cela permet la synchronisation entre tes appareils (téléphone, ordinateur, tablette).</li>
+  <li>Toi seul peut accéder à tes données, après authentification.</li>
+</ul>
+
+<h2>2. Quelles données sont collectées</h2>
+
+<h3>En mode local</h3>
+<ul>
+  <li>Profil (poids, taille, âge, sexe, niveau d'activité, objectif)</li>
+  <li>Repas et aliments consommés</li>
+  <li>Exercices et séances de sport</li>
+  <li>Mensurations et photos de progression (si tu en ajoutes — stockées localement uniquement)</li>
+  <li>Pesées et historique de poids</li>
+  <li>Données de bien-être (sommeil, humeur, énergie) si tu les renseignes</li>
+</ul>
+
+<h3>En mode connecté, en plus :</h3>
+<ul>
+  <li>Adresse email (pour l'authentification)</li>
+  <li>Identifiant unique généré par Firebase Auth (UID)</li>
+  <li>Date de création du compte et de dernière connexion (gérées par Firebase Auth)</li>
+</ul>
+
+<h3>Ce que nous NE collectons PAS :</h3>
+<ul>
+  <li>❌ Aucune donnée de localisation (GPS, IP-géoloc)</li>
+  <li>❌ Aucune publicité, aucun tracker tiers (pas de Google Analytics, pas de Facebook Pixel)</li>
+  <li>❌ Aucune donnée biométrique ou médicale au-delà de ce que tu saisis volontairement</li>
+  <li>❌ Aucun cookie de suivi</li>
+  <li>❌ Aucune donnée d'autres applications de ton appareil</li>
+</ul>
+
+<h2>3. Pourquoi ces données</h2>
+<p>Toutes les données collectées servent <strong>uniquement à te fournir la fonctionnalité de l'app</strong> :</p>
+<ul>
+  <li>Calculer ton métabolisme et ton objectif calorique</li>
+  <li>T'afficher ton journal et ton historique</li>
+  <li>Te synchroniser entre tes appareils (mode connecté)</li>
+</ul>
+<p>Nous n'utilisons <strong>jamais</strong> tes données à des fins commerciales, statistiques agrégées, vente à des tiers, ou entraînement de modèles d'IA.</p>
+
+<h2>4. OpenFoodFacts (recherche d'aliments)</h2>
+<p>Quand tu recherches ou scannes un produit, l'app interroge l'API publique <strong>OpenFoodFacts</strong> (<a href="https://openfoodfacts.org/" target="_blank">openfoodfacts.org</a>). Seul le code-barres ou le mot recherché est envoyé. Aucune donnée personnelle ne transite.</p>
+
+<h2>5. Tes droits (RGPD)</h2>
+<p>Conformément au RGPD, tu disposes des droits suivants :</p>
+<ul>
+  <li><strong>Accès</strong> : exporte toutes tes données via Settings → Exporter mes données (fichier JSON)</li>
+  <li><strong>Rectification</strong> : modifie ton profil à tout moment dans Settings</li>
+  <li><strong>Effacement</strong> : Settings → Effacer toutes mes données. En mode connecté, tu peux supprimer ton compte (contacte-nous).</li>
+  <li><strong>Portabilité</strong> : l'export JSON contient l'intégralité de tes données dans un format réutilisable</li>
+  <li><strong>Opposition / Limitation</strong> : tu peux à tout moment passer en mode local en te déconnectant et en supprimant tes données cloud</li>
+</ul>
+
+<h2>6. Sécurité</h2>
+<ul>
+  <li>Chiffrement TLS/HTTPS pour toutes les communications</li>
+  <li>Authentification Firebase (Google Cloud, certifié ISO 27001/27017/27018, SOC 1/2/3)</li>
+  <li>Règles Firestore strictes : seul l'utilisateur authentifié peut lire/écrire ses propres données</li>
+  <li>Aucun mot de passe stocké en clair (Firebase Auth gère le hash)</li>
+</ul>
+
+<h2>7. Conservation</h2>
+<p>Tes données sont conservées tant que tu utilises l'app. Si tu supprimes ton compte, toutes tes données sont supprimées des serveurs Firebase sous 30 jours.</p>
+
+<h2>8. Enfants</h2>
+<p>CalTrack Pro n'est pas destiné aux enfants de moins de 16 ans. Si tu es parent et estimes que ton enfant a fourni des données, contacte-nous pour suppression.</p>
+
+<h2>9. Modifications</h2>
+<p>Nous pouvons mettre à jour cette politique. Toute modification sera publiée sur cette page avec une nouvelle date. En cas de changement majeur, nous te notifierons dans l'app.</p>
+
+<h2>10. Contact</h2>
+<p>Pour toute question, demande de droit RGPD, ou signalement :</p>
+<ul>
+  <li>📧 Email : <a href="mailto:kouceila.moussaoui@ifjrpc.org">kouceila.moussaoui@ifjrpc.org</a></li>
+  <li>🌐 Site : <a href="https://alybar.github.io/caltrack-pro/">alybar.github.io/caltrack-pro</a></li>
+</ul>
+
+<p style="margin-top:32px;font-size:.78rem;color:var(--mut);">
+Cette politique est rédigée pour être lisible. Si une formulation te paraît ambiguë, contacte-nous — on clarifie.
+</p>
+
+</body>
+</html>

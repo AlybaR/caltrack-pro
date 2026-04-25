@@ -68,22 +68,27 @@ function renderPrivacyText() {
     if (!el) return;
     const firebaseMode = (typeof FIREBASE_ENABLED !== 'undefined') && FIREBASE_ENABLED;
     const authed = (typeof currentAuthUser !== 'undefined') && currentAuthUser;
+    const linksRow = `
+        <div style="margin-top:14px;display:flex;gap:14px;flex-wrap:wrap;">
+            <a href="privacy.html" target="_blank" rel="noopener"
+               style="color:var(--acc);font-weight:600;font-size:.82rem;">Politique de confidentialité ↗</a>
+            <a href="terms.html" target="_blank" rel="noopener"
+               style="color:var(--acc);font-weight:600;font-size:.82rem;">Conditions d'utilisation ↗</a>
+        </div>`;
     if (firebaseMode && authed) {
         el.innerHTML = `
-            🔒 <strong style="color:var(--txt)">Tes données sont chiffrées en transit (HTTPS)</strong> et stockées sur
-            Google Firebase (UE). Elles te sont accessibles uniquement après authentification.
+            🔒 <strong style="color:var(--txt)">Tes données sont chiffrées en transit</strong> (HTTPS) et stockées
+            sur Google Firebase (UE). Elles te sont accessibles uniquement après authentification.
             <br><br>
             Données stockées : email, profil (poids, objectif, macros), repas, exercices, mensurations, poids.
-            <br><br>
-            Tu peux exporter ou supprimer toutes tes données à tout moment via cette page.
-            <a href="#" onclick="alert('Politique de confidentialité — version complète à venir');return false;"
-               style="color:var(--acc);">Politique de confidentialité ↗</a>
+            ${linksRow}
         `;
     } else {
         el.innerHTML = `
             🔒 Mode local — toutes tes données sont stockées
-            <strong style="color:var(--txt)">uniquement sur ton appareil</strong> (localStorage).
+            <strong style="color:var(--txt)">uniquement sur ton appareil</strong>.
             Aucune donnée n'est envoyée vers un serveur.
+            ${linksRow}
         `;
     }
 }
