@@ -104,9 +104,10 @@ function waitFor(selector, timeout = 5000) {
 function wait(ms) { return new Promise(r => setTimeout(r, ms)); }
 
 async function reloadFrame() {
+    // Use src reassignment instead of location.reload() — works in more contexts
     return new Promise(resolve => {
-        frame.onload = () => { setTimeout(resolve, 250); };
-        frame.contentWindow.location.reload();
+        frame.onload = () => { setTimeout(resolve, 350); };
+        frame.src = frame.src;
     });
 }
 
@@ -114,11 +115,34 @@ async function clearAndReload() {
     try {
         frame.contentWindow.localStorage.clear();
         if (frame.contentWindow.indexedDB) {
-            // Best-effort, doesn't await
             try { frame.contentWindow.indexedDB.databases?.().then(dbs => dbs.forEach(db => frame.contentWindow.indexedDB.deleteDatabase(db.name))); } catch(e){}
         }
     } catch (e) { /* cross-origin or not loaded */ }
     return reloadFrame();
+}
+
+/* ---------- Sanity check at boot — detect file:// protocol ---------- */
+function checkProtocol() {
+    if (location.protocol === 'file:') {
+        const banner = document.createElement('div');
+        banner.style.cssText = `
+            position:fixed; top:0; left:0; right:0; z-index:99999;
+            background:#BC3535; color:#fff; padding:14px 20px;
+            font-family:-apple-system,sans-serif; font-size:.92rem;
+            line-height:1.5; box-shadow:0 4px 16px rgba(0,0,0,.4);
+        `;
+        banner.innerHTML = `
+            <strong>⚠️ Le runner doit être servi via HTTP local, pas en double-clic.</strong><br>
+            Ouvre PowerShell dans le dossier du projet et lance :
+            <code style="background:rgba(0,0,0,.25);padding:2px 6px;border-radius:4px;font-family:monospace;">python -m http.server 8000</code>
+            puis ouvre <code style="background:rgba(0,0,0,.25);padding:2px 6px;border-radius:4px;font-family:monospace;">http://localhost:8000/tests/</code><br>
+            <small style="opacity:.8;">Raison technique : la politique CORS du navigateur empêche l'iframe de fonctionner sous protocole <code>file://</code>.</small>
+        `;
+        document.body.appendChild(banner);
+        document.body.style.paddingTop = '90px';
+        return false;
+    }
+    return true;
 }
 
 /* ---------- Test context (passed to each scenario) ---------- */
@@ -244,6 +268,10 @@ frame.addEventListener('load', () => {
 });
 
 renderList();
-log('Test runner ready. Click ▶ Run All or click any test individually.', 'info');
+if (checkProtocol()) {
+    log('Test runner ready. Click ▶ Run All or click any test individually.', 'info');
+} else {
+    log('⚠️ Protocole file:// détecté — voir bandeau rouge en haut.', 'fail');
+}
 
 })();
