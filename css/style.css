@@ -4414,3 +4414,58 @@ html[data-theme="dark"] .sync-status.sync-off { background:rgba(255,255,255,.04)
 .empty-state-compact .empty-state-title { font-size: .98rem; }
 .empty-state-compact .empty-state-desc { font-size: .87rem; margin-bottom: 14px; }
 
+/* =================================================================
+   UX19 — NAV BADGES
+   Red dot = action expected today (Journal empty).
+   Soft warm dot = nothing logged today at all.
+   ================================================================= */
+.nav-btn, .side-nav-btn { position: relative; }
+
+.nav-btn.has-badge::after,
+.side-nav-btn.has-badge::after {
+    content: '';
+    position: absolute;
+    top: 6px;
+    right: calc(50% - 22px);
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--red);
+    box-shadow: 0 0 0 2px var(--card), 0 0 8px rgba(188,53,53,.5);
+    animation: badge-pulse 2.4s ease-in-out infinite;
+}
+.side-nav-btn.has-badge::after {
+    top: 14px;
+    right: 14px;
+}
+
+.nav-btn.has-badge-soft::after,
+.side-nav-btn.has-badge-soft::after {
+    content: '';
+    position: absolute;
+    top: 6px;
+    right: calc(50% - 22px);
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--warn);
+    opacity: .7;
+}
+.side-nav-btn.has-badge-soft::after {
+    top: 16px;
+    right: 16px;
+}
+/* Hide soft dot when on the page (active state) */
+.nav-btn.active.has-badge-soft::after,
+.side-nav-btn.active.has-badge-soft::after { display: none; }
+
+@keyframes badge-pulse {
+    0%, 100% { transform: scale(1);   opacity: 1;  }
+    50%      { transform: scale(1.2); opacity: .8; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .nav-btn.has-badge::after,
+    .side-nav-btn.has-badge::after { animation: none; }
+}
+

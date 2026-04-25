@@ -30,11 +30,11 @@ Effort : XS (<15min) · S (<1h) · M (1-3h) · L (>3h)
 
 | # | Item | Effort | Statut |
 |---|------|--------|--------|
-| UX6 | Greeting actionnable : "Il te reste **1247 kcal** et **2 repas**" | S | ⏳ |
+| UX6 | Greeting actionnable : "Il te reste **1247 kcal** et **2 repas**" | S | ✅ |
 | UX7 | Chip "aujourd'hui" visible sur toutes les pages | XS | ⏳ |
-| UX8 | Couleurs sémantiques cohérentes (vert/orange/rouge) partout | XS | ⏳ |
+| UX8 | Couleurs sémantiques cohérentes (vert/orange/rouge) partout | XS | 🟡 partiel |
 | UX9 | Notifications enrichies (kcal restantes contextuel) | S | ⏳ |
-| UX19 | Badge rouge sur bottom-nav si pas logué aujourd'hui | XS | ⏳ |
+| UX19 | Badge rouge sur bottom-nav si pas logué aujourd'hui | XS | ✅ |
 
 ---
 
@@ -43,7 +43,7 @@ Effort : XS (<15min) · S (<1h) · M (1-3h) · L (>3h)
 
 | # | Item | Effort | Statut |
 |---|------|--------|--------|
-| UX10 | Rattrapage streak 12h (oubli hier → log avant midi OK) | S | ⏳ |
+| UX10 | Rattrapage streak 12h (oubli hier → log avant midi OK) | S | ✅ |
 | UX11 | Mode vacances (pause streak/rappels, pas de guilt) | S | ⏳ |
 | UX12 | Rappel intelligent (rien logué à 14h → notif douce) | M | ⏳ |
 | UX13 | "Welcome back" après absence 7j+ | S | ⏳ |
@@ -58,7 +58,7 @@ Effort : XS (<15min) · S (<1h) · M (1-3h) · L (>3h)
 | UX15 | Skeleton loaders (au lieu de "Chargement...") | S | ⏳ |
 | UX17 | Pull-to-refresh sur dashboard | S | ⏳ |
 | UX22 | Empty states guidés (CTA + visuel) | S | ⏳ |
-| UX23 | `prefers-color-scheme` auto-détecté au 1er launch | XS | ⏳ |
+| UX23 | `prefers-color-scheme` auto-détecté au 1er launch | XS | ✅ |
 
 ---
 

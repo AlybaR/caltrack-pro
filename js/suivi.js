@@ -55,10 +55,14 @@ function renderSuivi() {
   renderMotivation(streak);
 }
 
-/* ---------- Streak ---------- */
+/* ---------- Streak ----------
+   UX10 — 12h grace: if today isn't logged yet but it's still before noon,
+   we don't break the streak. Lets users log breakfast late without guilt.
+*/
 function calcStreak() {
   let streak = 0;
   const now = new Date();
+  const beforeNoon = now.getHours() < 12;
   for (let i = 0; i < 365; i++) {
     const d = new Date(now);
     d.setDate(now.getDate() - i);
@@ -66,7 +70,11 @@ function calcStreak() {
     const day = getDay(dk);
     const k = totalKcal(day);
     if (k > 0 && k <= S.target) streak++;
-    else if (i > 0) break; // allow today to be incomplete
+    else if (i === 0 && beforeNoon) {
+      // Today not logged yet AND still morning → don't break, keep yesterday's streak alive
+      continue;
+    }
+    else if (i > 0) break;
   }
   return streak;
 }

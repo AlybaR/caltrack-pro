@@ -34,7 +34,10 @@ function getDay(dk) {
   if (!d.exercises) d.exercises = [];
   return d;
 }
-function saveDay(dk, data) { lsSave('day_' + dk, data); }
+function saveDay(dk, data) {
+  lsSave('day_' + dk, data);
+  if (typeof refreshNavBadges === 'function') refreshNavBadges();
+}
 // Portion helpers — qty defaults to 1 for backwards compatibility
 function foodQty(f) { return f.qty || 1; }
 function foodKcal(f) { return Math.round(f.k * foodQty(f)); }
@@ -87,6 +90,35 @@ function showPage(name) {
   if (name === 'poids') renderPoids();
   if (name === 'suivi') renderSuivi();
   if (name === 'settings') renderSettings();
+  refreshNavBadges();
+}
+
+/* ----------------------------------------------------------
+   UX19 — bottom-nav badges: red dot on Journal if nothing
+   logged for today (across meals + exercises + weight).
+   Removes itself once user logs anything.
+   ---------------------------------------------------------- */
+function refreshNavBadges() {
+  const dk = todayKey();
+  const day = getDay(dk);
+  const meals = day && day.meals ? day.meals : {};
+  const hasMeal = MEAL_KEYS.some(k => (meals[k] || []).length > 0);
+  const hasExo = (day && day.exercises || []).length > 0;
+  const hasWeight = day && day.weight != null;
+  const journalEmpty = !hasMeal;
+  // Show on Journal nav button (bottom + side)
+  ['nb-journal', 'sn-journal'].forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.classList.toggle('has-badge', journalEmpty);
+  });
+  // Subtle dot on Sport too if neither sport nor meal logged (= nothing today)
+  const nothingToday = !hasMeal && !hasExo && !hasWeight;
+  ['nb-sport', 'sn-sport'].forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.classList.toggle('has-badge-soft', nothingToday);
+  });
 }
 
 // ---------- LAUNCH ----------
@@ -99,6 +131,7 @@ function launchApp() {
   if (sideNav) sideNav.style.display = '';
   calcNutrition();
   showPage('dash');
+  refreshNavBadges();
   if (typeof initNotifications === 'function') initNotifications();
 }
 
@@ -190,8 +223,17 @@ function toggleTheme() {
   applyTheme(cur === 'dark' ? 'light' : 'dark');
   if (typeof renderSettings === 'function') renderSettings();
 }
-// Apply saved theme ASAP (before first paint if possible)
-applyTheme(lsLoad('theme') || 'light');
+// Apply saved theme ASAP (before first paint).
+// UX23: at first launch (no saved preference), respect OS preference.
+(function bootTheme() {
+  const saved = lsLoad('theme');
+  if (saved === 'dark' || saved === 'light') {
+    applyTheme(saved);
+    return;
+  }
+  const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  applyTheme(prefersDark ? 'dark' : 'light');
+})();
 
 // ---------- COUNT-UP (wow effect on numbers) ----------
 /** Animate an element's text from 0 (or its previous value) to `to`.
