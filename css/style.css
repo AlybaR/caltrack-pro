@@ -4469,3 +4469,46 @@ html[data-theme="dark"] .sync-status.sync-off { background:rgba(255,255,255,.04)
     .side-nav-btn.has-badge::after { animation: none; }
 }
 
+/* =================================================================
+   JOURNAL v2 — meal header icon buttons + compact layout
+   ================================================================= */
+.meal-icon-btn {
+    width: 32px;
+    height: 32px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg);
+    border: 1px solid var(--bdr);
+    border-radius: 8px;
+    font-size: 1rem;
+    line-height: 1;
+    cursor: pointer;
+    color: var(--txt2);
+    transition: background var(--mo-fast) ease, border-color var(--mo-fast) ease, transform var(--mo-fast) ease;
+    padding: 0;
+}
+.meal-icon-btn:hover {
+    background: var(--acc-bg);
+    border-color: var(--acc);
+    color: var(--acc);
+}
+.meal-icon-btn:active {
+    transform: scale(.92);
+}
+html[data-theme="dark"] .meal-icon-btn { background: rgba(255,255,255,.04); }
+
+/* Inline kcal label when meal is closed (e.g. "Petit-déjeuner · 240 kcal") */
+.meal-kcal-inline {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    color: var(--mut);
+    font-size: .82rem;
+    margin-left: 2px;
+}
+
+/* Old meal-scan-cta (giant orange button) — neutralized; kept here in case
+   any legacy code still emits it. We render via .meal-icon-btn now. */
+.meal-scan-cta { display: none !important; }
+

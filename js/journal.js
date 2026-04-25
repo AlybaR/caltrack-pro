@@ -52,9 +52,34 @@ const QUICK_BY_CAT = {
 let _activeCat = '🕒 Récents';
 let _qaSearch = '';
 let _journalDate = new Date(); // Current viewed date
-let _openMeals = { 'breakfast': true, 'lunch': true, 'dinner': true, 'snack': true };
+// Default: closed. Will be auto-set on first render via initOpenMealsByTimeOfDay().
+let _openMeals = { breakfast: false, lunch: false, dinner: false, snack: false };
+let _openMealsInitialized = false;
 let _editingFood = null; // { mk, idx }
 let _mealTab = { breakfast: 'quick', lunch: 'quick', dinner: 'quick', snack: 'quick' };
+
+/** Returns the meal key matching the current time of day. */
+function getCurrentMealKey() {
+    const h = new Date().getHours();
+    if (h < 11) return 'breakfast';
+    if (h < 15) return 'lunch';
+    if (h < 18) return 'snack';
+    return 'dinner';
+}
+
+/** First-load only: open the time-relevant meal + any meal already filled.
+ *  After that, we respect user toggles. */
+function initOpenMealsByTimeOfDay() {
+    if (_openMealsInitialized) return;
+    const dk = getJournalKey();
+    const day = getDay(dk);
+    const cur = getCurrentMealKey();
+    MEAL_KEYS.forEach(mk => {
+        const hasItems = (day.meals[mk] || []).length > 0;
+        _openMeals[mk] = hasItems || mk === cur;
+    });
+    _openMealsInitialized = true;
+}
 
 // Helper to get local date string YYYY-MM-DD safely
 const toLocaleISO = (d) => {
@@ -67,6 +92,7 @@ function getJournalKey() { return toLocaleISO(_journalDate); }
    MAIN RENDER
    ===================================================================== */
 function renderJournal() {
+    initOpenMealsByTimeOfDay();
     const dk = getJournalKey();
     const day = getDay(dk);
     const eaten = totalKcal(day);
@@ -158,11 +184,13 @@ function renderMealSections(day, dk) {
         <div class="meal-hd-left">
           <span class="meal-arrow">${isOpen ? '▼' : '▶'}</span>
           <span class="meal-title">${MEALS[mi]}</span>
+          ${!isOpen && mkc > 0 ? `<span class="meal-kcal-inline">· ${mkc} kcal</span>` : ''}
         </div>
         <div class="meal-hd-right" onclick="event.stopPropagation()">
-          ${mkc > 0 ? `<span class="meal-kcal-badge">${mkc} kcal</span>` : ''}
-          ${items.length > 0 ? `<button class="save-recipe-btn" onclick="saveRecipeFromMeal('${mk}')" title="Sauvegarder comme recette">💾</button>` : ''}
-          <button class="copy-yesterday-btn" onclick="copyFromYesterday('${mk}')" title="Copier depuis hier">📋</button>
+          ${isOpen && mkc > 0 ? `<span class="meal-kcal-badge">${mkc} kcal</span>` : ''}
+          <button class="meal-icon-btn" data-haptic="tap" onclick="openScanner('${mk}')" title="Scanner un code-barres" aria-label="Scanner">📷</button>
+          ${items.length > 0 ? `<button class="meal-icon-btn" onclick="saveRecipeFromMeal('${mk}')" title="Sauvegarder comme recette">💾</button>` : ''}
+          <button class="meal-icon-btn" onclick="copyFromYesterday('${mk}')" title="Copier depuis hier">📋</button>
         </div>
       </div>
 
@@ -175,12 +203,6 @@ function renderMealSections(day, dk) {
           </div>
 
           ${items.length > 0 ? `<div class="meal-divider"><span>Ajouter plus</span></div>` : ''}
-
-          <!-- Scanner quick-action (always visible) -->
-          <button class="scan-barcode-btn meal-scan-cta" onclick="openScanner('${mk}')">
-            <span class="scan-ico">📷</span>
-            <span class="scan-lbl">Scanner un code-barres</span>
-          </button>
 
           <!-- Add interface — 3 tabs -->
           <div class="meal-tabs">
@@ -353,11 +375,24 @@ function filterQuickAdd(mk, val) {
 function renderFoodList(el, items, mk) {
     if (!el) return;
     if (items.length === 0) {
+        // Look at yesterday — if there's something to copy, show prominent CTA
+        const yesterday = new Date(_journalDate);
+        yesterday.setDate(yesterday.getDate() - 1);
+        const off = yesterday.getTimezoneOffset() * 60000;
+        const yKey = new Date(yesterday.getTime() - off).toISOString().slice(0, 10);
+        const yMeals = (getDay(yKey).meals[mk]) || [];
+        const hasYesterday = yMeals.length > 0;
         el.innerHTML = `
             <div class="empty-state empty-state-compact">
                 <i data-lucide="utensils" class="empty-state-ico"></i>
                 <div class="empty-state-title">Pas encore de repas</div>
-                <div class="empty-state-desc">Scanne un code-barres ou utilise les options ci-dessous.</div>
+                <div class="empty-state-desc">${hasYesterday
+                    ? `Tu as mangé ${yMeals.length} aliment${yMeals.length > 1 ? 's' : ''} hier — recopie en 1 tap.`
+                    : 'Cherche un aliment ci-dessous ou scanne un code-barres.'}</div>
+                ${hasYesterday ? `
+                    <button class="empty-state-cta" data-haptic="success" onclick="copyFromYesterday('${mk}')">
+                        <i data-lucide="copy"></i>Comme hier (${yMeals.length} aliment${yMeals.length > 1 ? 's' : ''})
+                    </button>` : ''}
             </div>`;
         if (typeof refreshIcons === 'function') refreshIcons();
         return;
