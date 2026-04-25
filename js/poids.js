@@ -265,7 +265,16 @@ function renderWeightHistory(wh) {
     if (!hp) return;
     const recent = wh.slice().reverse().slice(0, 14);
     if (recent.length === 0) {
-        hp.innerHTML = `<div class="empty-state">Aucune mesure enregistrée</div>`;
+        hp.innerHTML = `
+            <div class="empty-state empty-state-compact">
+                <i data-lucide="scale" class="empty-state-ico"></i>
+                <div class="empty-state-title">Pas encore de pesée</div>
+                <div class="empty-state-desc">Pèse-toi maintenant pour démarrer ta courbe.</div>
+                <button class="empty-state-cta" onclick="document.getElementById('w-today')?.focus()">
+                    <i data-lucide="plus"></i>Ajouter ma première pesée
+                </button>
+            </div>`;
+        if (typeof refreshIcons === 'function') refreshIcons();
         return;
     }
     hp.innerHTML = recent.map(x => `

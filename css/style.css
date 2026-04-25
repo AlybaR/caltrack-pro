@@ -34,6 +34,7 @@
   --data:    #7B61D6;                    /* Violet doux — analytics / insights */
   --data-bg: rgba(123,97,214,.10);
   --warn:    #B47420;                    /* Attention / modération */
+  --warn-bg: rgba(180,116,32,.10);
   --red:     #BC3535;                    /* Erreur / dépassement */
   --red-bg:  rgba(188,53,53,.07);
 
@@ -41,6 +42,10 @@
   --yel:     var(--warn);
   --cyan:    var(--info);
   --pur:     var(--data);
+
+  /* Named font families (Design v2 canonical) */
+  --font-display: 'Outfit', system-ui, sans-serif;
+  --font-body:    'Inter', system-ui, sans-serif;
 
   /* Type scale — strict, see DESIGN-SYSTEM.md */
   --text-display: 2.5rem;     /* 40 — hero numbers */
@@ -979,12 +984,12 @@ html[data-theme="dark"] {
   animation: card-rise .7s var(--ease) both;
 }
 
-/* Soft halo behind the ring — the wow */
+/* Soft halo behind the ring — centered, breathes (Design v2 canonical) */
 .ring-halo {
   position: absolute;
-  top: -10%;
+  top: 50%;
   left: 50%;
-  transform: translateX(-50%);
+  transform: translate(-50%, -50%);
   width: 360px;
   height: 360px;
   border-radius: 50%;
@@ -1004,8 +1009,8 @@ html[data-theme="dark"] .ring-halo {
               rgba(224,107,61,0) 65%);
 }
 @keyframes halo-pulse {
-  0%, 100% { opacity: .7; transform: translateX(-50%) scale(1); }
-  50%      { opacity: 1;  transform: translateX(-50%) scale(1.06); }
+  0%, 100% { opacity: .7; transform: translate(-50%, -50%) scale(1); }
+  50%      { opacity: 1;  transform: translate(-50%, -50%) scale(1.06); }
 }
 
 .ring-outer {
@@ -4055,6 +4060,7 @@ html[data-theme="dark"] {
   --data:    #9C8FD6;
   --data-bg: rgba(156,143,214,.14);
   --warn:    #E9A441;
+  --warn-bg: rgba(233,164,65,.16);
   --red:     #E05E5E;
   --red-bg:  rgba(224,94,94,.12);
   /* Legacy aliases */
@@ -4323,4 +4329,88 @@ html[data-theme="dark"] .auth-btn-google:hover { background:rgba(255,255,255,.07
 
 html[data-theme="dark"] .sync-status { background:rgba(255,255,255,.05); }
 html[data-theme="dark"] .sync-status.sync-off { background:rgba(255,255,255,.04); border-color:rgba(255,255,255,.06); }
+
+/* =================================================================
+   TYPE UTILITIES (Design v2 canonical) — use sparingly, prefer
+   semantic component classes. Useful for new components & previews.
+   ================================================================= */
+.t-display {
+    font-family: var(--font-display);
+    font-size: var(--text-display);
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.045em;
+    font-variant-numeric: tabular-nums;
+    color: var(--txt);
+}
+.t-h1 { font-family: var(--font-display); font-size: var(--text-h1); font-weight: 700; letter-spacing: -.02em; line-height: 1.15; color: var(--txt); }
+.t-h2 { font-family: var(--font-display); font-size: var(--text-h2); font-weight: 700; letter-spacing: -.01em; line-height: 1.2; color: var(--txt); }
+.t-h3 { font-family: var(--font-display); font-size: var(--text-h3); font-weight: 600; color: var(--txt); }
+.t-body { font-family: var(--font-body); font-size: var(--text-body); font-weight: 400; color: var(--txt); line-height: 1.55; }
+.t-small { font-family: var(--font-body); font-size: var(--text-small); font-weight: 500; color: var(--txt2); }
+.t-caption { font-family: var(--font-body); font-size: var(--text-caption); font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--mut); }
+.t-num, [data-num] { font-variant-numeric: tabular-nums; }
+
+/* =================================================================
+   EMPTY STATE — canonical component
+   "Aucun X encore" without a CTA = bug. Always use this template.
+   ================================================================= */
+.empty-state {
+    text-align: center;
+    padding: 28px 20px 24px;
+    max-width: 420px;
+    margin: 0 auto;
+}
+.empty-state-ico {
+    width: var(--ico-hero);
+    height: var(--ico-hero);
+    color: var(--acc);
+    margin: 0 auto 14px;
+    display: block;
+    stroke-width: 1.5;
+}
+.empty-state-title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 1.05rem;
+    color: var(--txt);
+    margin-bottom: 6px;
+    line-height: 1.3;
+}
+.empty-state-desc {
+    font-family: var(--font-body);
+    font-size: var(--text-body);
+    color: var(--mut);
+    line-height: 1.5;
+    margin-bottom: 18px;
+}
+.empty-state-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: .92rem;
+    padding: 11px 20px;
+    border-radius: var(--r-md);
+    background: var(--acc);
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 18px var(--acc-glow);
+    transition: background var(--mo-fast) var(--ease-out, ease-out),
+                transform var(--mo-fast) var(--ease, cubic-bezier(.32,.72,0,1));
+    text-decoration: none;
+}
+.empty-state-cta:hover  { background: var(--acc2); }
+.empty-state-cta:active { transform: scale(.97); }
+.empty-state-cta i { width: 18px; height: 18px; }
+
+/* Compact variant for inside cards (no extra padding) */
+.empty-state-compact {
+    padding: 14px 12px 8px;
+}
+.empty-state-compact .empty-state-ico { margin-bottom: 10px; width: 36px; height: 36px; }
+.empty-state-compact .empty-state-title { font-size: .98rem; }
+.empty-state-compact .empty-state-desc { font-size: .87rem; margin-bottom: 14px; }
 

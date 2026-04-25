@@ -183,8 +183,9 @@ function renderSportToday(day) {
                 <div class="promise-title">🏋️ Sport aujourd'hui</div>
                 <button class="promise-cta" onclick="showPage('sport')">Ajouter →</button>
             </div>
-            <div class="promise-empty">Aucun exercice — un peu de mouvement aujourd'hui ?</div>
+            <div class="promise-empty">Pas encore d'exercice. Un peu de mouvement aujourd'hui ?</div>
         `;
+        if (typeof refreshIcons === 'function') refreshIcons();
         return;
     }
     const totalKcal = exos.reduce((s, e) => s + (e.kcal || 0), 0);
@@ -210,7 +211,19 @@ function renderGoalMini() {
     const current = wh.length ? wh[wh.length - 1].v : S.w;
     const goal = S.g;
     const start = S.w;
-    if (!goal || !start) { el.innerHTML = ''; return; }
+    if (!goal || !start) {
+        el.innerHTML = `
+            <div class="empty-state empty-state-compact">
+                <i data-lucide="target" class="empty-state-ico"></i>
+                <div class="empty-state-title">Aucun objectif défini</div>
+                <div class="empty-state-desc">Configure ton poids cible pour suivre ta trajectoire.</div>
+                <button class="empty-state-cta" onclick="resetWizard()">
+                    <i data-lucide="settings"></i>Définir mon objectif
+                </button>
+            </div>`;
+        if (typeof refreshIcons === 'function') refreshIcons();
+        return;
+    }
 
     const direction = goal < start ? 'loss' : (goal > start ? 'gain' : 'maintain');
     const totalToGo = goal - start;

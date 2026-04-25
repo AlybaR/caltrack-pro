@@ -353,7 +353,13 @@ function filterQuickAdd(mk, val) {
 function renderFoodList(el, items, mk) {
     if (!el) return;
     if (items.length === 0) {
-        el.innerHTML = `<div class="empty-state meal-empty">🍽 Aucun aliment encore<br><small>Scanne un code-barres ou utilise les options ci-dessous ↓</small></div>`;
+        el.innerHTML = `
+            <div class="empty-state empty-state-compact">
+                <i data-lucide="utensils" class="empty-state-ico"></i>
+                <div class="empty-state-title">Pas encore de repas</div>
+                <div class="empty-state-desc">Scanne un code-barres ou utilise les options ci-dessous.</div>
+            </div>`;
+        if (typeof refreshIcons === 'function') refreshIcons();
         return;
     }
     el.innerHTML = '';

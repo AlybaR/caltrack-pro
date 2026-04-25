@@ -438,7 +438,13 @@ function renderExList(exList) {
     const el = document.getElementById('ex-list');
     if (!el) return;
     if (!exList || exList.length === 0) {
-        el.innerHTML = `<div class="empty-state meal-empty">🏋️ Aucun exercice encore<br><small>Choisis une activité ci-dessous ↓</small></div>`;
+        el.innerHTML = `
+            <div class="empty-state empty-state-compact">
+                <i data-lucide="dumbbell" class="empty-state-ico"></i>
+                <div class="empty-state-title">Aucun exercice encore</div>
+                <div class="empty-state-desc">Choisis une activité ci-dessous pour démarrer.</div>
+            </div>`;
+        if (typeof refreshIcons === 'function') refreshIcons();
         return;
     }
     el.innerHTML = exList.map((e, i) => {
