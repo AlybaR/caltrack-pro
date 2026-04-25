@@ -18,10 +18,28 @@ const TIPS = [
 function getGreeting(name) {
     const h = new Date().getHours();
     if (h < 6) return `🌙 Bonne nuit, <span>${name}</span>`;
-    if (h < 12) return `☀️ Bonjour, <span>${name}</span> !`;
-    if (h < 18) return `💪 Bonne après-midi, <span>${name}</span> !`;
-    if (h < 22) return `🌆 Bonsoir, <span>${name}</span> !`;
-    return `🌙 Encore debout, <span>${name}</span> ? 😄`;
+    if (h < 12) return `☀️ Bonjour, <span>${name}</span>`;
+    if (h < 18) return `💪 Bon après-midi, <span>${name}</span>`;
+    if (h < 22) return `🌆 Bonsoir, <span>${name}</span>`;
+    return `🌙 Encore debout, <span>${name}</span> ?`;
+}
+
+/** Build an actionable subline: "Il te reste 1247 kcal et 2 repas à logger". */
+function buildActionableSub(eaten, effectiveTarget, day) {
+    const left = effectiveTarget - eaten;
+    const meals = day.meals || {};
+    const loggedMeals = MEAL_KEYS.filter(k => (meals[k] || []).length > 0).length;
+    const remainingMeals = Math.max(0, 4 - loggedMeals);
+    if (eaten === 0) {
+        return `Tu as <b>${effectiveTarget}</b> kcal pour aujourd'hui.`;
+    }
+    if (left < 0) {
+        return `Tu as dépassé de <b style="color:var(--red)">${Math.abs(left)}</b> kcal.`;
+    }
+    if (remainingMeals === 0) {
+        return `Plus que <b>${left}</b> kcal pour finir la journée.`;
+    }
+    return `Il te reste <b>${left}</b> kcal et <b>${remainingMeals}</b> repas à logger.`;
 }
 
 function renderDash() {
@@ -54,40 +72,71 @@ function renderDash() {
     // Date
     document.getElementById('dash-date').textContent = new Date().toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' });
 
-    // Calorie ring — based on effectiveTarget
+    // Actionable subline (under greeting)
+    const subEl = document.getElementById('dash-actionable');
+    if (subEl) subEl.innerHTML = buildActionableSub(eaten, effectiveTarget, day);
+
+    // Calorie ring — animated stroke reveal (radius 104 → circumference ≈ 653.45)
     const left = effectiveTarget - eaten;
     const pct = Math.min(eaten / effectiveTarget, 1);
-    const circ = 2 * Math.PI * 90;
+    const RING_R = 104;
+    const circ = 2 * Math.PI * RING_R;
     const ringEl = document.getElementById('ring-cal');
     ringEl.style.strokeDasharray = circ;
-    ringEl.style.strokeDashoffset = circ - circ * pct;
+    // Reset to 0 for animated reveal on each render
+    if (!ringEl.dataset.animated) {
+        ringEl.style.strokeDashoffset = circ;
+        // force reflow then animate
+        void ringEl.getBoundingClientRect();
+        ringEl.style.transition = 'stroke-dashoffset 1.2s var(--ease, cubic-bezier(.32,.72,0,1))';
+        requestAnimationFrame(() => {
+            ringEl.style.strokeDashoffset = circ - circ * pct;
+        });
+        ringEl.dataset.animated = '1';
+    } else {
+        ringEl.style.strokeDashoffset = circ - circ * pct;
+    }
 
+    // Sematic ring color: dépassé = rouge, ≥90% = sage well, sinon acc
+    if (left < 0) ringEl.style.stroke = 'var(--red)';
+    else if (pct >= 0.90) ringEl.style.stroke = 'var(--well)';
+    else ringEl.style.stroke = '';
+
+    // Hero number — count-up animation
     const leftEl = document.getElementById('ring-kcal-left');
-    leftEl.textContent = left >= 0 ? left : '−' + Math.abs(left);
+    const displayLeft = left >= 0 ? left : -Math.abs(left);
+    countUp(leftEl, displayLeft, {
+        fmt: (v) => {
+            const n = Math.round(v);
+            return n >= 0 ? n.toString() : '−' + Math.abs(n);
+        }
+    });
     leftEl.style.webkitTextFillColor = left < 0 ? 'var(--red)' : '';
     document.getElementById('ring-sub-txt').textContent = left >= 0 ? 'kcal restants' : 'kcal dépassés';
 
-    // Stat boxes
-    document.getElementById('d-target').textContent = effectiveTarget;
-    document.getElementById('d-eaten').textContent = eaten;
-    document.getElementById('d-bmr').textContent = bmr;
-    document.getElementById('d-tdee').textContent = tdee;
+    // Stat boxes — count-up
+    countUp(document.getElementById('d-target'), effectiveTarget);
+    countUp(document.getElementById('d-eaten'),  eaten);
+    countUp(document.getElementById('d-bmr'),    bmr);
+    countUp(document.getElementById('d-tdee'),   tdee);
     document.getElementById('d-deficit').textContent = '−' + rythme;
 
     // Burned stat box
     const dBurnedEl = document.getElementById('d-burned');
     if (dBurnedEl) {
-        dBurnedEl.textContent = burned > 0 ? '+' + burned : '0';
-        dBurnedEl.style.color = burned > 0 ? 'var(--grn)' : 'var(--mut)';
+        countUp(dBurnedEl, burned, { prefix: burned > 0 ? '+' : '', fmt: v => Math.round(v).toString() });
+        dBurnedEl.style.color = burned > 0 ? 'var(--well)' : 'var(--mut)';
     }
 
-    // Left box colour
+    // Left box — count-up + color
     const dLeftEl = document.getElementById('d-left');
-    dLeftEl.textContent = left >= 0 ? left : '−' + Math.abs(left);
-    dLeftEl.style.color = left < 0 ? 'var(--red)' : 'var(--grn)';
-
-    // Ring stroke colour
-    ringEl.style.stroke = left < 0 ? 'var(--red)' : '';
+    countUp(dLeftEl, displayLeft, {
+        fmt: (v) => {
+            const n = Math.round(v);
+            return n >= 0 ? n.toString() : '−' + Math.abs(n);
+        }
+    });
+    dLeftEl.style.color = left < 0 ? 'var(--red)' : 'var(--well)';
 
     // Safety alert
     const aEl = document.getElementById('dash-alert');
@@ -160,23 +209,39 @@ function renderWaterCtrl(day, dk, goal) {
 }
 
 function renderScore(day, eaten, target, mp, burned = 0) {
+    const sEl = document.getElementById('score-num');
+    const itemsEl = document.getElementById('score-items');
+
+    // Avant midi sans aucun repas logué : on ne juge pas la journée naissante.
+    const h = new Date().getHours();
+    if (eaten === 0 && h < 12) {
+        sEl.textContent = '—';
+        sEl.style.background = `linear-gradient(135deg,var(--well),var(--acc))`;
+        sEl.style.webkitBackgroundClip = 'text';
+        sEl.style.webkitTextFillColor = 'transparent';
+        sEl.style.backgroundClip = 'text';
+        itemsEl.innerHTML = `<div class="score-item score-pending">⏰ Le score se construit avec ta journée. Logge ton premier repas pour démarrer.</div>`;
+        return;
+    }
+
     const pr = MACROS_P[mp]; let score = 0; const items = [];
     if (eaten > 0 && eaten <= target) { score += 4; items.push('✅ Calories dans l\'objectif'); }
     else if (eaten === 0) items.push('⬜ Ajoute tes repas');
     else items.push('❌ Budget dépassé');
     if (burned > 0) { score += 1; items.push(`✅ Exercice : +${burned} kcal brûlées`); }
     if (day.water >= Math.round(S.water * 0.75)) { score += 3; items.push('✅ Hydratation suffisante'); }
-    else items.push(`❌ Bois plus d'eau (${day.water}/${S.water})`);
+    else items.push(`💧 Bois plus d'eau (${day.water}/${S.water})`);
     const protMin = Math.round(S.w * 1.6);
     const protG = Math.round((target * pr.p) / 4);
     if (protG >= protMin) { score += 3; items.push(`✅ Protéines OK (≥${protMin}g)`); }
-    else items.push(`❌ Protéines insuff. (cible ${protMin}g)`);
-    const col = score >= 8 ? 'var(--grn)' : score >= 5 ? 'var(--yel)' : 'var(--red)';
-    const sEl = document.getElementById('score-num');
+    else items.push(`🍖 Protéines à viser (${protMin}g)`);
+    const col = score >= 8 ? 'var(--well)' : score >= 5 ? 'var(--warn)' : 'var(--red)';
     sEl.textContent = score + '/10';
     sEl.style.background = `linear-gradient(135deg,${col},var(--acc))`;
-    sEl.style.webkitBackgroundClip = 'text'; sEl.style.webkitTextFillColor = 'transparent'; sEl.style.backgroundClip = 'text';
-    document.getElementById('score-items').innerHTML = items.map(s => `<div class="score-item">${s}</div>`).join('');
+    sEl.style.webkitBackgroundClip = 'text';
+    sEl.style.webkitTextFillColor = 'transparent';
+    sEl.style.backgroundClip = 'text';
+    itemsEl.innerHTML = items.map(s => `<div class="score-item">${s}</div>`).join('');
 }
 
 function renderCalorieCycling(cyc, target) {

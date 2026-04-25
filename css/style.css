@@ -144,9 +144,58 @@ body {
   color: inherit;
 }
 
-/* Legacy mesh / orb — kept hidden */
-.mesh-bg { display: none; }
-.orb      { display: none; }
+/* =================================================================
+   MESH BACKGROUND v2 — soft breathing orbs (Design v2 wow effect)
+   Subtle, non-distracting, premium feel
+   ================================================================= */
+.mesh-bg {
+    position:fixed; inset:0; z-index:-1;
+    pointer-events:none;
+    overflow:hidden;
+}
+.orb {
+    position:absolute;
+    border-radius:50%;
+    filter:blur(80px);
+    opacity:0;
+    animation:orb-fade-in 1.6s var(--ease) .2s forwards, orb-breathe 14s ease-in-out infinite;
+    will-change:transform, opacity;
+}
+.orb1 {
+    width:520px; height:520px;
+    background:radial-gradient(circle, rgba(200,81,42,.32), rgba(200,81,42,0) 70%);
+    top:-120px; left:-160px;
+    animation-delay:.2s, 0s;
+}
+.orb2 {
+    width:460px; height:460px;
+    background:radial-gradient(circle, rgba(132,169,140,.30), rgba(132,169,140,0) 70%);
+    top:30%; right:-200px;
+    animation-delay:.4s, 4s;
+}
+.orb3 {
+    width:380px; height:380px;
+    background:radial-gradient(circle, rgba(180,116,32,.22), rgba(180,116,32,0) 70%);
+    bottom:-180px; left:30%;
+    animation-delay:.6s, 8s;
+}
+@keyframes orb-fade-in {
+    to { opacity:1; }
+}
+@keyframes orb-breathe {
+    0%, 100% { transform:translate(0,0) scale(1); }
+    50%      { transform:translate(20px,-30px) scale(1.08); }
+}
+
+/* Reduced motion: orbs visible but static */
+@media (prefers-reduced-motion: reduce) {
+    .orb { animation:orb-fade-in 1.6s var(--ease) .2s forwards; }
+}
+
+/* Dark-mode mesh — slightly more saturated */
+html[data-theme="dark"] .orb1 { background:radial-gradient(circle, rgba(224,107,61,.22), rgba(224,107,61,0) 70%); }
+html[data-theme="dark"] .orb2 { background:radial-gradient(circle, rgba(157,191,166,.18), rgba(157,191,166,0) 70%); }
+html[data-theme="dark"] .orb3 { background:radial-gradient(circle, rgba(180,116,32,.14), rgba(180,116,32,0) 70%); }
 
 /* =================================================================
    SCROLLBAR
@@ -768,21 +817,58 @@ select option { background: var(--card); color: var(--txt); }
 /* =================================================================
    DASHBOARD
    ================================================================= */
-.dash-greeting {
-  font-family: 'Outfit', sans-serif;
-  font-size: 1.05rem;
-  font-weight: 700;
-  margin-bottom: 6px;
-  color: var(--txt);
+/* Dashboard header — Design v2 */
+.dash-page-hd {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  animation: dash-hd-in .7s var(--ease) both;
 }
 
-.dash-greeting span { color: var(--acc); }
+.dash-greeting {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: -.01em;
+  color: var(--txt);
+  line-height: 1.2;
+}
+.dash-greeting span {
+  color: var(--acc);
+  background: linear-gradient(135deg, var(--acc), var(--acc2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.dash-actionable {
+  font-size: .92rem;
+  color: var(--txt2);
+  line-height: 1.4;
+  margin-bottom: 4px;
+  animation: dash-hd-in .7s var(--ease) .12s both;
+}
+.dash-actionable b {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--txt);
+}
+.dash-actionable:empty { display: none; }
+
+@keyframes dash-hd-in {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
 
 .dash-hd-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
   gap: 8px;
+  margin-top: 2px;
+  animation: dash-hd-in .7s var(--ease) .24s both;
 }
 
 /* Streak chip on dashboard header */
@@ -873,30 +959,72 @@ html[data-theme="dark"] .quick-scan-btn { background:rgba(255,255,255,.04); }
 .dash-details summary::-webkit-details-marker { display: none; }
 
 /* =================================================================
-   CALORIE RING HERO
+   CALORIE RING HERO — Design v2 (gradient, halo, animated)
    ================================================================= */
+:root {
+  --ring-track: rgba(200,81,42,.08);
+}
+html[data-theme="dark"] {
+  --ring-track: rgba(255,255,255,.06);
+}
+
 .ring-hero-card {
-  background: var(--card);
-  border-radius: var(--r);
-  padding: 24px 20px 20px;
-  margin-bottom: 10px;
+  position: relative;
+  background: linear-gradient(180deg, var(--card) 0%, var(--bg2) 100%);
+  border-radius: var(--r-xl, 28px);
+  padding: 32px 20px 22px;
+  margin-bottom: 14px;
   box-shadow: var(--shadow-md);
+  overflow: hidden;
+  animation: card-rise .7s var(--ease) both;
+}
+
+/* Soft halo behind the ring — the wow */
+.ring-halo {
+  position: absolute;
+  top: -10%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 360px;
+  height: 360px;
+  border-radius: 50%;
+  background: radial-gradient(circle,
+              rgba(200,81,42,.18) 0%,
+              rgba(200,81,42,.06) 35%,
+              rgba(200,81,42,0) 65%);
+  filter: blur(20px);
+  pointer-events: none;
+  animation: halo-pulse 6s ease-in-out infinite;
+  z-index: 0;
+}
+html[data-theme="dark"] .ring-halo {
+  background: radial-gradient(circle,
+              rgba(224,107,61,.30) 0%,
+              rgba(224,107,61,.08) 35%,
+              rgba(224,107,61,0) 65%);
+}
+@keyframes halo-pulse {
+  0%, 100% { opacity: .7; transform: translateX(-50%) scale(1); }
+  50%      { opacity: 1;  transform: translateX(-50%) scale(1.06); }
 }
 
 .ring-outer {
-  width: 200px;
-  height: 200px;
+  width: 240px;
+  height: 240px;
   position: relative;
-  margin: 0 auto 16px;
+  margin: 0 auto 18px;
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 1;
 }
-
-.ring-outer svg {
+.ring-svg {
   position: absolute;
   inset: 0;
-  transform: rotate(-90deg);
+  filter: drop-shadow(0 4px 16px rgba(200,81,42,.20));
+}
+html[data-theme="dark"] .ring-svg {
+  filter: drop-shadow(0 4px 24px rgba(224,107,61,.30));
 }
 
 .ring-outer.goal-done {
@@ -908,23 +1036,66 @@ html[data-theme="dark"] .quick-scan-btn { background:rgba(255,255,255,.04); }
   flex-direction: column;
   align-items: center;
   z-index: 1;
+  animation: ring-inner-in .9s var(--ease) .3s both;
+}
+@keyframes ring-inner-in {
+  from { opacity: 0; transform: scale(.92); }
+  to   { opacity: 1; transform: scale(1); }
 }
 
-/* Main calorie number — Display XL */
+/* Hero number — bigger, valorized */
 .ring-kcal-left {
   font-family: 'Outfit', sans-serif;
-  font-size: 2.8rem;
-  font-weight: 900;
+  font-size: 3.6rem;
+  font-weight: 800;
   line-height: 1;
-  letter-spacing: -0.035em;
+  letter-spacing: -0.045em;
   color: var(--txt);
   font-variant-numeric: tabular-nums;
 }
 
 .ring-sub {
-  font-size: .75rem;
+  font-size: .82rem;
+  font-weight: 500;
   color: var(--mut);
-  margin-top: 4px;
+  margin-top: 6px;
+  letter-spacing: .01em;
+  text-transform: lowercase;
+}
+
+@keyframes card-rise {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Stagger reveal for dashboard cards */
+.page#page-dash.active > .card,
+.page#page-dash.active > .ring-hero-card,
+.page#page-dash.active > .quick-add-row { animation-fill-mode: both; }
+.page#page-dash.active > .ring-hero-card     { animation: card-rise .7s var(--ease) 0s both; }
+.page#page-dash.active > .quick-add-row      { animation: card-rise .65s var(--ease) .15s both; }
+.page#page-dash.active > .card:nth-of-type(1) { animation: card-rise .65s var(--ease) .22s both; }
+.page#page-dash.active > .card:nth-of-type(2) { animation: card-rise .65s var(--ease) .29s both; }
+.page#page-dash.active > .card:nth-of-type(3) { animation: card-rise .65s var(--ease) .36s both; }
+.page#page-dash.active > .card:nth-of-type(4) { animation: card-rise .65s var(--ease) .43s both; }
+.page#page-dash.active > .card:nth-of-type(5) { animation: card-rise .65s var(--ease) .50s both; }
+.page#page-dash.active > .card:nth-of-type(n+6) { animation: card-rise .65s var(--ease) .55s both; }
+
+@media (prefers-reduced-motion: reduce) {
+  .ring-halo,
+  .dash-page-hd,
+  .dash-actionable,
+  .dash-hd-row,
+  .ring-inner,
+  .page#page-dash.active > * { animation: none !important; }
+}
+
+/* Score "pending" state — morning, before any meal */
+.score-pending {
+  font-size: .85rem;
+  color: var(--txt2);
+  line-height: 1.5;
+  padding: 4px 0;
 }
 
 /* =================================================================

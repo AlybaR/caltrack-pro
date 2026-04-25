@@ -192,3 +192,30 @@ function toggleTheme() {
 }
 // Apply saved theme ASAP (before first paint if possible)
 applyTheme(lsLoad('theme') || 'light');
+
+// ---------- COUNT-UP (wow effect on numbers) ----------
+/** Animate an element's text from 0 (or its previous value) to `to`.
+ *  Respects prefers-reduced-motion. Format function lets you customize output. */
+function countUp(el, to, opts = {}) {
+  if (!el) return;
+  const from = opts.from != null ? opts.from : (parseFloat(el.dataset.val) || 0);
+  const dur = opts.dur || 900;
+  const fmt = opts.fmt || ((v) => Math.round(v).toString());
+  const prefix = opts.prefix || '';
+  el.dataset.val = to;
+  // Skip animation for trivial deltas or if user prefers reduced motion
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    el.textContent = prefix + fmt(to);
+    return;
+  }
+  if (Math.abs(to - from) < 1) { el.textContent = prefix + fmt(to); return; }
+  const start = performance.now();
+  const ease = (t) => 1 - Math.pow(1 - t, 3); // easeOutCubic
+  function step(now) {
+    const t = Math.min((now - start) / dur, 1);
+    const v = from + (to - from) * ease(t);
+    el.textContent = prefix + fmt(v);
+    if (t < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}

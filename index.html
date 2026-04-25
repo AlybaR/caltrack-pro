@@ -239,8 +239,9 @@
      PAGE: DASHBOARD
      ================================================================ -->
     <div class="page" id="page-dash">
-        <div class="page-hd" style="flex-direction:column;align-items:flex-start;gap:4px;">
+        <div class="page-hd dash-page-hd">
             <div class="dash-greeting" id="dash-greeting"></div>
+            <div class="dash-actionable" id="dash-actionable"></div>
             <div class="dash-hd-row">
                 <div class="date" id="dash-date"></div>
                 <div class="dash-streak-chip" id="dash-streak-chip"></div>
@@ -248,18 +249,20 @@
             </div>
         </div>
 
-        <!-- Calorie Ring hero -->
-        <div class="ring-hero-card card-glow-org" style="margin-bottom:12px;">
+        <!-- Calorie Ring hero (Design v2 — animated, gradient, halo) -->
+        <div class="ring-hero-card" style="margin-bottom:14px;">
+            <div class="ring-halo" aria-hidden="true"></div>
             <div class="ring-outer">
-                <svg width="200" height="200" viewBox="0 0 200 200">
-                    <circle cx="100" cy="100" r="90" fill="none" stroke="rgba(200,81,42,.10)" stroke-width="16" />
-                    <circle cx="100" cy="100" r="90" fill="none" stroke="url(#rg)" stroke-width="16"
-                        stroke-linecap="round" id="ring-cal"
-                        style="stroke-dasharray:565.49;stroke-dashoffset:565.49;transition:stroke-dashoffset .9s cubic-bezier(.32,.72,0,1)" />
+                <svg width="240" height="240" viewBox="0 0 240 240" class="ring-svg">
+                    <circle cx="120" cy="120" r="104" fill="none" stroke="var(--ring-track)" stroke-width="18" />
+                    <circle cx="120" cy="120" r="104" fill="none" stroke="url(#rgrad)" stroke-width="18"
+                            stroke-linecap="round" id="ring-cal" transform="rotate(-90 120 120)"
+                            style="stroke-dasharray:653.45;stroke-dashoffset:653.45;" />
                     <defs>
-                        <linearGradient id="rg" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" stop-color="#C8512A" />
-                            <stop offset="100%" stop-color="#B47420" />
+                        <linearGradient id="rgrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%"   stop-color="#E07A4A" />
+                            <stop offset="50%"  stop-color="#C8512A" />
+                            <stop offset="100%" stop-color="#A8411D" />
                         </linearGradient>
                     </defs>
                 </svg>
