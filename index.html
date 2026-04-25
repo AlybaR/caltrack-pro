@@ -18,6 +18,9 @@
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+    <!-- Lucide icons (line-icons, vectoriel, cohérent — Design System v2) -->
+    <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 
 <body>
@@ -565,14 +568,10 @@
             </div>
         </div>
 
-        <!-- Privacy -->
+        <!-- Privacy (text rendered dynamically by renderSettings) -->
         <div class="card" style="margin-bottom:10px;">
             <div class="card-t">Confidentialité</div>
-            <div style="font-size:.82rem;color:var(--mut);line-height:1.6;padding:4px 0;">
-                🔒 Toutes tes données sont stockées <strong style="color:var(--txt)">uniquement sur ton
-                    appareil</strong> (localStorage). Aucune donnée n'est envoyée vers un serveur. Aucune inscription
-                requise.
-            </div>
+            <div id="privacy-text" style="font-size:.82rem;color:var(--mut);line-height:1.6;padding:4px 0;"></div>
         </div>
 
         <!-- Danger zone -->
@@ -596,6 +595,7 @@
      SCRIPTS
      ================================================================ -->
     <script src="js/firebase-config.js"></script>
+    <script src="js/icons.js"></script>
     <script src="js/foods.js"></script>
     <script src="js/exercice.js"></script>
     <script src="js/scanner.js"></script>

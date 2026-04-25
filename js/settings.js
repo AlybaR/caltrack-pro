@@ -58,6 +58,34 @@ function renderSettings() {
 
     // Sign-out row (Firebase only, when logged in)
     renderSignOutRow();
+
+    // Privacy text — honest, depends on mode
+    renderPrivacyText();
+}
+
+function renderPrivacyText() {
+    const el = document.getElementById('privacy-text');
+    if (!el) return;
+    const firebaseMode = (typeof FIREBASE_ENABLED !== 'undefined') && FIREBASE_ENABLED;
+    const authed = (typeof currentAuthUser !== 'undefined') && currentAuthUser;
+    if (firebaseMode && authed) {
+        el.innerHTML = `
+            🔒 <strong style="color:var(--txt)">Tes données sont chiffrées en transit (HTTPS)</strong> et stockées sur
+            Google Firebase (UE). Elles te sont accessibles uniquement après authentification.
+            <br><br>
+            Données stockées : email, profil (poids, objectif, macros), repas, exercices, mensurations, poids.
+            <br><br>
+            Tu peux exporter ou supprimer toutes tes données à tout moment via cette page.
+            <a href="#" onclick="alert('Politique de confidentialité — version complète à venir');return false;"
+               style="color:var(--acc);">Politique de confidentialité ↗</a>
+        `;
+    } else {
+        el.innerHTML = `
+            🔒 Mode local — toutes tes données sont stockées
+            <strong style="color:var(--txt)">uniquement sur ton appareil</strong> (localStorage).
+            Aucune donnée n'est envoyée vers un serveur.
+        `;
+    }
 }
 
 function renderSignOutRow() {

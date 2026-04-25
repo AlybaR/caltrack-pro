@@ -1,6 +1,7 @@
 /* =================================================================
-   CalTrack Pro – style.css | "Clean Warmth" Premium Design System
-   Palette: Warm Cream · Confident Terracotta · Natural Stone
+   CalTrack Pro – style.css | Design System v2 — "Bien-être × Performance"
+   Palette: Warm Cream · Confident Terracotta · Sage Wellness · Natural Stone
+   See DESIGN-SYSTEM.md for the canonical reference.
    ================================================================= */
 
 /* ---------- IMPORTS ---------- */
@@ -23,14 +24,56 @@
   --acc-bg:   rgba(200,81,42,.07);
   --acc-glow: rgba(200,81,42,.22);
 
-  /* Semantic */
-  --grn:     #3D7A40;
+  /* Semantic — v2 : 1 token = 1 rôle (cf DESIGN-SYSTEM.md) */
+  --well:    #84A98C;                    /* Sage — bien-être / progression douce */
+  --well-bg: rgba(132,169,140,.10);
+  --grn:     #3D7A40;                    /* Vert succès / objectif atteint */
   --grn-bg:  rgba(61,122,64,.07);
-  --red:     #BC3535;
+  --info:    #5B8DAC;                    /* Cyan calme — eau, data neutre */
+  --info-bg: rgba(91,141,172,.10);
+  --data:    #7B61D6;                    /* Violet doux — analytics / insights */
+  --data-bg: rgba(123,97,214,.10);
+  --warn:    #B47420;                    /* Attention / modération */
+  --red:     #BC3535;                    /* Erreur / dépassement */
   --red-bg:  rgba(188,53,53,.07);
-  --yel:     #B47420;
-  --cyan:    #2E7E96;
-  --pur:     #6557A0;
+
+  /* Legacy aliases — still used by older CSS rules. Map to the new tokens. */
+  --yel:     var(--warn);
+  --cyan:    var(--info);
+  --pur:     var(--data);
+
+  /* Type scale — strict, see DESIGN-SYSTEM.md */
+  --text-display: 2.5rem;     /* 40 — hero numbers */
+  --text-h1:      1.75rem;    /* 28 — page titles */
+  --text-h2:      1.25rem;    /* 20 — card titles */
+  --text-h3:      1rem;       /* 16 — sub-headings */
+  --text-body:    0.9375rem;  /* 15 — body */
+  --text-small:   0.8125rem;  /* 13 — labels */
+  --text-caption: 0.6875rem;  /* 11 — micro labels */
+
+  /* Spacing — 4-base scale */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 24px;
+  --sp-6: 32px;
+  --sp-7: 48px;
+  --sp-8: 64px;
+
+  /* Icon sizes (Lucide) */
+  --ico-xs:    16px;
+  --ico-sm:    20px;
+  --ico-md:    22px;
+  --ico-lg:    28px;
+  --ico-hero:  48px;
+
+  /* Motion — see DESIGN-SYSTEM.md */
+  --mo-fast:   120ms;
+  --mo-mid:    240ms;
+  --mo-slow:   600ms;
+  --mo-spring: 800ms;
+  --ease-spring: cubic-bezier(.34,1.56,.64,1);
 
   /* Text */
   --txt:   #15110E;
@@ -3703,13 +3746,22 @@ html[data-theme="dark"] {
   --acc2:     #B85425;
   --acc-bg:   rgba(224,107,61,.10);
   --acc-glow: rgba(224,107,61,.30);
+  /* Semantic dark — slightly desaturated for night use */
+  --well:    #9DBFA6;
+  --well-bg: rgba(157,191,166,.14);
   --grn:     #4FB066;
   --grn-bg:  rgba(79,176,102,.12);
+  --info:    #7AAEC8;
+  --info-bg: rgba(122,174,200,.14);
+  --data:    #9C8FD6;
+  --data-bg: rgba(156,143,214,.14);
+  --warn:    #E9A441;
   --red:     #E05E5E;
   --red-bg:  rgba(224,94,94,.12);
-  --yel:     #E9A441;
-  --cyan:    #4DB5CC;
-  --pur:     #9C8FD6;
+  /* Legacy aliases */
+  --yel:     var(--warn);
+  --cyan:    var(--info);
+  --pur:     var(--data);
   --txt:   #F2EAE0;
   --txt2:  #D4C9B8;
   --mut:   #8A7D6E;
