@@ -4512,3 +4512,132 @@ html[data-theme="dark"] .meal-icon-btn { background: rgba(255,255,255,.04); }
    any legacy code still emits it. We render via .meal-icon-btn now. */
 .meal-scan-cta { display: none !important; }
 
+/* =================================================================
+   LANDING v2 — 3 promises layout
+   ================================================================= */
+.landing-promises {
+    width: 100%;
+    max-width: 380px;
+    margin: 24px auto 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.promise-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: var(--card);
+    border: 1px solid var(--bdr);
+    border-radius: var(--r-md);
+    padding: 12px 14px;
+    box-shadow: var(--shadow-xs);
+    text-align: left;
+    animation: card-rise .55s var(--ease) both;
+}
+.promise-item:nth-child(1) { animation-delay: .15s; }
+.promise-item:nth-child(2) { animation-delay: .25s; }
+.promise-item:nth-child(3) { animation-delay: .35s; }
+.promise-emoji {
+    font-size: 1.7rem;
+    line-height: 1;
+    flex-shrink: 0;
+    width: 44px; height: 44px;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--acc-bg);
+    border-radius: 50%;
+}
+.promise-body { flex: 1; min-width: 0; }
+.promise-name {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--txt);
+    margin-bottom: 2px;
+}
+.promise-desc {
+    font-size: .82rem;
+    color: var(--mut);
+    line-height: 1.3;
+}
+html[data-theme="dark"] .promise-item { background: rgba(255,255,255,.04); }
+
+/* Hide legacy feature pills if any */
+.landing-features { display: none; }
+
+/* =================================================================
+   WIZARD v2 — goal weight suggestion + ETA + advanced details
+   ================================================================= */
+.field-suggest {
+    margin-top: 6px;
+    padding: 8px 10px;
+    background: var(--well-bg);
+    border-radius: 8px;
+    font-size: .78rem;
+    color: var(--well);
+    line-height: 1.4;
+    display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+}
+.field-suggest b {
+    color: var(--txt);
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+}
+.suggest-apply {
+    background: var(--well);
+    color: #fff;
+    border: none;
+    border-radius: 999px;
+    padding: 4px 12px;
+    font-size: .76rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: filter var(--mo-fast) ease, transform var(--mo-fast) ease;
+}
+.suggest-apply:hover { filter: brightness(1.05); }
+.suggest-apply:active { transform: scale(.95); }
+
+.rythme-eta {
+    margin-top: 14px;
+    padding: 10px 12px;
+    background: var(--acc-bg);
+    border-radius: 10px;
+    font-size: .85rem;
+    color: var(--txt);
+    line-height: 1.4;
+}
+.rythme-eta:empty { display: none; }
+.rythme-eta b {
+    font-family: var(--font-display);
+    font-weight: 700;
+    color: var(--acc);
+    font-variant-numeric: tabular-nums;
+}
+.rythme-eta .eta-soft { color: var(--mut); font-size: .78rem; }
+.rythme-eta .eta-good { color: var(--well); font-weight: 600; }
+
+.wiz-advanced {
+    margin-top: 16px;
+    padding-top: 4px;
+}
+.wiz-advanced summary {
+    cursor: pointer;
+    user-select: none;
+    list-style: none;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: .88rem;
+    color: var(--mut);
+    padding: 8px 0;
+    display: flex; align-items: center; gap: 6px;
+}
+.wiz-advanced summary::before {
+    content: '▸';
+    transition: transform var(--mo-fast) ease;
+    font-size: .75rem;
+}
+.wiz-advanced[open] summary::before { transform: rotate(90deg); }
+.wiz-advanced summary::-webkit-details-marker { display: none; }
+.wiz-advanced summary:hover { color: var(--acc); }
+

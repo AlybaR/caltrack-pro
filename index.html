@@ -37,21 +37,37 @@
      ================================================================ -->
     <div id="landing">
         <div class="landing-logo">🌿</div>
-        <h1 class="landing-title">Mange mieux,<br>perds du poids.</h1>
-        <p class="landing-sub">2 minutes par jour pour noter tes repas.<br>On s'occupe du reste — calories, macros, suivi de poids.</p>
+        <h1 class="landing-title">Atteins ton objectif,<br>sans te prendre la tête.</h1>
+        <p class="landing-sub">Une app qui fait <b>3 choses</b>, vraiment bien.</p>
 
-        <div class="landing-features">
-            <span class="feat-pill">⚡ Rapide à utiliser</span>
-            <span class="feat-pill">📴 100% hors-ligne</span>
-            <span class="feat-pill">🔒 Données locales</span>
-            <span class="feat-pill">🔥 Streak quotidien</span>
-            <span class="feat-pill">📈 Courbe de poids</span>
+        <div class="landing-promises">
+            <div class="promise-item">
+                <div class="promise-emoji">🍽️</div>
+                <div class="promise-body">
+                    <div class="promise-name">Suivre tes calories</div>
+                    <div class="promise-desc">Scanner code-barres, macros, hydratation</div>
+                </div>
+            </div>
+            <div class="promise-item">
+                <div class="promise-emoji">🏋️</div>
+                <div class="promise-body">
+                    <div class="promise-name">Suivre ton sport</div>
+                    <div class="promise-desc">Cardio, muscu, progression auto</div>
+                </div>
+            </div>
+            <div class="promise-item">
+                <div class="promise-emoji">⚖️</div>
+                <div class="promise-body">
+                    <div class="promise-name">Atteindre ton poids</div>
+                    <div class="promise-desc">Courbe, ETA, mensurations</div>
+                </div>
+            </div>
         </div>
 
-        <button class="btn-landing" onclick="startWizard()">Démarrer gratuitement →</button>
+        <button class="btn-landing" onclick="startWizard()">Démarrer en 2 minutes →</button>
         <button class="btn-landing secondary" id="btn-install" style="display:none" onclick="installApp()">📱 Installer
             l'application</button>
-        <p class="landing-legal">Aucune inscription. Aucune donnée envoyée. Tout reste sur ton appareil.</p>
+        <p class="landing-legal">🔒 Sans pub · Sans tracker · Données chiffrées · RGPD</p>
     </div>
 
     <!-- ================================================================
@@ -75,8 +91,8 @@
         <!-- STEP 1 — Profil -->
         <div class="wiz-step active" id="ws1" style="max-width:480px;width:100%;">
             <div class="wiz-hd">
-                <h2>👤 Ton profil</h2>
-                <p>Les bases pour calculer ton métabolisme</p>
+                <h2>👤 Apprenons à te connaître</h2>
+                <p>3 infos pour calculer ton métabolisme. C'est tout.</p>
             </div>
             <div class="card">
                 <div class="card-t">Informations</div>
@@ -109,8 +125,9 @@
                     </div>
                     <div>
                         <label class="lbl">Poids cible (kg)</label>
-                        <input type="number" id="w-goal" placeholder="75" step=".1" min="30" max="300" />
+                        <input type="number" id="w-goal" placeholder="75" step=".1" min="30" max="300" inputmode="decimal" />
                         <div class="field-hint" id="hint-w-goal"></div>
+                        <div class="field-suggest" id="suggest-goal" style="display:none;"></div>
                     </div>
                 </div>
                 <div id="imc-badge" class="imc-badge" style="display:none;margin-top:10px;"></div>
@@ -124,8 +141,8 @@
         <!-- STEP 2 — Activité -->
         <div class="wiz-step" id="ws2" style="max-width:480px;width:100%;">
             <div class="wiz-hd">
-                <h2>🏃 Ton activité</h2>
-                <p>Pour calculer ta dépense énergétique totale</p>
+                <h2>🏃 Combien tu bouges ?</h2>
+                <p>Ton métabolisme dépend de ton activité. Choisis ce qui te ressemble le plus.</p>
             </div>
             <div class="card">
                 <div class="card-t">Niveau d'activité</div>
@@ -154,8 +171,8 @@
         <!-- STEP 3 — Objectif + Recap -->
         <div class="wiz-step" id="ws3" style="max-width:480px;width:100%;">
             <div class="wiz-hd">
-                <h2>🎯 Ton objectif</h2>
-                <p>Calibre ton déficit et tes macros</p>
+                <h2>🎯 À quel rythme ?</h2>
+                <p>Plus le déficit est grand, plus c'est rapide — mais plus c'est dur.</p>
             </div>
             <div class="card">
                 <div class="card-t">Récapitulatif</div>
@@ -174,30 +191,34 @@
                 </div>
                 <div class="alert alert-warn" id="rythme-warn" style="display:none;">⚠️ −1000 kcal/j est élevé. Consulte
                     ton médecin.</div>
-                <div class="divider"></div>
-                <div class="card-t">Répartition macros</div>
-                <div class="pills">
-                    <label class="pill-lbl"><input type="radio" name="mp" value="std" checked><span
-                            class="pill">Standard</span></label>
-                    <label class="pill-lbl"><input type="radio" name="mp" value="lc"><span
-                            class="pill">Low-Carb</span></label>
-                    <label class="pill-lbl"><input type="radio" name="mp" value="keto"><span
-                            class="pill">Keto</span></label>
-                    <label class="pill-lbl"><input type="radio" name="mp" value="hp"><span
-                            class="pill">High-Protein</span></label>
-                </div>
-                <div class="divider"></div>
-                <div class="card-t">Calorie Cycling</div>
-                <p style="font-size:.78rem;color:var(--mut);margin-bottom:8px;">Varie tes calories selon sport vs repos.
-                </p>
-                <div class="pills">
-                    <label class="pill-lbl"><input type="radio" name="cyc" value="off" checked><span
-                            class="pill">Désactivé</span></label>
-                    <label class="pill-lbl"><input type="radio" name="cyc" value="on"><span
-                            class="pill">Activé</span></label>
-                </div>
+                <div class="rythme-eta" id="rythme-eta"></div>
+
+                <details class="wiz-advanced">
+                    <summary>Options avancées (optionnel)</summary>
+                    <div class="card-t" style="margin-top:14px;">Répartition macros</div>
+                    <p style="font-size:.78rem;color:var(--mut);margin-bottom:8px;">Garde Standard si tu débutes.</p>
+                    <div class="pills">
+                        <label class="pill-lbl"><input type="radio" name="mp" value="std" checked><span
+                                class="pill">Standard</span></label>
+                        <label class="pill-lbl"><input type="radio" name="mp" value="lc"><span
+                                class="pill">Low-Carb</span></label>
+                        <label class="pill-lbl"><input type="radio" name="mp" value="keto"><span
+                                class="pill">Keto</span></label>
+                        <label class="pill-lbl"><input type="radio" name="mp" value="hp"><span
+                                class="pill">High-Protein</span></label>
+                    </div>
+                    <div class="divider"></div>
+                    <div class="card-t">Calorie Cycling</div>
+                    <p style="font-size:.78rem;color:var(--mut);margin-bottom:8px;">Varie tes calories selon sport vs repos. (Optionnel)</p>
+                    <div class="pills">
+                        <label class="pill-lbl"><input type="radio" name="cyc" value="off" checked><span
+                                class="pill">Désactivé</span></label>
+                        <label class="pill-lbl"><input type="radio" name="cyc" value="on"><span
+                                class="pill">Activé</span></label>
+                    </div>
+                </details>
             </div>
-            <button class="btn btn-acc" onclick="wizFinish()">🚀 Lancer CalTrack Pro !</button>
+            <button class="btn btn-acc" data-haptic="success" onclick="wizFinish()">🚀 C'est parti !</button>
             <button class="btn btn-ghost" onclick="wizGo(2,-1)">← Retour</button>
         </div>
     </div>

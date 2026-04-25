@@ -15,7 +15,7 @@ function wizGo(step, dir = 1) {
     inEl.classList.toggle('slide-left', dir < 0);
     inEl.classList.add('active');
     setTimeout(() => inEl.classList.remove('slide-left'), 400);
-    if (step === 3) updateRecap();
+    if (step === 3) { updateRecap(); updateRythmeEta(); }
 }
 
 function wizGo2() { if (!validateStep1()) return; wizGo(2, 1); }
@@ -104,14 +104,65 @@ function initWizardListeners() {
             document.getElementById(f.id).addEventListener('input', () => {
                 validateField(f.id, parseFloat(document.getElementById(f.id).value), f.min, f.max);
                 updateImcBadge();
+                updateGoalSuggest();
             });
         });
     document.querySelectorAll('input[name=rythme]').forEach(r => {
         r.addEventListener('change', () => {
             const warn = document.getElementById('rythme-warn');
             if (warn) warn.style.display = r.value === '1000' ? '' : 'none';
+            updateRythmeEta();
         });
     });
+    // Initial ETA preview when reaching step 3
+    setTimeout(updateRythmeEta, 100);
+}
+
+/** Suggest a healthy goal weight based on height (IMC 18.5-24.9) */
+function updateGoalSuggest() {
+    const h = parseFloat(document.getElementById('w-height').value);
+    const w = parseFloat(document.getElementById('w-weight').value);
+    const goalEl = document.getElementById('w-goal');
+    const suggestEl = document.getElementById('suggest-goal');
+    if (!suggestEl) return;
+    if (!h || h < 100 || !w) { suggestEl.style.display = 'none'; return; }
+    const hM = h / 100;
+    const minHealthy = (18.5 * hM * hM).toFixed(1);
+    const maxHealthy = (24.9 * hM * hM).toFixed(1);
+    // If the goal field is empty, suggest the lower-mid healthy weight
+    if (!goalEl.value) {
+        const target = ((22 * hM * hM)).toFixed(1);
+        suggestEl.innerHTML = `💡 Zone IMC saine : <b>${minHealthy} – ${maxHealthy} kg</b>
+            <button type="button" class="suggest-apply" onclick="applyGoalSuggest(${target})">Utiliser ${target} kg</button>`;
+    } else {
+        suggestEl.innerHTML = `💡 Zone IMC saine : <b>${minHealthy} – ${maxHealthy} kg</b>`;
+    }
+    suggestEl.style.display = '';
+}
+function applyGoalSuggest(v) {
+    const goalEl = document.getElementById('w-goal');
+    if (!goalEl) return;
+    goalEl.value = v;
+    goalEl.dispatchEvent(new Event('input', { bubbles: true }));
+}
+
+/** Live ETA preview on step 3 — depends on rythme + delta poids */
+function updateRythmeEta() {
+    const eta = document.getElementById('rythme-eta');
+    if (!eta) return;
+    const w = parseFloat(document.getElementById('w-weight').value);
+    const g = parseFloat(document.getElementById('w-goal').value);
+    const r = parseFloat(document.querySelector('input[name=rythme]:checked')?.value);
+    if (!w || !g || !r) { eta.innerHTML = ''; return; }
+    const deltaKg = Math.abs(w - g);
+    if (deltaKg < 0.1) { eta.innerHTML = '<span class="eta-good">✓ Tu es déjà à ton objectif</span>'; return; }
+    // ~7700 kcal per kg of fat loss; days = (deltaKg × 7700) / (rythme/day)
+    const days = Math.round((deltaKg * 7700) / r);
+    const target = new Date();
+    target.setDate(target.getDate() + days);
+    const dateStr = target.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
+    const weeks = Math.round(days / 7);
+    eta.innerHTML = `🎯 Tu atteins <b>${g} kg</b> vers le <b>${dateStr}</b> · <span class="eta-soft">~${weeks} semaines</span>`;
 }
 
 function updateRecap() {
