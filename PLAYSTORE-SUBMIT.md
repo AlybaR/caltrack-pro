@@ -193,7 +193,7 @@ Dans Play Console → **Create app** :
 - **App category** : Health & Fitness
 - **Tags** : Calorie counter, Weight loss, Fitness tracker
 - **Contact details** :
-  - Email : `caltrack.support@proton.me`
+  - Email : `caltrack.app@gmail.com`
   - Website : `https://alybar.github.io/caltrack-pro/`
   - Phone : optionnel (peut sauter)
 

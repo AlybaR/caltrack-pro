@@ -12,7 +12,7 @@
 - **Bundle ID** : `io.github.alybar.caltrack`
 - **Website** : https://alybar.github.io/caltrack-pro/
 - **Privacy** : https://alybar.github.io/caltrack-pro/privacy.html
-- **Contact** : caltrack.support@proton.me
+- **Contact** : caltrack.app@gmail.com
 - **Made by** : indie dev — France 🇫🇷
 - **Tech** : Progressive Web App vanilla JS · Firebase Auth + Firestore (optional sync)
 
@@ -339,7 +339,7 @@ Privacy : https://alybar.github.io/caltrack-pro/privacy.html
 Ouvert à interview / article. Merci pour votre temps.
 
 CalTrack Pro
-caltrack.support@proton.me
+caltrack.app@gmail.com
 ```
 
 ---

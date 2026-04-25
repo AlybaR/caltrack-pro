@@ -167,7 +167,7 @@ Pourquoi : la confiance ne se déclare pas, elle se prouve.
 
 ## 💬 Questions ?
 
-📧 caltrack.support@proton.me
+📧 caltrack.app@gmail.com
 🐙 [Issues GitHub](https://github.com/AlybaR/caltrack-pro/issues)
 
 *Dernière mise à jour : 25 avril 2026*
