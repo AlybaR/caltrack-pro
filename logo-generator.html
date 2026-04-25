@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CalTrack Pro — Logo Generator</title>
+<style>
+:root { --acc:#C8512A; --acc2:#A8411D; --well:#84A98C; --bg:#F9F7F4; --card:#FFFFFF; --bdr:#EDE5DB; --txt:#15110E; --mut:#9A8578; }
+* { box-sizing:border-box; margin:0; padding:0; }
+body { font-family:'Outfit', system-ui, sans-serif; background:var(--bg); color:var(--txt); padding:32px 20px; line-height:1.6; }
+.wrap { max-width:960px; margin:0 auto; }
+h1 { font-size:1.85rem; font-weight:800; margin-bottom:6px; letter-spacing:-.01em; }
+.sub { color:var(--mut); margin-bottom:24px; font-family:'Inter', sans-serif; font-size:.95rem; }
+.controls { background:var(--card); border:1px solid var(--bdr); border-radius:16px; padding:18px 22px; margin-bottom:22px; display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:14px 18px; }
+.ctrl label { display:block; font-size:.78rem; font-weight:600; color:var(--mut); text-transform:uppercase; letter-spacing:.06em; margin-bottom:4px; }
+.ctrl input[type=color] { width:100%; height:38px; border:1px solid var(--bdr); border-radius:8px; cursor:pointer; }
+.ctrl input[type=text] { width:100%; padding:9px 12px; border:1px solid var(--bdr); border-radius:8px; font-family:'Outfit', sans-serif; font-size:.92rem; }
+.ctrl select { width:100%; padding:9px 12px; border:1px solid var(--bdr); border-radius:8px; font-family:'Outfit', sans-serif; font-size:.92rem; background:#fff; }
+.preview-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:16px; }
+.preview-item { background:var(--card); border:1px solid var(--bdr); border-radius:16px; padding:18px; text-align:center; }
+.preview-item canvas { max-width:100%; height:auto; border-radius:14px; box-shadow:0 4px 18px rgba(20,8,0,.08); display:block; margin:0 auto 12px; image-rendering:auto; }
+.preview-item .label { font-size:.82rem; color:var(--mut); margin-bottom:8px; }
+.preview-item .label b { color:var(--txt); font-weight:700; }
+.btn { display:inline-block; background:var(--acc); color:#fff; border:none; border-radius:10px; font-family:'Outfit', sans-serif; font-weight:700; padding:9px 16px; cursor:pointer; text-decoration:none; font-size:.85rem; transition:background .15s; }
+.btn:hover { background:var(--acc2); }
+.bg-options { display:flex; gap:10px; flex-wrap:wrap; margin-top:8px; }
+.bg-opt { display:inline-flex; align-items:center; gap:6px; cursor:pointer; font-size:.85rem; padding:6px 12px; background:#fff; border:1px solid var(--bdr); border-radius:999px; }
+.bg-opt input { margin:0; }
+.note { margin-top:24px; padding:14px 18px; background:rgba(132,169,140,.10); border-left:3px solid var(--well); border-radius:8px; font-size:.88rem; line-height:1.55; }
+.note b { color:var(--txt); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>🎨 CalTrack Pro — Logo Generator</h1>
+  <p class="sub">Génère ton icône Play Store en 30 secondes. Modifie les options puis télécharge les PNG aux tailles requises.</p>
+
+  <div class="controls">
+    <div class="ctrl">
+      <label>Style</label>
+      <select id="style">
+        <option value="leaf-ring">Feuille dans anneau (recommandé)</option>
+        <option value="leaf-only">Feuille seule</option>
+        <option value="ring-only">Anneau seul</option>
+        <option value="letter">Lettre C</option>
+      </select>
+    </div>
+    <div class="ctrl">
+      <label>Couleur principale</label>
+      <input type="color" id="cAcc" value="#C8512A">
+    </div>
+    <div class="ctrl">
+      <label>Couleur secondaire</label>
+      <input type="color" id="cAcc2" value="#A8411D">
+    </div>
+    <div class="ctrl">
+      <label>Fond</label>
+      <input type="color" id="cBg" value="#F9F7F4">
+    </div>
+    <div class="ctrl">
+      <label>Forme du fond</label>
+      <select id="bgShape">
+        <option value="square">Carré arrondi (Play Store)</option>
+        <option value="circle">Cercle</option>
+        <option value="none">Transparent</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="preview-grid">
+    <div class="preview-item">
+      <canvas id="c192" width="192" height="192"></canvas>
+      <div class="label"><b>192×192</b> · Manifest PWA</div>
+      <button class="btn" onclick="dl(192)">↓ Télécharger</button>
+    </div>
+    <div class="preview-item">
+      <canvas id="c512" width="512" height="512"></canvas>
+      <div class="label"><b>512×512</b> · Play Store icon</div>
+      <button class="btn" onclick="dl(512)">↓ Télécharger</button>
+    </div>
+    <div class="preview-item">
+      <canvas id="c1024" width="1024" height="1024"></canvas>
+      <div class="label"><b>1024×1024</b> · Master HD</div>
+      <button class="btn" onclick="dl(1024)">↓ Télécharger</button>
+    </div>
+    <div class="preview-item" style="grid-column:span 2;">
+      <canvas id="cFeat" width="1024" height="500"></canvas>
+      <div class="label"><b>1024×500</b> · Play Store feature graphic</div>
+      <button class="btn" onclick="dl('feat')">↓ Télécharger</button>
+    </div>
+  </div>
+
+  <div class="note">
+    <b>Comment l'utiliser :</b><br>
+    1. Ajuste les couleurs/style ci-dessus (les aperçus se mettent à jour en direct).<br>
+    2. Clique <b>Télécharger</b> sur chaque taille → 4 PNG dans tes téléchargements.<br>
+    3. Renomme les 192 et 512 en <code>icon-192.png</code> et <code>icon-512.png</code> et écrase les fichiers du repo.<br>
+    4. Le <b>1024×1024</b> = master pour Play Store icon (champ "App icon").<br>
+    5. Le <b>1024×500</b> = feature graphic (haut de la fiche Play Store).
+  </div>
+</div>
+
+<script>
+function drawLogo(canvas, opts) {
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+  const isFeat = W !== H;
+  const cx = isFeat ? H / 2 + 80 : W / 2;
+  const cy = H / 2;
+  const size = Math.min(W, H);
+  ctx.clearRect(0, 0, W, H);
+
+  // Background
+  if (opts.bgShape === 'square' || isFeat) {
+    // Rounded square / gradient feature graphic bg
+    if (isFeat) {
+      const g = ctx.createLinearGradient(0, 0, W, 0);
+      g.addColorStop(0, opts.cAcc);
+      g.addColorStop(1, opts.cAcc2);
+      ctx.fillStyle = g;
+      ctx.fillRect(0, 0, W, H);
+    } else {
+      const r = size * 0.18; // adaptive icon corner radius
+      ctx.fillStyle = opts.cBg;
+      roundedRect(ctx, 0, 0, W, H, r);
+      ctx.fill();
+    }
+  } else if (opts.bgShape === 'circle') {
+    ctx.fillStyle = opts.cBg;
+    ctx.beginPath();
+    ctx.arc(W/2, H/2, size/2, 0, Math.PI*2);
+    ctx.fill();
+  }
+
+  // Mark — drawing
+  const markSize = isFeat ? H * 0.62 : size * 0.62;
+  if (opts.style === 'leaf-ring' || opts.style === 'ring-only' || opts.style === 'leaf-only') {
+    if (opts.style === 'leaf-ring' || opts.style === 'ring-only') {
+      // Ring (open at top, terracotta gradient)
+      const ringR = markSize / 2;
+      const lineW = markSize * 0.10;
+      const grd = ctx.createLinearGradient(cx - ringR, cy - ringR, cx + ringR, cy + ringR);
+      grd.addColorStop(0, lighten(opts.cAcc, 12));
+      grd.addColorStop(0.55, opts.cAcc);
+      grd.addColorStop(1, darken(opts.cAcc, 18));
+      ctx.strokeStyle = grd;
+      ctx.lineWidth = lineW;
+      ctx.lineCap = 'round';
+      ctx.beginPath();
+      // 80% ring, opening at top
+      ctx.arc(cx, cy, ringR, -Math.PI / 2 + 0.4, -Math.PI / 2 - 0.4 + Math.PI * 2);
+      ctx.stroke();
+    }
+    if (opts.style === 'leaf-ring' || opts.style === 'leaf-only') {
+      drawLeaf(ctx, cx, cy, markSize * 0.55, opts);
+    }
+  } else if (opts.style === 'letter') {
+    // Stylized "C" letter
+    ctx.fillStyle = isFeat ? '#fff' : opts.cAcc;
+    ctx.font = `800 ${markSize}px 'Outfit', system-ui, sans-serif`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('C', cx, cy + markSize * 0.04);
+  }
+
+  // Wordmark for feature graphic
+  if (isFeat) {
+    ctx.fillStyle = '#fff';
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'middle';
+    ctx.font = `800 76px 'Outfit', system-ui, sans-serif`;
+    const tx = H + 60;
+    ctx.fillText('CalTrack Pro', tx, H * 0.42);
+    ctx.font = `400 28px 'Inter', system-ui, sans-serif`;
+    ctx.fillStyle = 'rgba(255,255,255,.85)';
+    ctx.fillText('Calories · Sport · Poids', tx, H * 0.62);
+  }
+}
+
+function drawLeaf(ctx, cx, cy, sz, opts) {
+  // Stylized leaf — terracotta with sage hint
+  const g = ctx.createLinearGradient(cx - sz/2, cy - sz/2, cx + sz/2, cy + sz/2);
+  g.addColorStop(0, opts.cAcc);
+  g.addColorStop(1, opts.cAcc2);
+  ctx.fillStyle = g;
+  ctx.beginPath();
+  // Asymmetric leaf shape
+  ctx.moveTo(cx, cy - sz * 0.55);
+  ctx.bezierCurveTo(cx + sz * 0.55, cy - sz * 0.45, cx + sz * 0.45, cy + sz * 0.45, cx, cy + sz * 0.55);
+  ctx.bezierCurveTo(cx - sz * 0.45, cy + sz * 0.45, cx - sz * 0.55, cy - sz * 0.45, cx, cy - sz * 0.55);
+  ctx.fill();
+  // Vein
+  ctx.strokeStyle = 'rgba(255,255,255,.35)';
+  ctx.lineWidth = sz * 0.04;
+  ctx.lineCap = 'round';
+  ctx.beginPath();
+  ctx.moveTo(cx + sz * 0.05, cy - sz * 0.45);
+  ctx.quadraticCurveTo(cx - sz * 0.1, cy, cx - sz * 0.05, cy + sz * 0.45);
+  ctx.stroke();
+}
+
+function roundedRect(ctx, x, y, w, h, r) {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.lineTo(x + w - r, y);
+  ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+  ctx.lineTo(x + w, y + h - r);
+  ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+  ctx.lineTo(x + r, y + h);
+  ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+  ctx.lineTo(x, y + r);
+  ctx.quadraticCurveTo(x, y, x + r, y);
+  ctx.closePath();
+}
+
+function lighten(hex, p) { return shadeHex(hex, p); }
+function darken(hex, p)  { return shadeHex(hex, -p); }
+function shadeHex(hex, percent) {
+  const num = parseInt(hex.slice(1), 16);
+  let r = (num >> 16) + Math.round(2.55 * percent);
+  let g = ((num >> 8) & 0xff) + Math.round(2.55 * percent);
+  let b = (num & 0xff) + Math.round(2.55 * percent);
+  r = Math.min(255, Math.max(0, r));
+  g = Math.min(255, Math.max(0, g));
+  b = Math.min(255, Math.max(0, b));
+  return '#' + ((r << 16) | (g << 8) | b).toString(16).padStart(6, '0');
+}
+
+function getOpts() {
+  return {
+    style: document.getElementById('style').value,
+    cAcc:  document.getElementById('cAcc').value,
+    cAcc2: document.getElementById('cAcc2').value,
+    cBg:   document.getElementById('cBg').value,
+    bgShape: document.getElementById('bgShape').value,
+  };
+}
+
+function renderAll() {
+  const o = getOpts();
+  drawLogo(document.getElementById('c192'),  o);
+  drawLogo(document.getElementById('c512'),  o);
+  drawLogo(document.getElementById('c1024'), o);
+  drawLogo(document.getElementById('cFeat'), o);
+}
+
+function dl(size) {
+  const id = size === 'feat' ? 'cFeat' : 'c' + size;
+  const canvas = document.getElementById(id);
+  const filename = size === 'feat' ? 'feature-graphic-1024x500.png' : `icon-${size}.png`;
+  const link = document.createElement('a');
+  link.download = filename;
+  link.href = canvas.toDataURL('image/png');
+  link.click();
+}
+
+document.querySelectorAll('input, select').forEach(el => {
+  el.addEventListener('input', renderAll);
+  el.addEventListener('change', renderAll);
+});
+
+window.addEventListener('load', () => setTimeout(renderAll, 50));
+</script>
+
+</body>
+</html>
