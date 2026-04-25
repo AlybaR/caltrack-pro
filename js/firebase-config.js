@@ -16,4 +16,12 @@ const firebaseConfig = {
 // Set to `true` to force local-only mode even if config is present (for debug).
 const FORCE_LOCAL_MODE = false;
 
-const FIREBASE_ENABLED = !FORCE_LOCAL_MODE && !!firebaseConfig.apiKey;
+// Test runner detection — `?test=1` URL param forces local mode (no Firebase).
+// This lets tests/index.html control the app deterministically without
+// Firebase auth state interfering.
+const _IS_TEST_MODE = (() => {
+    try { return new URLSearchParams(location.search).get('test') === '1'; }
+    catch (e) { return false; }
+})();
+
+const FIREBASE_ENABLED = !FORCE_LOCAL_MODE && !_IS_TEST_MODE && !!firebaseConfig.apiKey;
