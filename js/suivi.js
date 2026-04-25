@@ -40,6 +40,18 @@ function renderSuivi() {
   renderMonthHeatmap(now);
   renderProjectionGraph();
   if (typeof renderIntelligence === 'function') renderIntelligence();
+
+  // [Design v3] Cards moved from dashboard → daily complement to weekly view.
+  // Score is computed from today's data; wellness + micros tracked daily.
+  const dk = todayKey();
+  const day = getDay(dk);
+  const eaten = totalKcal(day);
+  const burned = totalBurned(day);
+  const effectiveTarget = (S.target || 2000) + burned;
+  if (typeof renderScore === 'function') renderScore(day, eaten, effectiveTarget, S.mp, burned);
+  if (typeof renderWellnessCard === 'function') renderWellnessCard();
+  if (typeof renderMicrosCard === 'function') renderMicrosCard();
+
   renderMotivation(streak);
 }
 

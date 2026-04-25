@@ -318,13 +318,13 @@
             </button>
         </div>
 
-        <!-- Macros -->
-        <div class="card card-glow-cyn" style="margin-bottom:12px;">
-            <div class="card-t">🥩 Macros journalières</div>
+        <!-- Macros (sub-axe Calories) -->
+        <div class="card" style="margin-bottom:12px;">
+            <div class="card-t">🥩 Macros</div>
             <div class="mbars" id="dash-macros"></div>
         </div>
 
-        <!-- Water -->
+        <!-- Water (sub-axe Calories) -->
         <div class="card" style="margin-bottom:12px;">
             <div class="card-t">💧 Hydratation</div>
             <div style="font-size:.75rem;color:var(--mut);" id="water-goal-ml"></div>
@@ -342,27 +342,13 @@
             </div>
         </div>
 
-        <!-- Score -->
-        <div class="card card-glow-grn" style="margin-bottom:12px;">
-            <div class="card-t">⭐ Score santé du jour</div>
-            <div class="score-wrap">
-                <div class="score-big" id="score-num">—</div>
-                <div class="score-items" id="score-items"></div>
-            </div>
-        </div>
+        <!-- 🏋️ SPORT du jour (Promesse 2) -->
+        <div class="card promise-card" id="dash-sport-card" style="margin-bottom:12px;"></div>
 
-        <!-- Tip -->
-        <div class="card" style="margin-bottom:12px;">
-            <div class="tip-box" id="dash-tip"></div>
-        </div>
+        <!-- ⚖️ OBJECTIF (Promesse 3) -->
+        <div class="card promise-card" id="dash-goal-card" style="margin-bottom:12px;"></div>
 
-        <!-- Bien-être du jour (B1 sommeil + B2 humeur/énergie) -->
-        <div class="card wellness-card" id="wellness-card" style="margin-bottom:12px;"></div>
-
-        <!-- Micronutriments du jour (N5) -->
-        <div class="card micros-card" id="micros-card" style="margin-bottom:12px;"></div>
-
-        <!-- Calorie Cycling -->
+        <!-- Calorie Cycling (conditionnel) -->
         <div class="card" id="cyc-card" style="margin-bottom:12px;display:none;">
             <div class="card-t">🔄 Calorie Cycling</div>
             <div class="cyc-scroll">
@@ -473,6 +459,21 @@
                 <span style="color:var(--acc);">── Réel</span>
             </div>
         </div>
+
+        <!-- Score santé du jour (déplacé du dashboard — Design v3) -->
+        <div class="card card-glow-grn" style="margin-bottom:12px;">
+            <div class="card-t">⭐ Score santé du jour</div>
+            <div class="score-wrap">
+                <div class="score-big" id="score-num">—</div>
+                <div class="score-items" id="score-items"></div>
+            </div>
+        </div>
+
+        <!-- Bien-être (déplacé du dashboard — Design v3) -->
+        <div class="card wellness-card" id="wellness-card" style="margin-bottom:12px;"></div>
+
+        <!-- Micronutriments (déplacé du dashboard — Design v3) -->
+        <div class="card micros-card" id="micros-card" style="margin-bottom:12px;"></div>
 
         <!-- Phase 4 Analytics & Insights -->
         <div class="card" id="intelligence-section" style="margin-bottom:12px;"></div>

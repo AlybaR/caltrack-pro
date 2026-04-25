@@ -1099,6 +1099,134 @@ html[data-theme="dark"] .ring-svg {
 }
 
 /* =================================================================
+   PROMISE CARDS (Sport / Objectif) — Dashboard v3
+   ================================================================= */
+.promise-card {
+    padding: 14px 16px;
+}
+.promise-hd {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+.promise-title {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 700;
+    font-size: .98rem;
+    color: var(--txt);
+}
+.promise-stat {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 700;
+    font-size: .82rem;
+    font-variant-numeric: tabular-nums;
+    color: var(--well);
+    background: var(--well-bg);
+    padding: 4px 10px;
+    border-radius: 999px;
+}
+.promise-cta {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 600;
+    font-size: .82rem;
+    color: var(--acc);
+    background: var(--acc-bg);
+    border: none;
+    padding: 5px 12px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: background var(--mo-fast) ease, transform var(--mo-fast) ease;
+}
+.promise-cta:hover  { background: rgba(200,81,42,.14); }
+.promise-cta:active { transform: scale(.96); }
+
+.promise-empty {
+    font-size: .87rem;
+    color: var(--mut);
+    line-height: 1.5;
+    padding: 4px 0 2px;
+}
+
+.promise-list {
+    list-style: none;
+    margin: 0; padding: 0;
+    display: flex; flex-direction: column; gap: 4px;
+}
+.promise-list li {
+    font-size: .87rem;
+    color: var(--txt2);
+    padding: 3px 0;
+}
+.promise-list li.more {
+    color: var(--mut);
+    font-size: .80rem;
+    font-style: italic;
+    padding-top: 2px;
+}
+
+/* Goal card */
+.goal-line {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+}
+.goal-current {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+    color: var(--txt);
+}
+.goal-arrow {
+    color: var(--mut);
+    font-size: 1rem;
+}
+.goal-target {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    color: var(--acc);
+}
+.goal-eta {
+    margin-left: auto;
+    font-size: .78rem;
+    font-weight: 600;
+    color: var(--well);
+    background: var(--well-bg);
+    padding: 3px 9px;
+    border-radius: 999px;
+}
+.goal-progress { margin: 4px 0 8px; }
+.goal-progress-bg {
+    height: 6px;
+    border-radius: 999px;
+    background: rgba(0,0,0,.06);
+    overflow: hidden;
+}
+html[data-theme="dark"] .goal-progress-bg { background: rgba(255,255,255,.06); }
+.goal-progress-fg {
+    height: 100%;
+    background: linear-gradient(90deg, var(--acc), var(--well));
+    transition: width 1s var(--ease, cubic-bezier(.32,.72,0,1));
+}
+.goal-sub {
+    font-size: .82rem;
+    color: var(--mut);
+    line-height: 1.4;
+}
+.goal-sub b {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    color: var(--txt);
+}
+
+/* =================================================================
    STAT BOXES
    ================================================================= */
 .stats-grid { display: grid; gap: 8px; }

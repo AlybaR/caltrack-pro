@@ -50,11 +50,7 @@ function renderDash() {
     const { target, tdee, bmr, water, rythme, mp, cyc } = S;
     const effectiveTarget = target + burned; // exercise expands the budget
 
-    // Wellness card (B1 sommeil + B2 humeur/énergie)
-    if (typeof renderWellnessCard === 'function') renderWellnessCard();
-
-    // Micronutriments card (N5)
-    if (typeof renderMicrosCard === 'function') renderMicrosCard();
+    // [Design v3] Wellness, Micros, Score moved to Suivi — not rendered here.
 
     // Greeting
     document.getElementById('dash-greeting').innerHTML = getGreeting(S.name || 'Toi');
@@ -168,9 +164,100 @@ function renderDash() {
 
     renderMacroBars(eaten, effectiveTarget, mp, totalMacros(day));
     renderWaterCtrl(day, dk, water);
-    renderScore(day, eaten, effectiveTarget, mp, burned);
-    document.getElementById('dash-tip').innerHTML = `<strong>Conseil ·</strong> ${TIPS[new Date().getDate() % TIPS.length]}`;
+    renderSportToday(day);                         // Promesse 2
+    renderGoalMini();                              // Promesse 3
     renderCalorieCycling(cyc, target);
+    if (typeof refreshIcons === 'function') refreshIcons();
+}
+
+/* ============================================================
+   PROMESSE 2 — Sport du jour (mini-card dashboard)
+   ============================================================ */
+function renderSportToday(day) {
+    const el = document.getElementById('dash-sport-card');
+    if (!el) return;
+    const exos = day.exercises || [];
+    if (exos.length === 0) {
+        el.innerHTML = `
+            <div class="promise-hd">
+                <div class="promise-title">🏋️ Sport aujourd'hui</div>
+                <button class="promise-cta" onclick="showPage('sport')">Ajouter →</button>
+            </div>
+            <div class="promise-empty">Aucun exercice — un peu de mouvement aujourd'hui ?</div>
+        `;
+        return;
+    }
+    const totalKcal = exos.reduce((s, e) => s + (e.kcal || 0), 0);
+    const totalMin = exos.reduce((s, e) => s + (e.duration || e.dur || 0), 0);
+    const list = exos.slice(0, 3).map(e => `<li>✓ ${e.name || e.n || 'Exercice'}${e.duration ? ` · ${e.duration} min` : ''}${e.kcal ? ` · ${e.kcal} kcal` : ''}</li>`).join('');
+    const more = exos.length > 3 ? `<li class="more">+${exos.length - 3} autre${exos.length - 3 > 1 ? 's' : ''}</li>` : '';
+    el.innerHTML = `
+        <div class="promise-hd">
+            <div class="promise-title">🏋️ Sport aujourd'hui</div>
+            <div class="promise-stat">${totalKcal} kcal${totalMin ? ` · ${totalMin} min` : ''}</div>
+        </div>
+        <ul class="promise-list">${list}${more}</ul>
+    `;
+}
+
+/* ============================================================
+   PROMESSE 3 — Objectif (mini-card dashboard)
+   ============================================================ */
+function renderGoalMini() {
+    const el = document.getElementById('dash-goal-card');
+    if (!el) return;
+    const wh = (lsLoad('weight-history') || []).slice().sort((a, b) => a.d.localeCompare(b.d));
+    const current = wh.length ? wh[wh.length - 1].v : S.w;
+    const goal = S.g;
+    const start = S.w;
+    if (!goal || !start) { el.innerHTML = ''; return; }
+
+    const direction = goal < start ? 'loss' : (goal > start ? 'gain' : 'maintain');
+    const totalToGo = goal - start;
+    const doneSoFar = current - start;
+    const remaining = goal - current;
+    const pctDone = totalToGo !== 0 ? Math.max(0, Math.min(1, doneSoFar / totalToGo)) : 0;
+
+    // ETA — simple linear projection on last 14 entries
+    let etaTxt = '';
+    if (wh.length >= 3) {
+        const recent = wh.slice(-14);
+        const first = recent[0];
+        const last = recent[recent.length - 1];
+        const days = (new Date(last.d) - new Date(first.d)) / 86400000;
+        const slope = days > 0 ? (last.v - first.v) / days : 0;
+        if (slope !== 0 && Math.sign(slope) === Math.sign(remaining * -1)) {
+            const daysToGoal = Math.abs(remaining / slope);
+            if (daysToGoal < 365 * 2) {
+                const eta = new Date();
+                eta.setDate(eta.getDate() + Math.round(daysToGoal));
+                etaTxt = `🎯 ETA ${eta.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' })}`;
+            }
+        }
+    }
+
+    const remAbs = Math.abs(remaining).toFixed(1);
+    const totalAbs = Math.abs(totalToGo).toFixed(1);
+    const verb = direction === 'loss' ? 'à perdre' : direction === 'gain' ? 'à prendre' : 'à maintenir';
+
+    el.innerHTML = `
+        <div class="promise-hd">
+            <div class="promise-title">⚖️ Objectif</div>
+            <button class="promise-cta" onclick="showPage('poids')">Voir →</button>
+        </div>
+        <div class="goal-line">
+            <span class="goal-current">${current.toFixed(1)} kg</span>
+            <span class="goal-arrow">→</span>
+            <span class="goal-target">${goal.toFixed(1)} kg</span>
+            ${etaTxt ? `<span class="goal-eta">${etaTxt}</span>` : ''}
+        </div>
+        <div class="goal-progress">
+            <div class="goal-progress-bg">
+                <div class="goal-progress-fg" style="width:${(pctDone * 100).toFixed(1)}%"></div>
+            </div>
+        </div>
+        <div class="goal-sub">Plus que <b>${remAbs} kg</b> ${verb} sur <b>${totalAbs} kg</b> total</div>
+    `;
 }
 
 function renderMacroBars(eaten, target, mp, actualMacros) {
