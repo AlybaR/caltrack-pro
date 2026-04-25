@@ -4641,3 +4641,64 @@ html[data-theme="dark"] .promise-item { background: rgba(255,255,255,.04); }
 .wiz-advanced summary::-webkit-details-marker { display: none; }
 .wiz-advanced summary:hover { color: var(--acc); }
 
+/* =================================================================
+   SUPPORT CARD — donations (no paywall, no unlock)
+   ================================================================= */
+.support-card {
+    background: linear-gradient(135deg, var(--card) 0%, var(--well-bg) 100%);
+}
+html[data-theme="dark"] .support-card {
+    background: linear-gradient(135deg, var(--card) 0%, rgba(132,169,140,.06) 100%);
+}
+.support-text {
+    font-size: .9rem;
+    color: var(--txt2);
+    line-height: 1.55;
+    padding: 4px 0 14px;
+}
+.support-buttons {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+}
+.support-btn {
+    flex: 1 1 auto;
+    min-width: 140px;
+    text-align: center;
+    padding: 11px 16px;
+    border-radius: var(--r-md);
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: .92rem;
+    text-decoration: none;
+    transition: transform var(--mo-fast) ease, filter var(--mo-fast) ease, box-shadow var(--mo-fast) ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+.support-btn-coffee {
+    background: #FFDD00;
+    color: #000;
+    box-shadow: 0 4px 16px rgba(255,221,0,.25);
+}
+.support-btn-coffee:hover { filter: brightness(.96); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(255,221,0,.35); }
+.support-btn-gh {
+    background: #EA4AAA;
+    color: #fff;
+    box-shadow: 0 4px 16px rgba(234,74,170,.25);
+}
+.support-btn-gh:hover { filter: brightness(1.05); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(234,74,170,.35); }
+.support-btn:active { transform: scale(.97); }
+
+.support-foot {
+    font-size: .76rem;
+    color: var(--mut);
+    line-height: 1.5;
+    padding-top: 10px;
+    border-top: 1px solid var(--bdr);
+}
+.support-foot a { color: var(--acc); text-decoration: none; }
+.support-foot a:hover { text-decoration: underline; }
+
