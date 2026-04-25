@@ -477,6 +477,7 @@ function addFoodDirect(mk, n, k, p = null, l = null, g = null, qty = 1, extras =
     saveDay(dk, day);
     trackRecentFood(food);
     _editingFood = null;
+    if (typeof haptic === 'function') haptic('success');
     renderJournal();
 }
 

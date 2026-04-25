@@ -91,6 +91,7 @@ function showPage(name) {
   if (name === 'suivi') renderSuivi();
   if (name === 'settings') renderSettings();
   refreshNavBadges();
+  applyNumericInputmode();
 }
 
 /* ----------------------------------------------------------
@@ -234,6 +235,40 @@ function toggleTheme() {
   const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
   applyTheme(prefersDark ? 'dark' : 'light');
 })();
+
+// ---------- HAPTIC FEEDBACK (UX14) ----------
+/** Short vibration for critical taps. Falls back to no-op if unsupported. */
+function haptic(kind = 'tap') {
+  if (!navigator.vibrate) return;
+  // Don't haptic-spam if user prefers reduced motion (often correlated with sensitivity)
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const patterns = {
+    tap:     [8],         // light tap
+    success: [12, 40, 18],// satisfying double pulse
+    warn:    [25, 60, 25],// warning double
+    error:   [40, 80, 40, 80, 40],
+  };
+  try { navigator.vibrate(patterns[kind] || patterns.tap); } catch (e) {}
+}
+
+// Auto-fire haptic on any element with [data-haptic] attribute
+document.addEventListener('click', (e) => {
+  const t = e.target.closest('[data-haptic]');
+  if (t) haptic(t.dataset.haptic || 'tap');
+}, { passive: true });
+
+// ---------- INPUT MODE — UX16 (numeric keyboard on mobile) ----------
+/** Run after any DOM mutation that adds inputs. Adds inputmode=decimal
+ *  to every number input that doesn't already have one. */
+function applyNumericInputmode(root = document) {
+  root.querySelectorAll('input[type="number"]:not([inputmode])').forEach(el => {
+    el.setAttribute('inputmode', el.step && parseFloat(el.step) < 1 ? 'decimal' : 'numeric');
+  });
+}
+window.addEventListener('DOMContentLoaded', () => applyNumericInputmode());
+// Also after page navigation (renders new inputs)
+const _origShowPageForInputmode = window.showPage;
+// We can't wrap here yet (showPage is in same file scope). Hook done below in init.
 
 // ---------- COUNT-UP (wow effect on numbers) ----------
 /** Animate an element's text from 0 (or its previous value) to `to`.

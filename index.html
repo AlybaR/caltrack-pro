@@ -310,10 +310,10 @@
 
         <!-- Quick-add shortcuts -->
         <div class="quick-add-row">
-            <button class="quick-add-btn" onclick="showPage('journal')" aria-label="Ajouter un repas">
+            <button class="quick-add-btn" data-haptic="tap" onclick="showPage('journal')" aria-label="Ajouter un repas">
                 <span>+</span> Ajouter un repas
             </button>
-            <button class="quick-scan-btn" onclick="quickScanFromDash()" aria-label="Scanner un code-barres">
+            <button class="quick-scan-btn" data-haptic="tap" onclick="quickScanFromDash()" aria-label="Scanner un code-barres">
                 📷
             </button>
         </div>
@@ -330,9 +330,9 @@
             <div style="font-size:.75rem;color:var(--mut);" id="water-goal-ml"></div>
             <div class="water-ctrl">
                 <div class="water-btns">
-                    <button class="wbtn" id="water-btn-minus">−</button>
+                    <button class="wbtn" id="water-btn-minus" data-haptic="tap">−</button>
                     <div class="water-count" id="water-count">0</div>
-                    <button class="wbtn" id="water-btn-plus">+</button>
+                    <button class="wbtn" id="water-btn-plus" data-haptic="tap">+</button>
                 </div>
                 <div class="water-bar-wrap">
                     <div class="water-bar-bg">
@@ -417,7 +417,7 @@
             <div class="w-entry-row">
                 <input type="number" id="w-today" step=".1" inputmode="decimal" placeholder="ex: 84.2"
                        onkeydown="if(event.key==='Enter') addWeight()"/>
-                <button class="btn btn-acc btn-sm" onclick="addWeight()">+ Ajouter</button>
+                <button class="btn btn-acc btn-sm" data-haptic="success" onclick="addWeight()">+ Ajouter</button>
             </div>
             <div class="period-btns-wrap">
                 <button class="period-btn active" data-period="7" onclick="setPoidsFilter('7')">7 jours</button>
