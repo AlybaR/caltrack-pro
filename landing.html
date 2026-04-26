@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="description" content="Lyno — Suivi calories, sport et poids. Sans pub, sans tracker, sans paywall. PWA installable. RGPD strict.">
-<meta name="theme-color" content="#D4633A">
+<meta name="theme-color" content="#C8512A">
 <meta property="og:title" content="Lyno — Calories, Sport, Poids">
 <meta property="og:description" content="Une app honnête pour atteindre ton objectif. 100% gratuit. RGPD strict. Sans pub.">
 <meta property="og:image" content="https://alybar.github.io/caltrack-pro/icon-512.png">
@@ -13,151 +13,631 @@
 <title>Lyno — Calories, Sport et Poids · Sans pub, sans tracker</title>
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-192.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" media="print" onload="this.media='all'">
+
 <style>
 :root {
-  --bg:#F9F7F4; --bg2:#FDFCFB; --card:#FFFFFF; --bdr:#EDE5DB;
-  --acc:#C8512A; --acc2:#A8411D; --well:#84A98C;
-  --txt:#15110E; --txt2:#4A3C30; --mut:#9A8578;
+  --bg:#FAF7F2; --bg2:#FFFFFF; --card:#FFFFFF; --bdr:#EDE5DB; --bdr2:#D9CDBE;
+  --acc:#C8512A; --acc2:#A8411D; --acc3:#7A2A12;
+  --well:#84A98C; --well-deep:#5C7F66;
+  --info:#5B8DAC; --warn:#B47420;
+  --txt:#15110E; --txt2:#4A3C30; --mut:#9A8578; --faint:#C4B4A5;
+  --ease:cubic-bezier(.32,.72,0,1);
+  --ease-spring:cubic-bezier(.34,1.56,.64,1);
+  --shadow-md:0 10px 40px -12px rgba(20,8,0,.18), 0 4px 12px rgba(20,8,0,.06);
+  --shadow-lg:0 24px 56px -8px rgba(20,8,0,.22), 0 8px 24px rgba(20,8,0,.08);
+  --shadow-xl:0 32px 80px -8px rgba(200,81,42,.32), 0 12px 32px rgba(20,8,0,.10);
+  --r-sm:10px; --r-md:14px; --r-lg:20px; --r-xl:28px;
 }
+html[data-theme="dark"] {
+  --bg:#0E0C0A; --bg2:#13110F; --card:#1C1814; --bdr:#2C2722; --bdr2:#3A3328;
+  --acc:#E07A4A; --acc2:#C8512A; --acc3:#9C3A18;
+  --well:#9DBFA6; --well-deep:#84A98C;
+  --txt:#F5F0EA; --txt2:#C9C0B5; --mut:#8C7F71; --faint:#5A5045;
+  --shadow-md:0 10px 40px -12px rgba(0,0,0,.6), 0 4px 12px rgba(0,0,0,.4);
+  --shadow-lg:0 24px 56px -8px rgba(0,0,0,.7), 0 8px 24px rgba(0,0,0,.5);
+  --shadow-xl:0 32px 80px -8px rgba(224,122,74,.40), 0 12px 32px rgba(0,0,0,.4);
+}
+
 * { box-sizing:border-box; margin:0; padding:0; }
-html { scroll-behavior:smooth; }
-body { font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif; background:var(--bg); color:var(--txt); line-height:1.6; -webkit-font-smoothing:antialiased; }
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap');
-body, h1, h2, h3 { font-family:'Outfit', sans-serif; }
-.wrap { max-width:1080px; margin:0 auto; padding:0 24px; }
-.btn { display:inline-flex; align-items:center; gap:10px; padding:14px 26px; border-radius:14px; font-weight:700; font-size:1rem; text-decoration:none; transition:all .15s; cursor:pointer; border:none; font-family:'Outfit', sans-serif; }
-.btn-acc { background:var(--acc); color:#fff; box-shadow:0 6px 20px rgba(200,81,42,.28); }
-.btn-acc:hover { background:var(--acc2); transform:translateY(-1px); box-shadow:0 8px 28px rgba(200,81,42,.35); }
-.btn-ghost { background:#fff; color:var(--txt); border:1.5px solid var(--bdr); }
-.btn-ghost:hover { border-color:var(--acc); color:var(--acc); }
+html { scroll-behavior:smooth; -webkit-text-size-adjust:100%; }
+body {
+  font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  background:var(--bg); color:var(--txt); line-height:1.6;
+  -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+  overflow-x:hidden;
+}
+::selection { background:rgba(200,81,42,.18); color:inherit; }
 
-/* === HERO === */
-.hero { padding:80px 0 60px; position:relative; overflow:hidden; }
-.hero::before { content:''; position:absolute; top:-150px; left:-100px; width:500px; height:500px; border-radius:50%; background:radial-gradient(circle,rgba(200,81,42,.18),transparent 70%); filter:blur(60px); z-index:0; }
-.hero::after { content:''; position:absolute; top:30%; right:-200px; width:400px; height:400px; border-radius:50%; background:radial-gradient(circle,rgba(132,169,140,.20),transparent 70%); filter:blur(60px); z-index:0; }
-.hero .wrap { position:relative; z-index:1; text-align:center; }
-.logo { width:96px; height:96px; margin:0 auto 24px; display:flex; align-items:center; justify-content:center; background:linear-gradient(135deg,var(--acc),var(--acc2)); border-radius:24px; font-size:3rem; box-shadow:0 12px 40px rgba(200,81,42,.32); }
-.h1 { font-size:clamp(2rem,5vw,3.5rem); font-weight:800; letter-spacing:-.025em; line-height:1.1; margin-bottom:18px; }
-.h1 span { background:linear-gradient(135deg,var(--acc),var(--acc2)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
-.lede { font-size:clamp(1.05rem,2vw,1.25rem); color:var(--txt2); max-width:640px; margin:0 auto 36px; line-height:1.5; }
-.cta-row { display:flex; gap:14px; justify-content:center; flex-wrap:wrap; margin-bottom:30px; }
-.trust-line { font-size:.85rem; color:var(--mut); }
-.trust-line b { color:var(--well); }
+.wrap { max-width:1200px; margin:0 auto; padding:0 24px; }
 
-/* === PROMISES === */
-.promises { padding:60px 0; background:var(--bg2); }
-.section-eyebrow { font-size:.78rem; font-weight:700; text-transform:uppercase; letter-spacing:.12em; color:var(--acc); margin-bottom:8px; text-align:center; }
-.section-h2 { font-size:clamp(1.6rem,3.5vw,2.5rem); font-weight:800; text-align:center; margin-bottom:8px; letter-spacing:-.02em; }
-.section-sub { text-align:center; color:var(--mut); margin-bottom:42px; max-width:520px; margin-left:auto; margin-right:auto; }
-.p-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:20px; }
-.p-card { background:var(--card); border:1px solid var(--bdr); border-radius:20px; padding:28px 24px; transition:all .2s; }
-.p-card:hover { transform:translateY(-3px); box-shadow:0 12px 40px rgba(20,8,0,.06); border-color:var(--acc); }
-.p-emoji { font-size:2.4rem; line-height:1; margin-bottom:14px; }
-.p-name { font-size:1.25rem; font-weight:700; margin-bottom:8px; letter-spacing:-.01em; }
-.p-desc { color:var(--txt2); font-size:.95rem; }
-.p-list { margin-top:14px; padding-left:0; list-style:none; }
-.p-list li { padding:4px 0; font-size:.88rem; color:var(--mut); display:flex; align-items:center; gap:8px; }
-.p-list li::before { content:'✓'; color:var(--well); font-weight:700; }
+/* ============================================================
+   STICKY NAV (apparaît au scroll)
+   ============================================================ */
+.nav {
+  position:fixed; top:0; left:0; right:0; z-index:100;
+  padding:14px 24px;
+  background:rgba(250,247,242,.85);
+  backdrop-filter:blur(20px) saturate(180%);
+  -webkit-backdrop-filter:blur(20px) saturate(180%);
+  border-bottom:1px solid transparent;
+  transition:all .3s var(--ease);
+  transform:translateY(-100%);
+}
+html[data-theme="dark"] .nav { background:rgba(14,12,10,.85); }
+.nav.scrolled {
+  transform:translateY(0);
+  border-bottom-color:var(--bdr);
+}
+.nav-inner {
+  max-width:1200px; margin:0 auto;
+  display:flex; align-items:center; justify-content:space-between; gap:16px;
+}
+.nav-brand {
+  font-family:'Outfit',sans-serif; font-weight:800; font-size:1.15rem;
+  display:flex; align-items:center; gap:8px;
+  letter-spacing:-.01em;
+}
+.nav-brand-mark {
+  width:28px; height:28px; border-radius:8px;
+  background:linear-gradient(135deg,var(--acc),var(--acc3));
+  display:flex; align-items:center; justify-content:center;
+  font-size:.95rem;
+  box-shadow:0 4px 12px rgba(200,81,42,.35);
+}
+.nav-actions { display:flex; align-items:center; gap:10px; }
+.nav-link { color:var(--txt2); text-decoration:none; font-weight:500; font-size:.92rem; padding:6px 12px; border-radius:8px; transition:color .15s; }
+.nav-link:hover { color:var(--acc); }
+@media (max-width:680px) { .nav-link.hide-sm { display:none; } }
 
-/* === DIFF === */
-.diff { padding:80px 0; }
-.diff-grid { display:grid; grid-template-columns:1fr 1fr; gap:24px; max-width:840px; margin:0 auto; }
-.diff-col { background:var(--card); border-radius:20px; padding:28px 24px; }
-.diff-col.bad { border:1.5px solid rgba(188,53,53,.20); background:rgba(188,53,53,.03); }
-.diff-col.good { border:1.5px solid rgba(132,169,140,.30); background:rgba(132,169,140,.05); }
-.diff-h { font-size:1.05rem; font-weight:700; margin-bottom:14px; display:flex; align-items:center; gap:8px; }
-.diff-h.bad { color:var(--mut); text-decoration:line-through; }
-.diff-h.good { color:var(--well); }
-.diff-col ul { padding-left:0; list-style:none; }
-.diff-col li { padding:5px 0; font-size:.92rem; }
-.diff-col.bad li::before { content:'✗ '; color:#BC3535; font-weight:700; }
-.diff-col.good li::before { content:'✓ '; color:var(--well); font-weight:700; }
-@media (max-width:680px) { .diff-grid { grid-template-columns:1fr; } }
+/* ============================================================
+   BUTTONS
+   ============================================================ */
+.btn {
+  display:inline-flex; align-items:center; gap:10px;
+  padding:14px 28px; border-radius:14px;
+  font-family:'Outfit',sans-serif; font-weight:700; font-size:1rem;
+  text-decoration:none; cursor:pointer; border:none;
+  transition:all .2s var(--ease); white-space:nowrap;
+  position:relative; overflow:hidden;
+}
+.btn-acc {
+  background:linear-gradient(135deg,var(--acc),var(--acc2));
+  color:#fff;
+  box-shadow:0 12px 32px -8px rgba(200,81,42,.45);
+}
+.btn-acc:hover {
+  transform:translateY(-2px);
+  box-shadow:0 20px 48px -8px rgba(200,81,42,.55);
+}
+.btn-acc:active { transform:translateY(0); }
+.btn-ghost {
+  background:var(--bg2); color:var(--txt); border:1.5px solid var(--bdr2);
+}
+.btn-ghost:hover { border-color:var(--acc); color:var(--acc); transform:translateY(-1px); }
+.btn-sm { padding:9px 18px; font-size:.88rem; }
 
-/* === FAQ === */
-.faq { padding:60px 0; background:var(--bg2); }
-.faq-item { background:var(--card); border:1px solid var(--bdr); border-radius:14px; padding:18px 22px; margin-bottom:10px; max-width:720px; margin-left:auto; margin-right:auto; }
-.faq-q { font-weight:700; font-size:1rem; cursor:pointer; user-select:none; list-style:none; display:flex; justify-content:space-between; align-items:center; }
+/* ============================================================
+   HERO
+   ============================================================ */
+.hero {
+  position:relative; padding:120px 0 80px;
+  overflow:hidden;
+  text-align:center;
+}
+.hero-orb {
+  position:absolute; border-radius:50%; filter:blur(80px);
+  pointer-events:none; will-change:transform;
+}
+.hero-orb-1 { width:600px; height:600px; top:-200px; left:-100px; background:radial-gradient(circle,rgba(200,81,42,.28),transparent 65%); animation:orb-float-a 18s ease-in-out infinite; }
+.hero-orb-2 { width:520px; height:520px; top:10%; right:-180px; background:radial-gradient(circle,rgba(132,169,140,.30),transparent 65%); animation:orb-float-b 22s ease-in-out infinite; }
+.hero-orb-3 { width:400px; height:400px; bottom:-100px; left:30%; background:radial-gradient(circle,rgba(180,116,32,.22),transparent 65%); animation:orb-float-c 16s ease-in-out infinite; }
+
+@keyframes orb-float-a { 0%,100% { transform:translate(0,0) scale(1); } 50% { transform:translate(40px,-30px) scale(1.1); } }
+@keyframes orb-float-b { 0%,100% { transform:translate(0,0) scale(1); } 50% { transform:translate(-30px,40px) scale(1.08); } }
+@keyframes orb-float-c { 0%,100% { transform:translate(0,0) scale(1); } 50% { transform:translate(20px,-20px) scale(1.12); } }
+
+.hero-content { position:relative; z-index:2; }
+
+.hero-badge {
+  display:inline-flex; align-items:center; gap:6px;
+  padding:6px 14px; border-radius:999px;
+  background:rgba(200,81,42,.08); border:1px solid rgba(200,81,42,.18);
+  color:var(--acc); font-size:.78rem; font-weight:700;
+  letter-spacing:.04em; text-transform:uppercase;
+  margin-bottom:24px;
+  animation:fadeInUp .8s var(--ease) both;
+}
+.hero-badge .dot { width:6px; height:6px; border-radius:50%; background:var(--acc); animation:pulse-dot 2s ease-in-out infinite; }
+@keyframes pulse-dot { 0%,100% { opacity:1; transform:scale(1); } 50% { opacity:.5; transform:scale(1.3); } }
+
+.hero-mark {
+  width:108px; height:108px; margin:0 auto 28px;
+  border-radius:28px;
+  background:linear-gradient(135deg,var(--acc) 0%,var(--acc2) 50%,var(--acc3) 100%);
+  display:flex; align-items:center; justify-content:center;
+  font-size:3.4rem; box-shadow:0 24px 60px -12px rgba(200,81,42,.55);
+  animation:fadeInUp .8s var(--ease) .1s both, mark-breathe 6s ease-in-out infinite;
+}
+@keyframes mark-breathe { 0%,100% { transform:scale(1); } 50% { transform:scale(1.04); } }
+
+.hero h1 {
+  font-family:'Outfit',sans-serif;
+  font-size:clamp(2.4rem,6.5vw,5rem);
+  font-weight:900;
+  line-height:1.05; letter-spacing:-.035em;
+  margin-bottom:22px;
+  animation:fadeInUp .8s var(--ease) .2s both;
+}
+.hero h1 .gradient {
+  background:linear-gradient(135deg,var(--acc),var(--acc2));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.hero .lede {
+  font-size:clamp(1.05rem,2.2vw,1.4rem);
+  color:var(--txt2); max-width:680px; margin:0 auto 40px;
+  line-height:1.5;
+  animation:fadeInUp .8s var(--ease) .3s both;
+}
+.hero-cta {
+  display:flex; gap:14px; justify-content:center; flex-wrap:wrap;
+  margin-bottom:48px;
+  animation:fadeInUp .8s var(--ease) .4s both;
+}
+.hero-trust {
+  display:flex; justify-content:center; gap:28px; flex-wrap:wrap;
+  font-size:.85rem; color:var(--mut);
+  animation:fadeInUp .8s var(--ease) .5s both;
+}
+.hero-trust span { display:flex; align-items:center; gap:6px; }
+
+@keyframes fadeInUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+
+/* ============================================================
+   STATS BAR (counters animés)
+   ============================================================ */
+.stats-bar {
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:16px;
+  max-width:880px; margin:48px auto 0;
+  padding:24px;
+  background:var(--card); border:1px solid var(--bdr);
+  border-radius:var(--r-xl);
+  box-shadow:var(--shadow-md);
+  animation:fadeInUp .8s var(--ease) .6s both;
+}
+.stat-item { text-align:center; }
+.stat-num {
+  font-family:'Outfit',sans-serif; font-weight:800;
+  font-size:clamp(1.8rem,4vw,2.6rem);
+  background:linear-gradient(135deg,var(--acc),var(--acc2));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  background-clip:text;
+  font-variant-numeric:tabular-nums; line-height:1;
+}
+.stat-num .unit { font-size:.55em; color:var(--mut); -webkit-text-fill-color:var(--mut); margin-left:2px; }
+.stat-label { font-size:.78rem; color:var(--mut); margin-top:6px; font-weight:500; }
+
+/* ============================================================
+   SECTION COMMON
+   ============================================================ */
+.section { padding:100px 0; position:relative; }
+.section-tinted { background:var(--bg2); }
+.eyebrow {
+  display:inline-block;
+  font-family:'Outfit',sans-serif;
+  font-size:.78rem; font-weight:800; letter-spacing:.14em;
+  color:var(--acc); text-transform:uppercase;
+  margin-bottom:14px;
+  padding:5px 12px; border-radius:999px;
+  background:rgba(200,81,42,.07);
+}
+.section h2 {
+  font-family:'Outfit',sans-serif;
+  font-size:clamp(1.8rem,4.5vw,3.2rem);
+  font-weight:800; letter-spacing:-.025em;
+  line-height:1.1; margin-bottom:14px;
+}
+.section .sub {
+  font-size:clamp(1rem,1.8vw,1.18rem);
+  color:var(--txt2); max-width:680px; line-height:1.55;
+  margin-bottom:60px;
+}
+.section.center .eyebrow,
+.section.center h2,
+.section.center .sub { text-align:center; }
+.section.center .sub { margin-left:auto; margin-right:auto; }
+
+/* Reveal on scroll */
+.reveal { opacity:0; transform:translateY(28px); transition:opacity .9s var(--ease), transform .9s var(--ease); will-change:opacity, transform; }
+.reveal.in { opacity:1; transform:translateY(0); }
+.reveal-stagger > * { opacity:0; transform:translateY(20px); transition:opacity .7s var(--ease), transform .7s var(--ease); }
+.reveal-stagger.in > *:nth-child(1) { opacity:1; transform:translateY(0); transition-delay:0s; }
+.reveal-stagger.in > *:nth-child(2) { opacity:1; transform:translateY(0); transition-delay:.12s; }
+.reveal-stagger.in > *:nth-child(3) { opacity:1; transform:translateY(0); transition-delay:.24s; }
+.reveal-stagger.in > *:nth-child(4) { opacity:1; transform:translateY(0); transition-delay:.36s; }
+
+/* ============================================================
+   3 PROMESSES
+   ============================================================ */
+.promise-grid {
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:24px;
+}
+.promise-card {
+  background:var(--card); border:1px solid var(--bdr);
+  border-radius:var(--r-xl); padding:36px 28px;
+  position:relative; overflow:hidden;
+  transition:all .3s var(--ease);
+  cursor:default;
+}
+.promise-card::before {
+  content:''; position:absolute; top:-50%; right:-50%; width:200%; height:200%;
+  background:radial-gradient(circle at top right, rgba(200,81,42,.12), transparent 50%);
+  opacity:0; transition:opacity .4s ease;
+  pointer-events:none;
+}
+.promise-card:hover {
+  transform:translateY(-6px);
+  box-shadow:var(--shadow-lg);
+  border-color:var(--acc);
+}
+.promise-card:hover::before { opacity:1; }
+.promise-icon {
+  width:64px; height:64px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:2.2rem;
+  background:linear-gradient(135deg,rgba(200,81,42,.10),rgba(200,81,42,.04));
+  border-radius:18px;
+  margin-bottom:22px;
+  transition:transform .4s var(--ease-spring);
+}
+.promise-card:hover .promise-icon { transform:scale(1.1) rotate(-5deg); }
+.promise-name {
+  font-family:'Outfit',sans-serif;
+  font-weight:800; font-size:1.4rem;
+  letter-spacing:-.015em; margin-bottom:10px;
+}
+.promise-desc {
+  color:var(--txt2); font-size:.96rem; line-height:1.6;
+  margin-bottom:18px;
+}
+.promise-list { list-style:none; padding:0; }
+.promise-list li {
+  font-size:.9rem; color:var(--mut); padding:5px 0;
+  display:flex; align-items:center; gap:10px;
+}
+.promise-list li::before {
+  content:''; width:18px; height:18px; border-radius:50%;
+  background:var(--well); flex-shrink:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6L9 17l-5-5'/%3E%3C/svg%3E");
+  background-size:60%; background-position:center; background-repeat:no-repeat;
+}
+
+/* ============================================================
+   COMMENT ÇA MARCHE — 3 ÉTAPES
+   ============================================================ */
+.steps { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:28px; }
+.step {
+  background:var(--card); border:1px solid var(--bdr);
+  border-radius:var(--r-xl); padding:32px 28px;
+  position:relative;
+}
+.step-num {
+  position:absolute; top:-20px; left:28px;
+  width:48px; height:48px; border-radius:14px;
+  background:linear-gradient(135deg,var(--acc),var(--acc2));
+  color:#fff; display:flex; align-items:center; justify-content:center;
+  font-family:'Outfit',sans-serif; font-weight:900; font-size:1.4rem;
+  box-shadow:0 8px 24px -6px rgba(200,81,42,.55);
+}
+.step-mockup {
+  width:100%; aspect-ratio:9/16;
+  max-height:280px;
+  background:linear-gradient(135deg,var(--bg),var(--bg2));
+  border:1.5px solid var(--bdr);
+  border-radius:18px; margin:24px 0 18px;
+  position:relative; overflow:hidden;
+  display:flex; align-items:center; justify-content:center;
+}
+.step-mockup-content {
+  text-align:center; padding:18px;
+}
+.step-mockup-emoji { font-size:3.5rem; line-height:1; margin-bottom:10px; display:block; animation:bounce-soft 3s ease-in-out infinite; }
+@keyframes bounce-soft { 0%,100% { transform:translateY(0); } 50% { transform:translateY(-8px); } }
+.step-mockup-text {
+  font-family:'Outfit',sans-serif; font-weight:700; color:var(--txt);
+  font-size:.95rem;
+}
+.step-mockup-num {
+  font-family:'Outfit',sans-serif; font-weight:800;
+  font-size:2.2rem; color:var(--acc);
+  font-variant-numeric:tabular-nums;
+}
+.step-mockup-num .small { font-size:.5em; color:var(--mut); }
+.step h3 { font-family:'Outfit',sans-serif; font-weight:800; font-size:1.15rem; margin-bottom:8px; letter-spacing:-.01em; }
+.step p { color:var(--txt2); font-size:.92rem; line-height:1.5; }
+
+/* ============================================================
+   COMPARISON — vs concurrents
+   ============================================================ */
+.compare-grid {
+  display:grid; grid-template-columns:1fr 1fr; gap:20px;
+  max-width:920px; margin:0 auto;
+}
+@media (max-width:680px) { .compare-grid { grid-template-columns:1fr; } }
+.compare-col {
+  background:var(--card); border-radius:var(--r-xl);
+  padding:32px 28px;
+  position:relative;
+  transition:transform .3s var(--ease);
+}
+.compare-col.bad {
+  border:1.5px solid rgba(188,53,53,.20);
+  background:linear-gradient(180deg,rgba(188,53,53,.03),transparent);
+}
+.compare-col.good {
+  border:1.5px solid rgba(132,169,140,.30);
+  background:linear-gradient(180deg,rgba(132,169,140,.06),transparent);
+  box-shadow:var(--shadow-md);
+  transform:scale(1.02);
+}
+.compare-col.good:hover { transform:scale(1.04) translateY(-4px); box-shadow:var(--shadow-lg); }
+.compare-h {
+  font-family:'Outfit',sans-serif; font-weight:800; font-size:1.2rem;
+  margin-bottom:18px; display:flex; align-items:center; gap:10px;
+}
+.compare-h.bad { color:var(--mut); }
+.compare-h.bad em { text-decoration:line-through; font-style:normal; }
+.compare-h.good { color:var(--well-deep); }
+.compare-list { list-style:none; padding:0; }
+.compare-list li {
+  font-size:.94rem; padding:9px 0;
+  display:flex; align-items:flex-start; gap:10px;
+  border-bottom:1px dashed var(--bdr);
+}
+.compare-list li:last-child { border-bottom:none; }
+.compare-col.bad li { color:var(--txt2); }
+.compare-col.bad li::before {
+  content:'✗'; color:#BC3535; font-weight:900; font-size:1rem;
+  width:18px; flex-shrink:0;
+}
+.compare-col.good li { color:var(--txt); font-weight:500; }
+.compare-col.good li::before {
+  content:'✓'; color:var(--well-deep); font-weight:900; font-size:1rem;
+  width:18px; flex-shrink:0;
+}
+
+/* ============================================================
+   FAQ
+   ============================================================ */
+.faq-list { max-width:780px; margin:0 auto; }
+.faq-item {
+  background:var(--card); border:1px solid var(--bdr);
+  border-radius:var(--r-md); padding:20px 24px;
+  margin-bottom:12px;
+  transition:all .25s var(--ease);
+}
+.faq-item:hover { border-color:var(--acc); }
+.faq-item[open] { box-shadow:var(--shadow-md); }
+.faq-q {
+  font-family:'Outfit',sans-serif; font-weight:700; font-size:1rem;
+  cursor:pointer; user-select:none; list-style:none;
+  display:flex; justify-content:space-between; align-items:center; gap:14px;
+}
 .faq-q::-webkit-details-marker { display:none; }
-.faq-q::after { content:'+'; color:var(--acc); font-size:1.4rem; font-weight:300; transition:transform .2s; }
-details[open] .faq-q::after { transform:rotate(45deg); }
-.faq-a { padding-top:12px; color:var(--txt2); font-size:.94rem; line-height:1.6; }
+.faq-q::after {
+  content:''; width:22px; height:22px; flex-shrink:0;
+  border-radius:50%; background:var(--acc-bg,rgba(200,81,42,.1));
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg' fill='none' stroke='%23C8512A' stroke-width='2.5' stroke-linecap='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-size:14px; background-position:center; background-repeat:no-repeat;
+  transition:transform .3s var(--ease);
+}
+.faq-item[open] .faq-q::after { transform:rotate(180deg); }
+.faq-a {
+  padding-top:14px; color:var(--txt2);
+  font-size:.94rem; line-height:1.65;
+}
+.faq-a a { color:var(--acc); }
 
-/* === CTA FINAL === */
-.cta-final { padding:80px 0; text-align:center; }
-.cta-final .h2 { margin-bottom:14px; }
-.cta-final .lede { margin-bottom:28px; }
+/* ============================================================
+   CTA FINAL
+   ============================================================ */
+.cta-final {
+  text-align:center; padding:120px 24px;
+  background:linear-gradient(135deg,var(--acc),var(--acc2),var(--acc3));
+  color:#fff; position:relative; overflow:hidden;
+}
+.cta-final::before {
+  content:''; position:absolute; inset:0;
+  background:radial-gradient(circle at 30% 20%, rgba(255,255,255,.15), transparent 50%);
+}
+.cta-final * { position:relative; z-index:1; }
+.cta-final h2 { color:#fff; margin-bottom:14px; }
+.cta-final .sub { color:rgba(255,255,255,.92); margin-bottom:36px; max-width:600px; margin-left:auto; margin-right:auto; }
+.cta-final .btn {
+  background:#fff; color:var(--acc); font-weight:800;
+  box-shadow:0 16px 40px -8px rgba(0,0,0,.3);
+}
+.cta-final .btn:hover { background:#FFF8F2; transform:translateY(-3px); }
 
-/* === FOOTER === */
-footer { padding:30px 0 50px; border-top:1px solid var(--bdr); background:var(--bg2); margin-top:60px; }
-footer .wrap { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:18px; }
-footer .links { display:flex; gap:18px; flex-wrap:wrap; }
-footer a { color:var(--mut); font-size:.85rem; text-decoration:none; transition:color .15s; }
-footer a:hover { color:var(--acc); }
-.foot-brand { font-weight:700; font-size:.95rem; }
-.foot-brand span { color:var(--mut); font-weight:400; margin-left:6px; }
+/* ============================================================
+   FOOTER
+   ============================================================ */
+footer { padding:48px 24px 64px; background:var(--bg2); border-top:1px solid var(--bdr); }
+.foot {
+  max-width:1200px; margin:0 auto;
+  display:flex; justify-content:space-between; align-items:center;
+  flex-wrap:wrap; gap:20px;
+}
+.foot-brand {
+  font-family:'Outfit',sans-serif; font-weight:800; font-size:1rem;
+  display:flex; align-items:center; gap:10px;
+}
+.foot-brand small { color:var(--mut); font-weight:400; font-size:.78rem; }
+.foot-links { display:flex; gap:22px; flex-wrap:wrap; }
+.foot-links a { color:var(--mut); font-size:.86rem; text-decoration:none; transition:color .15s; }
+.foot-links a:hover { color:var(--acc); }
 
-/* === DARK SUPPORT === */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg:#13110F; --bg2:#1A1714; --card:#211D19; --bdr:#2C2722;
-    --txt:#F5F0EA; --txt2:#C9C0B5; --mut:#8C7F71;
-    --acc:#E06B3D; --acc2:#C8512A;
-  }
+/* ============================================================
+   STICKY BOTTOM CTA (mobile only)
+   ============================================================ */
+.sticky-cta {
+  position:fixed; bottom:0; left:0; right:0; z-index:99;
+  padding:14px 20px;
+  background:rgba(250,247,242,.95);
+  backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px);
+  border-top:1px solid var(--bdr);
+  transform:translateY(100%); transition:transform .35s var(--ease);
+  display:none;
+}
+html[data-theme="dark"] .sticky-cta { background:rgba(14,12,10,.95); }
+@media (max-width:680px) { .sticky-cta { display:block; } }
+.sticky-cta.show { transform:translateY(0); }
+.sticky-cta-inner { display:flex; gap:10px; align-items:center; max-width:600px; margin:0 auto; }
+.sticky-cta .btn { flex:1; padding:14px 18px; font-size:.92rem; justify-content:center; }
+
+@media (max-width:680px) {
+  body.has-sticky-cta { padding-bottom:88px; }
+}
+
+/* ============================================================
+   MOTION-REDUCED
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration:.01ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important; }
 }
 </style>
 </head>
 <body>
 
-<!-- HERO -->
-<section class="hero">
-  <div class="wrap">
-    <div class="logo">🌿</div>
-    <h1 class="h1">Atteins ton objectif,<br><span>sans te prendre la tête.</span></h1>
-    <p class="lede">Lyno fait <b>3 choses, vraiment bien</b> : suivre tes calories, suivre ton sport, atteindre ton poids cible. Pas de pub. Pas de tracker. Pas de paywall.</p>
-    <div class="cta-row">
-      <a href="https://play.google.com/store/apps/details?id=io.github.alybar.lyno" class="btn btn-acc">📱 Télécharger sur Play Store</a>
-      <a href="./index.html" class="btn btn-ghost">🌐 Essayer dans le navigateur</a>
+<!-- ============================================================
+     STICKY NAV
+     ============================================================ -->
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="#" class="nav-brand">
+      <span class="nav-brand-mark">🌿</span>
+      <span>Lyno</span>
+    </a>
+    <div class="nav-actions">
+      <a href="#features" class="nav-link hide-sm">Features</a>
+      <a href="#how" class="nav-link hide-sm">Comment ça marche</a>
+      <a href="#faq" class="nav-link hide-sm">FAQ</a>
+      <a href="./index.html" class="btn btn-acc btn-sm">Essayer →</a>
     </div>
-    <p class="trust-line">🔒 <b>RGPD strict</b> · Serveurs UE · Code source public</p>
+  </div>
+</nav>
+
+<!-- ============================================================
+     HERO
+     ============================================================ -->
+<section class="hero">
+  <div class="hero-orb hero-orb-1"></div>
+  <div class="hero-orb hero-orb-2"></div>
+  <div class="hero-orb hero-orb-3"></div>
+
+  <div class="wrap hero-content">
+    <div class="hero-badge">
+      <span class="dot"></span>
+      <span>Bientôt sur Play Store</span>
+    </div>
+
+    <div class="hero-mark">🌿</div>
+
+    <h1>
+      Atteins ton objectif,<br>
+      <span class="gradient">sans te prendre la tête.</span>
+    </h1>
+
+    <p class="lede">
+      Lyno fait <b>3 choses, vraiment bien</b> : suivre tes calories, suivre ton sport, atteindre ton poids cible.
+      <br>Pas de pub. Pas de tracker. Pas de paywall.
+    </p>
+
+    <div class="hero-cta">
+      <a href="https://play.google.com/store/apps/details?id=io.github.alybar.lyno" class="btn btn-acc">
+        📱 Bientôt sur Play Store
+      </a>
+      <a href="./index.html" class="btn btn-ghost">
+        🌐 Essayer dans le navigateur
+      </a>
+    </div>
+
+    <div class="hero-trust">
+      <span>🔒 RGPD strict</span>
+      <span>🇪🇺 Serveurs UE</span>
+      <span>📂 Code source ouvert</span>
+      <span>💛 100% gratuit</span>
+    </div>
+
+    <!-- Counters animés -->
+    <div class="stats-bar reveal" id="statsBar">
+      <div class="stat-item">
+        <div class="stat-num" data-counter="2000000">0<span class="unit">+</span></div>
+        <div class="stat-label">Aliments dans la base</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num" data-counter="0">0<span class="unit">€</span></div>
+        <div class="stat-label">Coût pour toi</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num" data-counter="0">0<span class="unit"></span></div>
+        <div class="stat-label">Pubs · Trackers · Paywall</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num" data-counter="3">0<span class="unit"></span></div>
+        <div class="stat-label">Promesses tenues</div>
+      </div>
+    </div>
   </div>
 </section>
 
-<!-- 3 PROMESSES -->
-<section class="promises" id="features">
+<!-- ============================================================
+     3 PROMESSES
+     ============================================================ -->
+<section class="section section-tinted center" id="features">
   <div class="wrap">
-    <div class="section-eyebrow">Ce que ça fait</div>
-    <h2 class="section-h2">3 promesses, tenues</h2>
-    <p class="section-sub">Pas de feature inutile. Chaque écran sert une de ces 3 promesses.</p>
-    <div class="p-grid">
-      <div class="p-card">
-        <div class="p-emoji">🍽️</div>
-        <div class="p-name">Suivre tes calories</div>
-        <div class="p-desc">Scanner code-barres, recherche OpenFoodFacts (2M+ produits), favoris, récents.</div>
-        <ul class="p-list">
+    <div class="reveal">
+      <span class="eyebrow">Ce que ça fait</span>
+      <h2>3 promesses, tenues</h2>
+      <p class="sub">Pas de feature inutile. Chaque écran sert une de ces 3 promesses.</p>
+    </div>
+
+    <div class="promise-grid reveal-stagger">
+      <div class="promise-card">
+        <div class="promise-icon">🍽️</div>
+        <div class="promise-name">Suivre tes calories</div>
+        <p class="promise-desc">Scanner code-barres, recherche OpenFoodFacts (2M+ produits), favoris, récents intelligents.</p>
+        <ul class="promise-list">
           <li>Macros auto (P/L/G)</li>
           <li>Hydratation</li>
-          <li>Micronutriments (fibres, sel, sucre)</li>
-          <li>4 répartitions : Standard, Low-Carb, Keto, High-Protein</li>
+          <li>Micronutriments</li>
+          <li>4 répartitions : Std, Low-Carb, Keto, High-Protein</li>
         </ul>
       </div>
-      <div class="p-card">
-        <div class="p-emoji">🏋️</div>
-        <div class="p-name">Suivre ton sport</div>
-        <div class="p-desc">Cardio, muscu détaillée, sport, bien-être. Tracking par exercice.</div>
-        <ul class="p-list">
+
+      <div class="promise-card">
+        <div class="promise-icon">🏋️</div>
+        <div class="promise-name">Suivre ton sport</div>
+        <p class="promise-desc">Cardio, muscu détaillée, séance globale. Tracking précis par exercice.</p>
+        <ul class="promise-list">
           <li>Séries × reps × charges</li>
           <li>Calcul 1RM (Epley/Brzycki)</li>
           <li>Courbe de progression par exo</li>
           <li>Brûleur intégré au budget kcal</li>
         </ul>
       </div>
-      <div class="p-card">
-        <div class="p-emoji">⚖️</div>
-        <div class="p-name">Atteindre ton poids</div>
-        <div class="p-desc">Wizard scientifique (Mifflin-St Jeor), courbe de poids, mensurations.</div>
-        <ul class="p-list">
-          <li>Prédiction ETA ("objectif atteint le 12 août")</li>
+
+      <div class="promise-card">
+        <div class="promise-icon">⚖️</div>
+        <div class="promise-name">Atteindre ton poids</div>
+        <p class="promise-desc">Wizard scientifique (Mifflin-St Jeor), courbe de poids lissée, mensurations.</p>
+        <ul class="promise-list">
+          <li>Prédiction ETA personnalisée</li>
           <li>Détection de plateau</li>
           <li>% Masse grasse (formule Navy)</li>
           <li>Jalons motivants</li>
@@ -167,32 +647,91 @@ footer a:hover { color:var(--acc); }
   </div>
 </section>
 
-<!-- DIFF -->
-<section class="diff">
+<!-- ============================================================
+     COMMENT ÇA MARCHE
+     ============================================================ -->
+<section class="section center" id="how">
   <div class="wrap">
-    <div class="section-eyebrow">La différence</div>
-    <h2 class="section-h2">Ce qu'on ne fait PAS</h2>
-    <p class="section-sub">Comparé aux apps "freemium" classiques.</p>
-    <div class="diff-grid">
-      <div class="diff-col bad">
-        <div class="diff-h bad">😬 Les autres apps</div>
-        <ul>
+    <div class="reveal">
+      <span class="eyebrow">En 3 étapes</span>
+      <h2>Comment ça marche</h2>
+      <p class="sub">Du téléchargement à ta première pesée — moins de 5 minutes.</p>
+    </div>
+
+    <div class="steps reveal-stagger">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-mockup">
+          <div class="step-mockup-content">
+            <span class="step-mockup-emoji">👤</span>
+            <div class="step-mockup-text">Wizard scientifique<br>30 secondes</div>
+          </div>
+        </div>
+        <h3>Ton profil</h3>
+        <p>Quelques infos (âge, taille, poids, objectif) → on calcule ton métabolisme et ton budget calorique optimal.</p>
+      </div>
+
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-mockup">
+          <div class="step-mockup-content">
+            <span class="step-mockup-emoji">📷</span>
+            <div class="step-mockup-text">Scan ou Récents<br>3 secondes par repas</div>
+          </div>
+        </div>
+        <h3>Logger ton quotidien</h3>
+        <p>Code-barres, recherche, ou récents pondérés par repas. L'app apprend ce que tu manges.</p>
+      </div>
+
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-mockup">
+          <div class="step-mockup-content">
+            <div class="step-mockup-num">−5,2<span class="small"> kg</span></div>
+            <div class="step-mockup-text" style="margin-top:8px">Suivre ta progression</div>
+          </div>
+        </div>
+        <h3>Atteindre ton objectif</h3>
+        <p>Courbe de poids, ETA en temps réel, alertes plateau. Tu sais où tu vas, tu sais quand tu y arrives.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     COMPARAISON CONCURRENTS
+     ============================================================ -->
+<section class="section section-tinted center">
+  <div class="wrap">
+    <div class="reveal">
+      <span class="eyebrow">La différence</span>
+      <h2>Ce qu'on ne fait <em style="font-style:normal;color:var(--acc)">pas</em></h2>
+      <p class="sub">Comparé aux apps "freemium" classiques (MyFitnessPal, Yazio, Lifesum…)</p>
+    </div>
+
+    <div class="compare-grid reveal-stagger">
+      <div class="compare-col bad">
+        <div class="compare-h bad">😬 <em>Les autres apps</em></div>
+        <ul class="compare-list">
           <li>Pubs entre chaque action</li>
           <li>Paywall caché à 60-80€/an</li>
           <li>Trackers tiers (Facebook, Google)</li>
           <li>Vente de données nutritionnelles</li>
           <li>Inscription obligatoire dès l'ouverture</li>
-          <li>Analyse de comportement</li>
+          <li>Coach virtuel culpabilisant</li>
+          <li>Code propriétaire fermé</li>
         </ul>
       </div>
-      <div class="diff-col good">
-        <div class="diff-h good">🌿 Lyno</div>
-        <ul>
+
+      <div class="compare-col good">
+        <div class="compare-h good">🌿 Lyno</div>
+        <ul class="compare-list">
           <li>Aucune pub. Jamais.</li>
-          <li>100% gratuit, pas de premium</li>
+          <li>100% gratuit. Aucun paywall.</li>
           <li>Aucun tracker tiers</li>
-          <li>Pas de vente de données</li>
+          <li>Tes données sont à toi (RGPD strict)</li>
           <li>Mode local sans inscription complet</li>
+          <li>Ton, pas culpabilisant — encourageant</li>
           <li>Code source public sur GitHub</li>
         </ul>
       </div>
@@ -200,66 +739,75 @@ footer a:hover { color:var(--acc); }
   </div>
 </section>
 
-<!-- FAQ -->
-<section class="faq" id="faq">
+<!-- ============================================================
+     FAQ
+     ============================================================ -->
+<section class="section center" id="faq">
   <div class="wrap">
-    <div class="section-eyebrow">FAQ</div>
-    <h2 class="section-h2">Les bonnes questions</h2>
-    <p class="section-sub" style="margin-bottom:24px;">Si la réponse n'y est pas, écris-moi : <a href="mailto:lyno.app1@gmail.com" style="color:var(--acc);">lyno.app1@gmail.com</a></p>
+    <div class="reveal">
+      <span class="eyebrow">FAQ</span>
+      <h2>Les bonnes questions</h2>
+      <p class="sub">Si la réponse n'y est pas, écris-moi : <a href="mailto:lyno.app1@gmail.com" style="color:var(--acc);font-weight:600">lyno.app1@gmail.com</a></p>
+    </div>
 
-    <details class="faq-item">
-      <summary class="faq-q">C'est gratuit, c'est où le piège ?</summary>
-      <div class="faq-a">Pas de piège. Pas de pub, pas de paywall, pas de vente de données. Le projet est financé par mon temps libre. La sync Firebase a un free tier qui couvre largement les premiers milliers d'utilisateurs. Si l'app explose, j'ajouterai un don volontaire — jamais de paywall sur les fonctions de base.</div>
-    </details>
+    <div class="faq-list">
+      <details class="faq-item">
+        <summary class="faq-q">C'est gratuit, c'est où le piège ?</summary>
+        <div class="faq-a">Pas de piège. Pas de pub, pas de paywall, pas de vente de données. Le projet est financé par mon temps libre + des donations volontaires (Buy Me a Coffee, GitHub Sponsors). La sync Firebase a un free tier qui couvre largement les premiers milliers d'utilisateurs.</div>
+      </details>
 
-    <details class="faq-item">
-      <summary class="faq-q">C'est open-source ?</summary>
-      <div class="faq-a">Oui, le code source est public sur GitHub : <a href="https://github.com/AlybaR/caltrack-pro" style="color:var(--acc);">github.com/AlybaR/caltrack-pro</a>. Tu peux fork, contribuer, ou héberger ta propre version.</div>
-    </details>
+      <details class="faq-item">
+        <summary class="faq-q">C'est open-source ?</summary>
+        <div class="faq-a">Oui, le code source est public sur <a href="https://github.com/AlybaR/caltrack-pro">GitHub</a>. Tu peux fork, contribuer, ou héberger ta propre version.</div>
+      </details>
 
-    <details class="faq-item">
-      <summary class="faq-q">Comment vous protégez mes données ?</summary>
-      <div class="faq-a">Mode local-only par défaut : tes données ne quittent jamais ton appareil. Si tu crées un compte (optionnel) : chiffrement HTTPS, stockage Google Firebase serveurs UE, tu es le seul à y accéder. RGPD strict, droit d'effacement à tout moment. <a href="privacy.html" style="color:var(--acc);">Politique complète →</a></div>
-    </details>
+      <details class="faq-item">
+        <summary class="faq-q">Comment vous protégez mes données ?</summary>
+        <div class="faq-a">Mode local-only par défaut : tes données ne quittent jamais ton appareil. Si tu crées un compte (optionnel) : chiffrement HTTPS, stockage Google Firebase serveurs UE, tu es le seul à y accéder. RGPD strict, droit d'effacement à tout moment. <a href="privacy.html">Politique complète →</a></div>
+      </details>
 
-    <details class="faq-item">
-      <summary class="faq-q">Comparaison MyFitnessPal / Yazio / Lifesum ?</summary>
-      <div class="faq-a">Lyno est plus simple, plus rapide, plus honnête. Pas de feed social, pas de coach virtuel qui culpabilise. Plus orienté privacy. Conçue pour des adultes français (saisons, marques, types de plats locaux). Idéale si tu cherches un tracker direct et neutre.</div>
-    </details>
+      <details class="faq-item">
+        <summary class="faq-q">Comparaison MyFitnessPal / Yazio / Lifesum ?</summary>
+        <div class="faq-a">Lyno est plus simple, plus rapide, plus honnête. Pas de feed social, pas de coach virtuel qui culpabilise. Plus orienté privacy. Idéale si tu cherches un tracker direct et neutre.</div>
+      </details>
 
-    <details class="faq-item">
-      <summary class="faq-q">Disponible sur iPhone ?</summary>
-      <div class="faq-a">L'app est une PWA (Progressive Web App), donc oui : sur iPhone, ouvre Safari → menu Partager → "Sur l'écran d'accueil". Tu obtiens une icône comme une vraie app. Une version native iOS App Store est prévue si l'app décolle.</div>
-    </details>
+      <details class="faq-item">
+        <summary class="faq-q">Disponible sur iPhone ?</summary>
+        <div class="faq-a">Lyno est une PWA installable. Sur iPhone : ouvre dans Safari → menu Partager → "Sur l'écran d'accueil". Tu obtiens une icône comme une vraie app. Une version native iOS App Store est prévue si l'app décolle.</div>
+      </details>
 
-    <details class="faq-item">
-      <summary class="faq-q">Ça marche hors-ligne ?</summary>
-      <div class="faq-a">Oui. C'est une PWA installable qui cache les ressources. Tu peux logger des aliments, du sport, ton poids même sans connexion. Le scan code-barres a besoin d'internet pour interroger OpenFoodFacts. La sync se fait au retour en ligne.</div>
-    </details>
+      <details class="faq-item">
+        <summary class="faq-q">Ça marche hors-ligne ?</summary>
+        <div class="faq-a">Oui. PWA installable qui cache les ressources. Tu peux logger des aliments, du sport, ton poids même sans connexion. Le scan code-barres a besoin d'internet pour interroger OpenFoodFacts. La sync se fait au retour en ligne.</div>
+      </details>
 
-    <details class="faq-item">
-      <summary class="faq-q">Avertissement médical ?</summary>
-      <div class="faq-a">Lyno est un outil de tracking, <b>pas un dispositif médical</b>. Les calculs (BMR, TDEE, déficit, IMC) sont des estimations validées scientifiquement, mais ne remplacent pas l'avis d'un professionnel de santé. En cas de troubles alimentaires, antécédents médicaux, ou doute, consulte un médecin/diététicien.</div>
-    </details>
-  </div>
-</section>
-
-<!-- CTA FINAL -->
-<section class="cta-final">
-  <div class="wrap">
-    <h2 class="section-h2">Prêt à commencer ?</h2>
-    <p class="lede">2 minutes pour le wizard. Aucune inscription requise.</p>
-    <div class="cta-row">
-      <a href="https://play.google.com/store/apps/details?id=io.github.alybar.lyno" class="btn btn-acc">📱 Télécharger gratuitement</a>
-      <a href="./index.html" class="btn btn-ghost">Essayer dans le navigateur</a>
+      <details class="faq-item">
+        <summary class="faq-q">Avertissement médical ?</summary>
+        <div class="faq-a">Lyno est un outil de tracking, <b>pas un dispositif médical</b>. Les calculs (BMR, TDEE, déficit, IMC) sont des estimations validées scientifiquement, mais ne remplacent pas l'avis d'un professionnel de santé.</div>
+      </details>
     </div>
   </div>
 </section>
 
+<!-- ============================================================
+     CTA FINAL
+     ============================================================ -->
+<section class="cta-final">
+  <h2>Prêt à commencer ?</h2>
+  <p class="sub">2 minutes pour le wizard. Aucune inscription requise.</p>
+  <a href="./index.html" class="btn">Démarrer maintenant →</a>
+</section>
+
+<!-- ============================================================
+     FOOTER
+     ============================================================ -->
 <footer>
-  <div class="wrap">
-    <div class="foot-brand">🌿 Lyno <span>· Made in France 🇫🇷</span></div>
-    <div class="links">
+  <div class="foot">
+    <div class="foot-brand">
+      🌿 Lyno
+      <small>Made in France 🇫🇷</small>
+    </div>
+    <div class="foot-links">
       <a href="privacy.html">Confidentialité</a>
       <a href="terms.html">Conditions</a>
       <a href="https://github.com/AlybaR/caltrack-pro">GitHub</a>
@@ -268,6 +816,107 @@ footer a:hover { color:var(--acc); }
     </div>
   </div>
 </footer>
+
+<!-- ============================================================
+     STICKY BOTTOM CTA (mobile)
+     ============================================================ -->
+<div class="sticky-cta" id="stickyCta">
+  <div class="sticky-cta-inner">
+    <a href="./index.html" class="btn btn-acc">Essayer Lyno →</a>
+  </div>
+</div>
+
+<script>
+// Auto dark mode au 1er load
+(function() {
+  const saved = localStorage.getItem('theme');
+  if (saved === 'dark' || (!saved && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+    document.documentElement.setAttribute('data-theme','dark');
+  }
+})();
+
+// Reveal sections au scroll
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('in');
+      io.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.15, rootMargin: '0px 0px -50px 0px' });
+
+document.querySelectorAll('.reveal, .reveal-stagger').forEach(el => io.observe(el));
+
+// Sticky nav + sticky CTA mobile
+const nav = document.getElementById('nav');
+const sticky = document.getElementById('stickyCta');
+let scrollY = 0;
+function onScroll() {
+  scrollY = window.scrollY;
+  if (scrollY > 200) {
+    nav.classList.add('scrolled');
+    if (window.innerWidth <= 680) {
+      sticky.classList.add('show');
+      document.body.classList.add('has-sticky-cta');
+    }
+  } else {
+    nav.classList.remove('scrolled');
+    sticky.classList.remove('show');
+    document.body.classList.remove('has-sticky-cta');
+  }
+}
+window.addEventListener('scroll', onScroll, { passive: true });
+
+// Counters animés
+const counterIO = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      animateCounter(e.target);
+      counterIO.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.5 });
+
+function animateCounter(el) {
+  const target = parseInt(el.dataset.counter, 10);
+  const duration = 1800;
+  const start = performance.now();
+  const unitEl = el.querySelector('.unit');
+  const unit = unitEl ? unitEl.outerHTML : '';
+  const fmt = (n) => {
+    if (target >= 1000000) return (n / 1000000).toFixed(target % 1000000 === 0 && n === target ? 0 : 1) + ' M';
+    if (target >= 1000) return (n / 1000).toFixed(0) + ' k';
+    return Math.round(n).toLocaleString('fr-FR');
+  };
+  function step(now) {
+    const t = Math.min((now - start) / duration, 1);
+    const eased = 1 - Math.pow(1 - t, 3);
+    const v = target * eased;
+    el.innerHTML = fmt(v) + unit;
+    if (t < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+document.querySelectorAll('.stat-num[data-counter]').forEach(el => counterIO.observe(el));
+
+// Parallax orbs (subtle, perf-friendly)
+const orbs = document.querySelectorAll('.hero-orb');
+let ticking = false;
+window.addEventListener('scroll', () => {
+  if (!ticking) {
+    requestAnimationFrame(() => {
+      const y = window.scrollY;
+      orbs.forEach((orb, i) => {
+        const speed = 0.15 + i * 0.05;
+        orb.style.transform = `translateY(${y * speed}px)`;
+      });
+      ticking = false;
+    });
+    ticking = true;
+  }
+}, { passive: true });
+</script>
 
 </body>
 </html>

@@ -6,7 +6,7 @@
    - Install: allSettled so one missing asset doesn't break everything
    ==================================================== */
 
-const CACHE = 'caltrack-v37';
+const CACHE = 'lyno-v38';
 const CORE_ASSETS = [
     './',
     './index.html',
