@@ -21,3 +21,8 @@ mission_abdos_tracker.jsx
 
 # Claude Code
 .claude/
+
+# Lighthouse reports (générés au besoin, pas commit)
+Test*lighhouse*.html
+Test*lighthouse*.html
+lighthouse-*.html

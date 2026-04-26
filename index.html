@@ -12,15 +12,29 @@
     <link rel="manifest" href="manifest.json" />
     <link rel="apple-touch-icon" href="icon-192.png" />
     <title>🌿 CalTrack Pro</title>
+
+    <!-- Performance hints — preconnect to external domains used at boot -->
+    <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://unpkg.com" crossorigin>
+
+    <!-- Fonts: load with display=swap to render text immediately with fallback -->
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap"></noscript>
+
+    <!-- Main stylesheet -->
     <link rel="stylesheet" href="css/style.css" />
 
-    <!-- Firebase SDK (compat — global `firebase.*`) -->
-    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+    <!-- Firebase SDK — deferred so they don't block initial render.
+         Firebase only kicks in after window.onload, so defer is safe. -->
+    <script defer src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script defer src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+    <script defer src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 
-    <!-- Lucide icons (line-icons, vectoriel, cohérent — Design System v2) -->
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Lucide deferred — icons render after DOMContentLoaded which is fine -->
+    <script defer src="https://unpkg.com/lucide@latest"></script>
 </head>
 
 <body>

@@ -4,8 +4,9 @@
    See DESIGN-SYSTEM.md for the canonical reference.
    ================================================================= */
 
-/* ---------- IMPORTS ---------- */
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800&display=swap');
+/* ---------- IMPORTS ----------
+   Note: Google Fonts moved to <link> in index.html <head> for non-blocking
+   load (with media='print' + onload swap). DO NOT re-add @import here. */
 
 /* =================================================================
    DESIGN TOKENS
