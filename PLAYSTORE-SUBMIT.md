@@ -1,6 +1,6 @@
 # 🚀 Play Store — guide de soumission step-by-step
 
-> Guide complet pour publier CalTrack Pro sur le Play Store en mode **TWA** (Trusted Web Activity).
+> Guide complet pour publier Lyno sur le Play Store en mode **TWA** (Trusted Web Activity).
 > Une PWA → un APK signé → upload Play Console → review → live.
 > **Temps total : ~2-4h de travail réparties sur 3-7 jours** (review Google = 1-3 jours).
 
@@ -52,7 +52,7 @@ Si un des scores est en dessous, **dis-moi quel test échoue**, je le fix.
 
 ### Option A — Le faire vite avec Canva
 1. Canva (gratuit) → cherche template **App Icon Generator**
-2. Couleur de fond : `#D4633A` (terracotta CalTrack)
+2. Couleur de fond : `#D4633A` (terracotta Lyno)
 3. Symbole : feuille stylisée 🌿 (notre signature) ou silhouette anneau
 4. Export PNG :
    - 1024×1024 (master)
@@ -100,9 +100,9 @@ C'est la voie **la plus simple**. Pas besoin d'Android Studio.
 4. Si tout est vert → clique **Package for stores**
 5. Sélectionne **Android (Google Play)**
 6. Configure :
-   - **Package ID** : `io.github.alybar.caltrack` (à conserver, c'est ton bundle ID)
-   - **App name** : `CalTrack Pro`
-   - **Launcher name** : `CalTrack`
+   - **Package ID** : `io.github.alybar.lyno` (à conserver, c'est ton bundle ID)
+   - **App name** : `Lyno`
+   - **Launcher name** : `Lyno`
    - **App version** : `1.0.0`
    - **Version code** : `1`
    - **Display mode** : `Standalone`
@@ -137,7 +137,7 @@ Le TWA exige que ton domaine "prouve" qu'il connaît ton app, sinon Chrome affic
    `https://alybar.github.io/caltrack-pro/.well-known/assetlinks.json`
 6. Test final : https://developers.google.com/digital-asset-links/tools/generator
    - Hosting site : `alybar.github.io/caltrack-pro`
-   - Package name : `io.github.alybar.caltrack`
+   - Package name : `io.github.alybar.lyno`
    - Hash : (celui de ton signing key)
    - **Test statement** → doit être ✅
 
@@ -158,7 +158,7 @@ Le TWA exige que ton domaine "prouve" qu'il connaît ton app, sinon Chrome affic
 Dans Play Console → **Create app** :
 
 ### 5.1 Détails de base
-- **App name** : CalTrack Pro
+- **App name** : Lyno
 - **Default language** : Français (France)
 - **App or game** : App
 - **Free or paid** : Free
@@ -170,7 +170,7 @@ Dans Play Console → **Create app** :
 - **Privacy policy** : `https://alybar.github.io/caltrack-pro/privacy.html`
 - **App access** : All functionality available (or "Some functionality restricted" si tu veux mettre l'auth)
 - **Ads** : No ads
-- **Content rating** : remplis le questionnaire (CalTrack Pro = "Reference" + "Health & Fitness", pas de violence, pas de contenu adulte → rating PEGI 3 ou Tous publics)
+- **Content rating** : remplis le questionnaire (Lyno = "Reference" + "Health & Fitness", pas de violence, pas de contenu adulte → rating PEGI 3 ou Tous publics)
 - **Target audience** : Age 16-65+ (pas pour enfants)
 - **News app** : No
 - **COVID-19 contact tracing** : No
@@ -180,7 +180,7 @@ Dans Play Console → **Create app** :
 - **Health features** : Yes → Health/Fitness/Wellness tracker (PAS dispositif médical)
 
 #### Store listing
-- **App name** : CalTrack Pro
+- **App name** : Lyno
 - **Short description** : copy from PLAYSTORE-LISTING.md
 - **Full description** : copy from PLAYSTORE-LISTING.md
 - **App icon** : upload icon-512.png (HD)
@@ -193,7 +193,7 @@ Dans Play Console → **Create app** :
 - **App category** : Health & Fitness
 - **Tags** : Calorie counter, Weight loss, Fitness tracker
 - **Contact details** :
-  - Email : `caltrack.app1@gmail.com`
+  - Email : `lyno.app1@gmail.com`
   - Website : `https://alybar.github.io/caltrack-pro/`
   - Phone : optionnel (peut sauter)
 
@@ -204,7 +204,7 @@ Dans Play Console → **Create app** :
 3. **Release name** : `1.0.0 — Initial release`
 4. **Release notes** :
    ```
-   🎉 Première version publique de CalTrack Pro !
+   🎉 Première version publique de Lyno !
 
    Une app simple pour 3 choses :
    • Suivre tes calories (scanner code-barres, macros, micros)
@@ -224,7 +224,7 @@ Choisis les pays cibles : **France** + tous les pays francophones (Belgique, Sui
 ## ⏳ Étape 6 — Review Google (1-7 jours)
 
 Google review automatiquement + manuellement. Délais constatés :
-- Apps simples (comme CalTrack Pro) : **24-72h**
+- Apps simples (comme Lyno) : **24-72h**
 - Première publi : peut être 7 jours
 - Si rejet : email avec raisons précises → tu corriges → resoumets
 
@@ -272,7 +272,7 @@ Google review automatiquement + manuellement. Délais constatés :
 [ ] Roll out → Production
 ```
 
-Quand tu coches tout ça → **CalTrack Pro est en review chez Google.** 🚀
+Quand tu coches tout ça → **Lyno est en review chez Google.** 🚀
 
 ---
 

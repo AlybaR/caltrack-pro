@@ -11,7 +11,7 @@
 ### App name
 *(max 30 caractères)*
 ```
-CalTrack Pro
+Lyno
 ```
 
 ### Short description
@@ -24,7 +24,7 @@ Suivi calories, sport et poids. Atteins ton objectif sans te prendre la tête.
 *(max 4000 caractères — la fiche complète)*
 
 ```
-🌿 CalTrack Pro — la perte de poids, simplement.
+🌿 Lyno — la perte de poids, simplement.
 
 Pas de coach virtuel qui te culpabilise. Pas de paywall agressif. Pas de pubs.
 Juste une app qui fait 3 choses, très bien :
@@ -50,7 +50,7 @@ Juste une app qui fait 3 choses, très bien :
 • Prédiction ETA : "À ce rythme, objectif atteint le 12 août"
 • Détection de plateau
 
-✨ POURQUOI CalTrack Pro
+✨ POURQUOI Lyno
 • 100% offline-ready (PWA installable, fonctionne sans connexion)
 • Sync optionnelle entre tes appareils (téléphone + ordi)
 • Mode sombre soigné
@@ -76,7 +76,7 @@ Juste une app qui fait 3 choses, très bien :
 • Personnes qui en ont marre des apps "freemium" qui cachent les vraies fonctions
 
 ⚠️ AVERTISSEMENT
-CalTrack Pro est un outil de suivi, pas un dispositif médical.
+Lyno est un outil de suivi, pas un dispositif médical.
 Consulte un professionnel en cas de doute, troubles alimentaires, antécédents médicaux ou grossesse.
 
 Développé en France 🇫🇷 · Open-source friendly · Sans bullshit.
@@ -107,7 +107,7 @@ Health & Fitness
 
 ### App name
 ```
-CalTrack Pro
+Lyno
 ```
 
 ### Short description
@@ -119,7 +119,7 @@ Track calories, workouts and weight. Reach your goal without the BS.
 ### Full description
 
 ```
-🌿 CalTrack Pro — weight loss, made simple.
+🌿 Lyno — weight loss, made simple.
 
 No virtual coach making you feel guilty. No aggressive paywall. No ads.
 Just an app that does 3 things, really well:
@@ -145,7 +145,7 @@ Just an app that does 3 things, really well:
 • ETA prediction: "At this rate, goal reached on August 12"
 • Plateau detection
 
-✨ WHY CalTrack Pro
+✨ WHY Lyno
 • 100% offline-ready (installable PWA, works without connection)
 • Optional sync across your devices (phone + computer)
 • Polished dark mode
@@ -171,7 +171,7 @@ Just an app that does 3 things, really well:
 • People tired of "freemium" apps hiding real features
 
 ⚠️ DISCLAIMER
-CalTrack Pro is a tracking tool, not a medical device.
+Lyno is a tracking tool, not a medical device.
 Consult a professional if in doubt, with eating disorders, medical history, or pregnancy.
 
 Made in France 🇫🇷 · Open-source friendly · No bullshit.
@@ -224,7 +224,7 @@ https://alybar.github.io/caltrack-pro/terms.html
 
 ## 📧 Contact email (Play Console)
 ```
-caltrack.app1@gmail.com
+lyno.app1@gmail.com
 ```
 
 ## 🌐 Website

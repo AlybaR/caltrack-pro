@@ -1,4 +1,4 @@
-# 📜 CHANGELOG — CalTrack Pro
+# 📜 CHANGELOG — Lyno
 
 Trace complète de tous les changements depuis le début du projet.
 Format inspiré de [Keep a Changelog](https://keepachangelog.com/).

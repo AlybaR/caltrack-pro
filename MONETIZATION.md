@@ -1,4 +1,4 @@
-# 💰 Stratégie de monétisation — CalTrack Pro
+# 💰 Stratégie de monétisation — Lyno
 
 > **Posture** : un dev solo qui veut **une app qui rapporte sans gérer de gens**.
 > Zero customer support live. Zero community management. Zero B2B sales call.
@@ -167,7 +167,7 @@ Pourquoi : la confiance ne se déclare pas, elle se prouve.
 
 ## 💬 Questions ?
 
-📧 caltrack.app1@gmail.com
+📧 lyno.app1@gmail.com
 🐙 [Issues GitHub](https://github.com/AlybaR/caltrack-pro/issues)
 
 *Dernière mise à jour : 25 avril 2026*

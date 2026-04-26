@@ -84,7 +84,7 @@ function renderAuthForm() {
     page.innerHTML = `
         <div class="auth-container">
             <div class="auth-logo">🌿</div>
-            <h1 class="auth-title">CalTrack Pro</h1>
+            <h1 class="auth-title">Lyno</h1>
             <p class="auth-sub">${_authMode === 'signup' ? 'Ton suivi, synchronisé partout' : 'Bon retour parmi nous'}</p>
 
             <form class="auth-form" onsubmit="submitAuth(event)">

@@ -1,4 +1,4 @@
-# 🧪 Test Runner — CalTrack Pro
+# 🧪 Test Runner — Lyno
 
 Simulation E2E auto-hébergée. Aucune installation requise.
 

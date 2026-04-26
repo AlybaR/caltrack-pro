@@ -1,6 +1,6 @@
 {
-  "name": "CalTrack Pro — Calories, sport et poids",
-  "short_name": "CalTrack",
+  "name": "Lyno — Calories, sport et poids",
+  "short_name": "Lyno",
   "description": "Suivi scientifique de calories, macros, poids et sport. Atteins ton objectif sans te prendre la tête.",
   "id": "/caltrack-pro/",
   "start_url": "./index.html",

@@ -1,4 +1,4 @@
-# 🗺️ Roadmap — CalTrack Pro
+# 🗺️ Roadmap — Lyno
 
 **Objectif final :** vraie app de tracking complète — nourriture, sport, poids, objectifs.
 

@@ -1,5 +1,5 @@
 /* ====================================================
-   sw.js — Service Worker  |  CalTrack Pro v3.1
+   sw.js — Service Worker  |  Lyno v3.1
    Strategy:
    - Core app assets: stale-while-revalidate
    - External fonts: cache-first (opaque OK)

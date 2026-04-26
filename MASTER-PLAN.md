@@ -1,4 +1,4 @@
-# 🎯 MASTER PLAN — Mise en marché CalTrack Pro
+# 🎯 MASTER PLAN — Mise en marché Lyno
 
 > **Plan d'attaque que tu peux suivre seul** si tu n'as plus de crédits Claude.
 > Chaque action a ses pré-requis, instructions step-by-step, critère de complétion.
@@ -16,12 +16,12 @@
 | RGPD legal | ✅ privacy.html + terms.html live |
 | Marketing | ✅ Landing + press kit prêts |
 | Monétisation | ✅ Strategy + donation buttons |
-| Email | ⏳ caltrack.app1@gmail.com (à créer) |
+| Email | ⏳ lyno.app1@gmail.com (à créer) |
 | Logo HD | ⏳ À générer via logo-generator.html |
 | Screenshots | ⏳ 8 captures à prendre |
 | Play Console | ⏳ Compte à créer ($25) |
 | Performance | ⚠️ Lighthouse 59 → à optimiser |
-| Nom du projet | ⚠️ "CalTrack" pris sur stores → renommer |
+| Nom du projet | ⚠️ "Lyno" pris sur stores → renommer |
 | Design icônes | ⚠️ Trop d'emojis dans le chrome → Lucide |
 | Mobile UX food entry | ⚠️ À améliorer |
 
@@ -83,8 +83,8 @@ Capture d'écran à fournir d'abord pour audit précis. Hypothèses :
 Une fois le nom choisi en Phase 0.1.
 
 #### 2.1 — Search & replace
-- [ ] CalTrack → [Nouveau nom] dans : index.html, manifest.json, privacy/terms, PLAYSTORE-*, PRESS-KIT, MONETIZATION, README, ROADMAP, DESIGN-SYSTEM, landing.html
-- [ ] Bundle ID `io.github.alybar.caltrack` → `io.github.alybar.[newname]`
+- [ ] Lyno → [Nouveau nom] dans : index.html, manifest.json, privacy/terms, PLAYSTORE-*, PRESS-KIT, MONETIZATION, README, ROADMAP, DESIGN-SYSTEM, landing.html
+- [ ] Bundle ID `io.github.alybar.lyno` → `io.github.alybar.[newname]`
 - [ ] Title meta tags
 - [ ] Couleur theme inchangée (terracotta reste)
 

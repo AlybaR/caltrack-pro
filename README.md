@@ -1,4 +1,4 @@
-# 🌿 CalTrack Pro
+# 🌿 Lyno
 
 Suivi scientifique de calories, macros, poids et hydratation — **100 % local, 100 % hors-ligne**.
 

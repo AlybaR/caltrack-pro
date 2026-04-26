@@ -1,6 +1,6 @@
 # 🚀 Play Store — Master Checklist
 
-> **Goal**: ship CalTrack Pro on Google Play Store in **3-7 jours**.
+> **Goal**: ship Lyno on Google Play Store in **3-7 jours**.
 > Tracks the complete picture in one place.
 > Mark items ✅ as you complete them.
 
@@ -105,7 +105,7 @@
 - [ ] Mailing list (optionnel — Mailchimp / Buttondown free tier)
 
 ### C4. Pre-launch teaser
-- [ ] Post J-7 : "CalTrack Pro arrive sur Play Store dans 1 semaine. Voici ce que ça fait." + screenshots
+- [ ] Post J-7 : "Lyno arrive sur Play Store dans 1 semaine. Voici ce que ça fait." + screenshots
 - [ ] Post J-3 : "3 jours avant le launch. Bêta test ouvert ici → URL"
 - [ ] Post J-day : "C'EST LIVE. Lien Play Store: ..."
 
@@ -120,7 +120,7 @@
 - [ ] Verify identity (24-48h)
 
 ### D2. Create app
-- [ ] App name: CalTrack Pro
+- [ ] App name: Lyno
 - [ ] Default language: French (France)
 - [ ] App or game: App
 - [ ] Free or paid: Free
@@ -152,7 +152,7 @@
 ### D5. Store settings
 - [ ] App category: Health & Fitness
 - [ ] Tags: Calorie counter, Weight loss, Fitness tracker
-- [ ] Contact: caltrack.app1@gmail.com + website URL
+- [ ] Contact: lyno.app1@gmail.com + website URL
 
 ---
 
@@ -189,8 +189,8 @@ Take on a real Android device, app installed as PWA (NOT Chrome):
 - [ ] Verify all 4 scores green (PWA, Manifest, SW, Icons)
 - [ ] Click "Package for stores" → Android (Google Play)
 - [ ] Configure:
-  - [ ] Package ID: `io.github.alybar.caltrack`
-  - [ ] App name: CalTrack Pro
+  - [ ] Package ID: `io.github.alybar.lyno`
+  - [ ] App name: Lyno
   - [ ] Version: 1.0.0
   - [ ] Status bar: #D4633A
   - [ ] Background: #F9F7F4
