@@ -6,7 +6,7 @@
    - Install: allSettled so one missing asset doesn't break everything
    ==================================================== */
 
-const CACHE = 'caltrack-v34';
+const CACHE = 'caltrack-v35';
 const CORE_ASSETS = [
     './',
     './index.html',

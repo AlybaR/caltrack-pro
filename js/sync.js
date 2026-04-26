@@ -53,8 +53,9 @@ async function onUserReady(user) {
         S = saved;
         launchApp();
     } else {
-        // Brand-new user → show wizard
-        document.getElementById('landing').style.display = '';
+        // Brand-new user → show landing (3 promises) → leads to wizard
+        if (typeof showLanding === 'function') showLanding();
+        else document.getElementById('landing').style.display = '';
     }
 }
 

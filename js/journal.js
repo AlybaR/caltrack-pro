@@ -327,12 +327,12 @@ function renderQuickGrid(mk) {
     if (search) {
         foods = Object.values(QUICK_BY_CAT).flat().filter(f => f.n.toLowerCase().includes(search));
         const favs = lsLoad('fav_foods') || [];
-        const recents = getRecentFoods(50);
+        const recents = getRecentFoods(mk, 50);
         foods = [...recents.filter(f => f.n.toLowerCase().includes(search)), ...foods, ...favs.filter(f => f.n.toLowerCase().includes(search))];
         // deduplicate
         foods = foods.filter((v, i, a) => a.findIndex(t => (t.n === v.n)) === i);
     } else if (_activeCat === '🕒 Récents') {
-        foods = getRecentFoods(12);
+        foods = getRecentFoods(mk, 12);
     } else if (_activeCat === '⭐ Favoris') {
         foods = lsLoad('fav_foods') || [];
     } else {
@@ -510,45 +510,64 @@ function addFoodDirect(mk, n, k, p = null, l = null, g = null, qty = 1, extras =
     }
     day.meals[mk].push(food);
     saveDay(dk, day);
-    trackRecentFood(food);
+    trackRecentFood(food, mk);
     _editingFood = null;
     if (typeof haptic === 'function') haptic('success');
     renderJournal();
 }
 
-/* ---------- UX1 — Recent foods tracker ----------
-   Keeps the last ~30 unique foods eaten, scored by recency × frequency. */
-function trackRecentFood(food) {
+/* ---------- UX1 — Recent foods tracker (meal-slot aware) ----------
+   Tracks WHICH meal slot a food was logged in (mks). Récents are then
+   contextualised: petit-déj records score higher when viewing breakfast,
+   dîner records higher when viewing dinner, etc. */
+function trackRecentFood(food, mk) {
     let recents = lsLoad('recent_foods') || [];
     const now = Date.now();
     const idx = recents.findIndex(r => r.n === food.n);
     if (idx >= 0) {
         recents[idx].count = (recents[idx].count || 1) + 1;
         recents[idx].ts = now;
-        // Update macros if newer entry has them
+        // Per-meal counters
+        if (mk) {
+            recents[idx].mks = recents[idx].mks || {};
+            recents[idx].mks[mk] = (recents[idx].mks[mk] || 0) + 1;
+        }
+        // Refresh macros if newer entry has them
         ['k','p','l','g','fib','suc','sel','sat'].forEach(k => { if (food[k] != null) recents[idx][k] = food[k]; });
     } else {
         const rec = { n: food.n, k: food.k, ts: now, count: 1 };
+        if (mk) rec.mks = { [mk]: 1 };
         ['p','l','g','fib','suc','sel','sat'].forEach(k => { if (food[k] != null) rec[k] = food[k]; });
         recents.push(rec);
     }
-    // Cap at 30 entries
+    // Cap at 30 entries (sort by recency)
     recents.sort((a, b) => b.ts - a.ts);
     if (recents.length > 30) recents = recents.slice(0, 30);
     lsSave('recent_foods', recents);
 }
 
-function getRecentFoods(limit = 12) {
+/** Get recent foods, optionally filtered by current meal slot.
+ *  - mk provided → meal-specific count weighted ×3, total count ×0.5
+ *  - mk null → fall back to total count (legacy behaviour)
+ *  - All scores multiplied by recency weight. */
+function getRecentFoods(mk, limit = 12) {
+    // Backwards compat: if first arg is a number, treat it as limit (old signature)
+    if (typeof mk === 'number') { limit = mk; mk = null; }
     const recents = lsLoad('recent_foods') || [];
     const now = Date.now();
     const DAY = 86400000;
-    // Score: count × recency-weight (recent foods score higher)
     return recents
         .map(r => {
             const ageDays = (now - (r.ts || 0)) / DAY;
-            const recencyW = Math.max(0.1, 1 - ageDays / 30); // fades over 30 days
-            return { ...r, score: (r.count || 1) * recencyW };
+            const recencyW = Math.max(0.1, 1 - ageDays / 30);
+            const totalCount = r.count || 1;
+            const mealCount = (r.mks && mk) ? (r.mks[mk] || 0) : 0;
+            const baseScore = mk
+                ? (mealCount * 3 + totalCount * 0.5)
+                : totalCount;
+            return { ...r, score: baseScore * recencyW };
         })
+        .filter(r => r.score > 0)  // exclude items never used in this slot when mk provided
         .sort((a, b) => b.score - a.score)
         .slice(0, limit);
 }

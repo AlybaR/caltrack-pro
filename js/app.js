@@ -160,24 +160,40 @@ function launchApp() {
   if (typeof initNotifications === 'function') initNotifications();
 }
 
+/** Show the landing page (3-promise hero). Called only when no auth/no settings. */
+function showLanding() {
+  const el = document.getElementById('landing');
+  if (el) el.style.display = '';
+}
+function hideLanding() {
+  const el = document.getElementById('landing');
+  if (el) el.style.display = 'none';
+}
+
 // ---------- INIT ----------
 window.onload = () => {
-  // If Firebase is configured → let auth.js drive the launch flow
-  // (onUserReady in sync.js will call launchApp once cloud state is resolved).
+  // If Firebase is configured → let auth.js drive the launch flow.
+  // Landing stays hidden until either:
+  //   - auth.js shows the auth-page (logged out), OR
+  //   - sync.js onUserReady decides to show landing (logged in but no settings yet).
+  // This prevents the landing flash during boot.
   const firebaseMode = (typeof FIREBASE_ENABLED !== 'undefined') && FIREBASE_ENABLED;
   if (firebaseMode && typeof initAuth === 'function') {
     const ok = initAuth();
-    // If Firebase init failed for any reason → fall back to local auto-launch
     if (!ok) {
+      // Firebase init failed → fall back to local mode.
       const saved = lsLoad('settings');
       if (saved && saved.target) { S = saved; launchApp(); }
+      else { showLanding(); }
     }
   } else {
-    // Local-only mode (no Firebase config) — legacy behaviour
+    // Local-only mode — show landing if no settings, else launch app.
     const saved = lsLoad('settings');
     if (saved && saved.target) {
       S = saved;
       launchApp();
+    } else {
+      showLanding();
     }
   }
   // Resize weight graph
