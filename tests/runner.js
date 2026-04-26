@@ -270,6 +270,21 @@ frame.addEventListener('load', () => {
 renderList();
 if (checkProtocol()) {
     log('Test runner ready. Click ▶ Run All or click any test individually.', 'info');
+
+    // Force-bypass any cached app version: append a cache-buster to iframe src.
+    // This guarantees we always test the latest code, never a stale SW cache.
+    try {
+        const fresh = '../index.html?test=1&_cb=' + Date.now();
+        if (frame.src.indexOf('_cb=') === -1) frame.src = fresh;
+    } catch (e) {}
+
+    // Best-effort: unregister any SW within reach so /tests/ context is clean.
+    if (navigator.serviceWorker && navigator.serviceWorker.getRegistrations) {
+        navigator.serviceWorker.getRegistrations().then(regs => {
+            regs.forEach(reg => reg.unregister().catch(() => {}));
+            if (regs.length) log(`Unregistered ${regs.length} service worker(s).`, 'warn');
+        }).catch(() => {});
+    }
 } else {
     log('⚠️ Protocole file:// détecté — voir bandeau rouge en haut.', 'fail');
 }
