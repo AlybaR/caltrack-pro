@@ -37,6 +37,8 @@ const SCENARIOS = [
         id: 'J14',
         name: 'First-time user — du landing au dashboard',
         target: '< 90 sec, < 15 taps',
+        targetMs: 90000,
+        targetTaps: 15,
         // No seed — fresh user starts on landing
         async run(ctx) {
             await ctx.waitFor('#landing', 8000);
@@ -86,6 +88,8 @@ const SCENARIOS = [
         id: 'J1',
         name: 'Journal — ajouter un aliment via récents',
         target: '< 10 sec, < 4 taps',
+        targetMs: 10000,
+        targetTaps: 4,
         seed: seedWith({
             recent_foods: [
                 { n: 'Test pomme', k: 52, p: 0, l: 0, g: 14, ts: Date.now(), count: 5 }
@@ -145,6 +149,8 @@ const SCENARIOS = [
         id: 'J5',
         name: 'Hydratation — +1 verre d\'eau',
         target: '1 tap',
+        targetMs: 3000,
+        targetTaps: 2,
         seed: seedWith(),
         async run(ctx) {
             await ctx.waitFor('#nb-dash');
@@ -163,6 +169,8 @@ const SCENARIOS = [
         id: 'J6',
         name: 'Sport — logger une session cardio',
         target: '< 20 sec',
+        targetMs: 20000,
+        targetTaps: 6,
         seed: seedWith(),
         async run(ctx) {
             await ctx.waitFor('#nb-sport');
@@ -197,6 +205,8 @@ const SCENARIOS = [
         id: 'J10',
         name: 'Poids — enregistrer la pesée du matin',
         target: '< 8 sec, 3 taps',
+        targetMs: 8000,
+        targetTaps: 3,
         seed: seedWith(),
         async run(ctx) {
             await ctx.waitFor('#nb-poids');
@@ -320,97 +330,74 @@ const SCENARIOS = [
         id: 'U1',
         name: '🌅→🌙 Journée complète : 4 repas + sport + eau + pesée',
         target: 'simulation user assidu',
+        targetMs: 30000,
+        targetTaps: 25,
         seed: seedWith(),
         async run(ctx) {
             await ctx.waitFor('#page-dash.active');
 
-            // 🌅 7h30 — Petit-déjeuner
-            await ctx.click('#nb-journal');
-            await ctx.waitFor('#meals-container');
-            await ctx.wait(300);
-            // Tab Manuel sur le 1er repas (petit-déj)
-            const breakfastSec = ctx.$$('.meal-section')[0];
-            ctx.assert(breakfastSec, 'Section petit-déj présente');
-            const manualTab = breakfastSec.querySelector('button.meal-tab[data-tab="manual"]');
-            manualTab.click(); ctx.tapCount++;
-            await ctx.wait(150);
-            const bName = breakfastSec.querySelector('input[id^="fn-"]');
-            const bKcal = breakfastSec.querySelector('input[id^="fk-"]');
-            bName.value = 'Café + croissant';
-            bName.dispatchEvent(new Event('input', { bubbles: true }));
-            bKcal.value = '320';
-            bKcal.dispatchEvent(new Event('input', { bubbles: true }));
-            bKcal.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
-            await ctx.wait(300);
+            // Helper: log a meal via Manuel tab. Re-queries sections fresh
+            // because each click → renderJournal → DOM rebuild.
+            const logMeal = async (mealIdx, name, kcal) => {
+                await ctx.click('#nb-journal');
+                await ctx.waitFor('#meals-container');
+                await ctx.wait(350);
+                let sec = ctx.$$('.meal-section')[mealIdx];
+                ctx.assert(sec, `Section meal idx=${mealIdx} présente`);
+                // Open if closed
+                if (sec.classList.contains('closed')) {
+                    sec.querySelector('.meal-hd').click(); ctx.tapCount++;
+                    await ctx.wait(300);
+                    sec = ctx.$$('.meal-section')[mealIdx]; // re-query after re-render
+                }
+                const manualTab = sec.querySelector('button.meal-tab[data-tab="manual"]');
+                ctx.assert(manualTab, 'Manual tab existe');
+                manualTab.click(); ctx.tapCount++;
+                await ctx.wait(200);
+                sec = ctx.$$('.meal-section')[mealIdx]; // re-query after pane swap
+                const nameInp = sec.querySelector('input[id^="fn-"]');
+                const kcalInp = sec.querySelector('input[id^="fk-"]');
+                ctx.assert(nameInp && kcalInp, 'Inputs manuels visibles');
+                nameInp.value = name;
+                nameInp.dispatchEvent(new Event('input', { bubbles: true }));
+                kcalInp.value = String(kcal);
+                kcalInp.dispatchEvent(new Event('input', { bubbles: true }));
+                kcalInp.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+                await ctx.wait(400);
+            };
 
-            // 💧 9h — Premier verre d'eau
+            // 🌅 Petit-déj
+            await logMeal(0, 'Café + croissant', 320);
+
+            // 💧 3 verres d'eau
             await ctx.click('#nb-dash');
             await ctx.waitFor('#water-btn-plus');
-            for (let i = 0; i < 3; i++) {
-                await ctx.click('#water-btn-plus');
-            }
+            for (let i = 0; i < 3; i++) await ctx.click('#water-btn-plus');
             const waterCount = parseInt(ctx.text('#water-count'), 10);
             ctx.assert(waterCount === 3, `3 verres d'eau ajoutés (${waterCount})`);
 
-            // ☀️ 13h — Déjeuner via tab Manuel du 2ème repas
-            await ctx.click('#nb-journal');
-            await ctx.waitFor('#meals-container');
-            await ctx.wait(300);
-            const lunchSec = ctx.$$('.meal-section')[1];
-            const lunchHd = lunchSec.querySelector('.meal-hd');
-            // Open lunch (might be closed by time-of-day default)
-            if (lunchSec.classList.contains('closed')) {
-                lunchHd.click(); ctx.tapCount++;
-                await ctx.wait(200);
-            }
-            const lManTab = lunchSec.querySelector('button.meal-tab[data-tab="manual"]');
-            lManTab.click(); ctx.tapCount++;
-            await ctx.wait(150);
-            const lName = lunchSec.querySelector('input[id^="fn-"]');
-            const lKcal = lunchSec.querySelector('input[id^="fk-"]');
-            lName.value = 'Salade poulet quinoa';
-            lName.dispatchEvent(new Event('input', { bubbles: true }));
-            lKcal.value = '580';
-            lKcal.dispatchEvent(new Event('input', { bubbles: true }));
-            lKcal.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
-            await ctx.wait(300);
+            // ☀️ Déjeuner
+            await logMeal(1, 'Salade poulet quinoa', 580);
 
-            // 🏋️ 18h — Séance sport (course 30 min)
+            // 🏋️ Sport
             await ctx.click('#nb-sport');
             await ctx.waitFor('#exercice-section');
-            await ctx.wait(300);
+            await ctx.wait(400);
             const cardioPill = ctx.$$('.ex-cat-btn').find(b => b.textContent.includes('Cardio'));
             if (cardioPill) { cardioPill.click(); ctx.tapCount++; await ctx.wait(200); }
             const runBtn = ctx.$$('.ex-preset-btn').find(b => b.textContent.toLowerCase().includes('course'));
             ctx.assert(runBtn, 'Bouton Course à pied présent');
             runBtn.click(); ctx.tapCount++;
-            await ctx.wait(300);
+            await ctx.wait(400);
             const durEl = ctx.$('#ex-c-dur');
             durEl.value = '30';
             durEl.dispatchEvent(new Event('input', { bubbles: true }));
             const cardConfirm = ctx.$('button[onclick="confirmCardio()"]');
             cardConfirm.click(); ctx.tapCount++;
-            await ctx.wait(400);
+            await ctx.wait(500);
 
-            // 🌙 20h — Dîner
-            await ctx.click('#nb-journal');
-            await ctx.wait(300);
-            const dinnerSec = ctx.$$('.meal-section')[2];
-            if (dinnerSec.classList.contains('closed')) {
-                dinnerSec.querySelector('.meal-hd').click(); ctx.tapCount++;
-                await ctx.wait(200);
-            }
-            const dManTab = dinnerSec.querySelector('button.meal-tab[data-tab="manual"]');
-            dManTab.click(); ctx.tapCount++;
-            await ctx.wait(150);
-            const dName = dinnerSec.querySelector('input[id^="fn-"]');
-            const dKcal = dinnerSec.querySelector('input[id^="fk-"]');
-            dName.value = 'Saumon riz légumes';
-            dName.dispatchEvent(new Event('input', { bubbles: true }));
-            dKcal.value = '650';
-            dKcal.dispatchEvent(new Event('input', { bubbles: true }));
-            dKcal.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
-            await ctx.wait(300);
+            // 🌙 Dîner
+            await logMeal(2, 'Saumon riz légumes', 650);
 
             // ⚖️ 21h — Pesée du jour
             await ctx.click('#nb-poids');
@@ -487,8 +474,12 @@ const SCENARIOS = [
             await ctx.wait(400);
             const heatmap = ctx.$('#month-heatmap');
             ctx.assert(heatmap.children.length > 0, 'Heatmap rendue avec cases');
-            const greenCells = heatmap.querySelectorAll('.heatmap-day');
-            ctx.assert(greenCells.length > 0, `${greenCells.length} cases rendues`);
+            // Real class is .hmap-day (not heatmap-day)
+            const cells = heatmap.querySelectorAll('.hmap-day');
+            ctx.assert(cells.length > 0, `${cells.length} cases rendues`);
+            // Some cells should have .ok class (days where kcal was logged within target)
+            const okCells = heatmap.querySelectorAll('.hmap-day.ok');
+            ctx.assert(okCells.length > 0, `${okCells.length} cases vertes (jours dans l'objectif)`);
 
             // 3. Poids tab → courbe doit s'afficher (canvas non vide)
             await ctx.click('#nb-poids');
@@ -561,9 +552,9 @@ const SCENARIOS = [
             const sections = ctx.$$('.meal-section');
             ctx.assert(sections.length === 4, '4 sections de repas');
 
-            // Total = 320 + 710 + 645 + 276 = 1951
+            // Sum: bf=345, lunch=710, dinner=645, snack=276 → 1976
             const totalKcal = Object.values(day.meals).flat().reduce((s, f) => s + f.k, 0);
-            ctx.assert(totalKcal === 1951, `Total kcal correct: ${totalKcal}`);
+            ctx.assert(totalKcal === 1976, `Total kcal correct: ${totalKcal}`);
 
             // Tab Sport → 3 exos affichés
             await ctx.click('#nb-sport');
@@ -577,7 +568,7 @@ const SCENARIOS = [
             await ctx.click('#nb-dash');
             await ctx.wait(500);
             const eaten = ctx.text('#d-eaten');
-            ctx.assert(eaten.includes('1951') || parseInt(eaten, 10) === 1951, `D-eaten = 1951 (${eaten})`);
+            ctx.assert(eaten.includes('1976') || parseInt(eaten, 10) === 1976, `D-eaten = 1976 (${eaten})`);
             const burned = ctx.text('#d-burned');
             ctx.assert(burned.includes('552') || parseInt(burned.replace('+', ''), 10) === 552, `Burned correct (${burned})`);
         }

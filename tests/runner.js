@@ -66,7 +66,7 @@ function setStatus(idx, status, time) {
 }
 
 /* ---------- Stats ---------- */
-const stats = { total: 0, pass: 0, fail: 0, time: 0 };
+const stats = { total: 0, pass: 0, fail: 0, time: 0, ergoSlow: 0, ergoTaps: 0 };
 function updateStats() {
     document.getElementById('stat-total').textContent = stats.total;
     document.getElementById('stat-pass').textContent = stats.pass;
@@ -74,7 +74,7 @@ function updateStats() {
     document.getElementById('stat-time').textContent = stats.time;
 }
 function resetStats() {
-    stats.total = stats.pass = stats.fail = stats.time = 0;
+    stats.total = stats.pass = stats.fail = stats.time = stats.ergoSlow = stats.ergoTaps = 0;
     updateStats();
 }
 
@@ -264,10 +264,26 @@ async function runOne(idx) {
         else await wait(300);
         await scenario.run(ctx);
         const elapsed = Date.now() - t0;
-        log(`✅ PASS — ${elapsed}ms · ${ctx.tapCount} taps`, 'pass');
+
+        // Ergonomic verdict: compare to scenario targets
+        const ergoBits = [];
+        if (scenario.targetMs) {
+            const ok = elapsed <= scenario.targetMs;
+            ergoBits.push((ok ? '⚡' : '🐢') + ` ${elapsed}ms / cible ${scenario.targetMs}ms`);
+        }
+        if (scenario.targetTaps) {
+            const ok = ctx.tapCount <= scenario.targetTaps;
+            ergoBits.push((ok ? '👌' : '👆') + ` ${ctx.tapCount} taps / cible ${scenario.targetTaps}`);
+        }
+        const ergoSuffix = ergoBits.length ? ' · ' + ergoBits.join(' · ') : '';
+
+        log(`✅ PASS — ${elapsed}ms · ${ctx.tapCount} taps${ergoSuffix}`, 'pass');
         setStatus(idx, 'pass', elapsed);
         stats.pass++;
         stats.time += elapsed;
+        // Track ergonomic miss separately
+        if (scenario.targetMs && elapsed > scenario.targetMs) stats.ergoSlow++;
+        if (scenario.targetTaps && ctx.tapCount > scenario.targetTaps) stats.ergoTaps++;
     } catch (e) {
         const elapsed = Date.now() - t0;
         log(`❌ FAIL — ${e.message || e}`, 'fail');
@@ -294,6 +310,11 @@ async function runAll() {
         await wait(150);
     }
     log(`=== DONE — ${stats.pass}/${stats.total} passed in ${stats.time}ms ===`, stats.fail === 0 ? 'pass' : 'warn');
+    if (stats.ergoSlow > 0 || stats.ergoTaps > 0) {
+        log(`🎯 Ergonomie : ${stats.ergoSlow} test(s) trop lent(s) · ${stats.ergoTaps} test(s) trop de taps`, 'warn');
+    } else if (stats.fail === 0) {
+        log(`🎯 Ergonomie : tous les tests dans les cibles temps + taps ✓`, 'pass');
+    }
 }
 
 /* ---------- Wire up ---------- */
