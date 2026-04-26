@@ -684,3 +684,193 @@ function isVisibleSafe(el, ctx) {
         return cs.display !== 'none';
     } catch(e) { return true; }
 }
+
+/* ╔══════════════════════════════════════════════════════════════╗
+   ║  STRESS TESTS — limites & robustesse                         ║
+   ╚══════════════════════════════════════════════════════════════╝ */
+
+SCENARIOS.push(
+    /* ─── S1 — 1000 récents ──────────────────────────────────── */
+    {
+        id: 'S1',
+        name: '⚡ Stress : 1000 récents → render Journal',
+        target: '< 2s même avec 1000 aliments',
+        targetMs: 2500,
+        seed: (() => {
+            const recents = [];
+            for (let i = 0; i < 1000; i++) {
+                recents.push({
+                    n: `Aliment ${i}`,
+                    k: 50 + (i % 500),
+                    p: i % 30, l: i % 15, g: i % 50,
+                    ts: Date.now() - i * 60000,  // staggered timestamps
+                    count: 1 + (i % 10),
+                    mks: { breakfast: i % 4 === 0 ? 5 : 0, lunch: i % 4 === 1 ? 5 : 0 }
+                });
+            }
+            return seedWith({ recent_foods: recents });
+        })(),
+        async run(ctx) {
+            const t0 = Date.now();
+            await ctx.click('#nb-journal');
+            await ctx.waitFor('#meals-container');
+            await ctx.wait(300);
+            const renderTime = Date.now() - t0;
+            ctx.assert(renderTime < 2000, `Journal rendu en ${renderTime}ms (cible <2000ms)`);
+            // Vérifie que les boutons récents sont rendus (max 12 affichés)
+            const recBtns = ctx.$$('.qbtn');
+            ctx.assert(recBtns.length > 0 && recBtns.length <= 50, `${recBtns.length} boutons récents (cap respecté)`);
+        }
+    },
+
+    /* ─── S2 — 90 jours d'historique ─────────────────────────── */
+    {
+        id: 'S2',
+        name: '⚡ Stress : 90 jours d\'historique → suivi page',
+        target: '< 3s heatmap+graph render',
+        targetMs: 4000,
+        seed: (() => {
+            const today = new Date();
+            const days = {};
+            const wh = [];
+            for (let i = 89; i >= 0; i--) {
+                const d = new Date(today); d.setDate(d.getDate() - i);
+                const dk = d.toISOString().slice(0, 10);
+                days['day_' + dk] = {
+                    meals: { breakfast:[{n:'A',k:300}], lunch:[{n:'B',k:600}], dinner:[{n:'C',k:500}], snack:[] },
+                    water: 8,
+                    weight: 85 - i * 0.04,
+                    exercises: i % 3 === 0 ? [{ n:'X', kcal:300, dur:30, type:'cardio' }] : []
+                };
+                wh.push({ d: dk, v: 85 - i * 0.04 });
+            }
+            return seedWith({ 'weight-history': wh, ...days });
+        })(),
+        async run(ctx) {
+            const t0 = Date.now();
+            await ctx.click('#nb-suivi');
+            await ctx.waitFor('#month-heatmap');
+            await ctx.wait(500);
+            const elapsed = Date.now() - t0;
+            ctx.assert(elapsed < 3000, `Suivi rendu en ${elapsed}ms avec 90j de data`);
+            const cells = ctx.$$('#month-heatmap .hmap-day');
+            ctx.assert(cells.length > 30, `Heatmap : ${cells.length} cases rendues`);
+            // Poids — courbe sur 90 jours
+            await ctx.click('#nb-poids');
+            await ctx.waitFor('#weight-canvas');
+            await ctx.wait(400);
+            const canvas = ctx.$('#weight-canvas');
+            ctx.assert(canvas.width > 0 && canvas.height > 0, 'Canvas dimensionné correctement');
+        }
+    },
+
+    /* ─── S3 — 50 aliments dans un seul repas ────────────────── */
+    {
+        id: 'S3',
+        name: '⚡ Stress : 50 aliments dans un repas',
+        target: 'pas de freeze UI',
+        targetMs: 3000,
+        seed: (() => {
+            const dk = new Date().toISOString().slice(0, 10);
+            const breakfast = [];
+            for (let i = 0; i < 50; i++) breakfast.push({ n: `Item ${i}`, k: 100 + i });
+            return seedWith({
+                ['day_' + dk]: { meals: { breakfast, lunch:[], dinner:[], snack:[] }, water: 0, exercises: [] }
+            });
+        })(),
+        async run(ctx) {
+            const t0 = Date.now();
+            await ctx.click('#nb-journal');
+            await ctx.waitFor('#meals-container');
+            await ctx.wait(500);
+            const elapsed = Date.now() - t0;
+            ctx.assert(elapsed < 2500, `Journal avec 50 aliments rendu en ${elapsed}ms`);
+            // Total kcal = somme des 50
+            const expected = Array.from({length: 50}, (_, i) => 100 + i).reduce((s, v) => s + v, 0);
+            const day = ctx.getStorage('day_' + new Date().toISOString().slice(0, 10));
+            const actual = day.meals.breakfast.reduce((s, f) => s + f.k, 0);
+            ctx.assert(actual === expected, `Total = ${expected} (${actual})`);
+        }
+    },
+
+    /* ─── S4 — Edge cases : noms longs, caractères spéciaux ──── */
+    {
+        id: 'S4',
+        name: '⚡ Stress : noms longs + caractères spéciaux',
+        target: 'pas de XSS, pas de cassure layout',
+        seed: seedWith({
+            recent_foods: [
+                { n: 'Très long nom d\'aliment qui dépasse vraiment toute limite raisonnable et continue'.repeat(2), k: 200, ts: Date.now(), count: 1 },
+                { n: '<script>alert("XSS")</script>', k: 100, ts: Date.now(), count: 1 },
+                { n: 'Émoji 🥗🍕🍔🌮 + ñ é à ç', k: 150, ts: Date.now(), count: 1 },
+                { n: '"Quotes" & \'apos\' & <tags>', k: 175, ts: Date.now(), count: 1 }
+            ]
+        }),
+        async run(ctx) {
+            await ctx.click('#nb-journal');
+            await ctx.waitFor('#meals-container');
+            await ctx.wait(400);
+            // Vérifie qu'aucun script ne s'est exécuté (pas d'alert ouverte)
+            // (On peut pas vraiment tester ça via DOM, mais on vérifie que le texte est échappé dans le HTML)
+            const html = ctx.$('#meals-container').innerHTML;
+            const hasUnescapedScript = /<script>alert/.test(html);
+            ctx.assert(!hasUnescapedScript, 'Pas de balise <script> non échappée dans le HTML');
+            // Vérifie que les boutons sont bien rendus
+            const btns = ctx.$$('.qbtn');
+            ctx.assert(btns.length >= 4, `${btns.length} boutons rendus avec edge cases`);
+        }
+    },
+
+    /* ─── U1b — Returning user (efficacité) ─────────────────── */
+    {
+        id: 'U1b',
+        name: '🔁 Returning user : 4 repas via "Comme hier" en < 8 taps',
+        target: 'mesurer le gain de l\'usage répété',
+        targetMs: 12000,
+        targetTaps: 8,
+        seed: (() => {
+            // Simule J-1 avec 4 repas habituels
+            const yesterday = new Date(); yesterday.setDate(yesterday.getDate() - 1);
+            const yKey = yesterday.toISOString().slice(0, 10);
+            return seedWith({
+                ['day_' + yKey]: {
+                    meals: {
+                        breakfast: [{ n: 'Café', k: 5 }, { n: 'Tartines beurre', k: 280 }],
+                        lunch:     [{ n: 'Poulet riz', k: 620 }],
+                        dinner:    [{ n: 'Soupe', k: 350 }],
+                        snack:     [{ n: 'Pomme', k: 52 }]
+                    },
+                    water: 8, exercises: []
+                }
+            });
+        })(),
+        async run(ctx) {
+            await ctx.waitFor('#page-dash.active');
+            await ctx.click('#nb-journal');
+            await ctx.waitFor('#meals-container');
+            await ctx.wait(400);
+            // Sur chaque repas vide, cliquer "Comme hier" CTA
+            const sections = ctx.$$('.meal-section');
+            for (let i = 0; i < 4; i++) {
+                let sec = ctx.$$('.meal-section')[i];
+                if (sec.classList.contains('closed')) {
+                    sec.querySelector('.meal-hd').click(); ctx.tapCount++;
+                    await ctx.wait(300);
+                    sec = ctx.$$('.meal-section')[i];
+                }
+                const cta = sec.querySelector('.empty-state-cta');
+                if (cta) {
+                    cta.click(); ctx.tapCount++;
+                    await ctx.wait(400);
+                }
+            }
+            // Vérifie que les 4 repas ont été recopiés
+            const dk = new Date().toISOString().slice(0, 10);
+            const day = ctx.getStorage('day_' + dk);
+            const total = MEAL_KEYS_TEST.reduce((s, k) => s + (day.meals[k] || []).length, 0);
+            ctx.assert(total >= 5, `${total} aliments recopiés via "Comme hier" (cible ≥5)`);
+        }
+    }
+);
+
+const MEAL_KEYS_TEST = ['breakfast', 'lunch', 'dinner', 'snack'];
