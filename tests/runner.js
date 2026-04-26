@@ -88,12 +88,25 @@ function $$(sel) {
     return Array.from(frame.contentDocument.querySelectorAll(sel));
 }
 
+/** Robust visibility check that works for position:fixed (where offsetParent is always null). */
+function isVisible(el) {
+    if (!el) return false;
+    const win = frame.contentWindow;
+    if (!win || !win.getComputedStyle) return false;
+    try {
+        const cs = win.getComputedStyle(el);
+        if (cs.display === 'none' || cs.visibility === 'hidden' || cs.opacity === '0') return false;
+        const rect = el.getBoundingClientRect();
+        return rect.width > 0 && rect.height > 0;
+    } catch (e) { return false; }
+}
+
 function waitFor(selector, timeout = 5000) {
     const start = Date.now();
     return new Promise((resolve, reject) => {
         const tick = () => {
             const el = $(selector);
-            if (el && el.offsetParent !== null) return resolve(el);
+            if (el && isVisible(el)) return resolve(el);
             if (Date.now() - start > timeout) return reject(new Error('Timeout waiting for ' + selector + ' — ' + diagnoseIframe()));
             setTimeout(tick, 50);
         };
@@ -106,17 +119,15 @@ function diagnoseIframe() {
     try {
         const doc = frame.contentDocument;
         if (!doc) return 'iframe document inaccessible';
-        const visible = (sel) => { const el = doc.querySelector(sel); return el && el.offsetParent !== null; };
+        const v = (sel) => isVisible(doc.querySelector(sel));
         const bits = [];
-        if (visible('#auth-page')) bits.push('AUTH page visible');
-        if (visible('#landing'))   bits.push('landing visible');
-        if (visible('#wizard'))    bits.push('wizard visible');
-        if (visible('#page-dash')) bits.push('dashboard active');
-        if (visible('#page-journal.active')) bits.push('journal active');
-        // Check Firebase state
+        if (v('#auth-page')) bits.push('AUTH page visible');
+        if (v('#landing'))   bits.push('landing visible');
+        if (v('#wizard'))    bits.push('wizard visible');
+        if (v('#page-dash')) bits.push('dashboard active');
+        if (v('#page-journal.active')) bits.push('journal active');
         const fbEnabled = frame.contentWindow.FIREBASE_ENABLED;
         bits.push('FIREBASE_ENABLED=' + fbEnabled);
-        // Storage check
         try { bits.push('settings=' + (frame.contentWindow.localStorage.getItem('settings') ? 'present' : 'empty')); } catch(e){}
         return bits.join(' · ') || 'page-state unknown';
     } catch (e) { return 'diag-error: ' + e.message; }
