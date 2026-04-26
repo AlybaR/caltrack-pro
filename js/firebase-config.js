@@ -25,3 +25,6 @@ const _IS_TEST_MODE = (() => {
 })();
 
 const FIREBASE_ENABLED = !FORCE_LOCAL_MODE && !_IS_TEST_MODE && !!firebaseConfig.apiKey;
+// Expose on window for diagnostics (test runner reads this)
+window.FIREBASE_ENABLED = FIREBASE_ENABLED;
+window._IS_TEST_MODE    = _IS_TEST_MODE;
