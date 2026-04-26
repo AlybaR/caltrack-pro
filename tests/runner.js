@@ -143,11 +143,17 @@ async function reloadFrame() {
     });
 }
 
-async function clearAndReload() {
+async function clearAndReload(seed) {
     try {
         frame.contentWindow.localStorage.clear();
         if (frame.contentWindow.indexedDB) {
             try { frame.contentWindow.indexedDB.databases?.().then(dbs => dbs.forEach(db => frame.contentWindow.indexedDB.deleteDatabase(db.name))); } catch(e){}
+        }
+        // Pre-seed localStorage BEFORE reload so the app boots with the right state
+        if (seed && typeof seed === 'object') {
+            for (const [k, v] of Object.entries(seed)) {
+                frame.contentWindow.localStorage.setItem(k, JSON.stringify(v));
+            }
         }
     } catch (e) { /* cross-origin or not loaded */ }
     return reloadFrame();
@@ -254,7 +260,7 @@ async function runOne(idx) {
     const t0 = Date.now();
 
     try {
-        if (scenario.fresh !== false) await clearAndReload();
+        if (scenario.fresh !== false) await clearAndReload(scenario.seed);
         else await wait(300);
         await scenario.run(ctx);
         const elapsed = Date.now() - t0;
