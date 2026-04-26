@@ -564,13 +564,16 @@ const SCENARIOS = [
             ctx.assert(exItems.length >= 3 || ctx.$('#ex-list').textContent.includes('Course'),
                 `Liste exercices contient les 3 entrées (trouvé ${exItems.length})`);
 
-            // Dashboard reflète tout
+            // Dashboard reflète tout — read dataset.val (source of truth, not the
+            // mid-animation rendered text) to avoid count-up animation race.
             await ctx.click('#nb-dash');
             await ctx.wait(500);
-            const eaten = ctx.text('#d-eaten');
-            ctx.assert(eaten.includes('1976') || parseInt(eaten, 10) === 1976, `D-eaten = 1976 (${eaten})`);
-            const burned = ctx.text('#d-burned');
-            ctx.assert(burned.includes('552') || parseInt(burned.replace('+', ''), 10) === 552, `Burned correct (${burned})`);
+            const eatenEl = ctx.$('#d-eaten');
+            const eatenFinal = parseFloat(eatenEl.dataset.val || eatenEl.textContent);
+            ctx.assert(eatenFinal === 1976, `D-eaten final = 1976 (${eatenFinal} dataset, "${eatenEl.textContent}" text)`);
+            const burnedEl = ctx.$('#d-burned');
+            const burnedFinal = parseFloat(burnedEl.dataset.val || burnedEl.textContent.replace('+',''));
+            ctx.assert(burnedFinal === 552, `Burned final = 552 (${burnedFinal})`);
         }
     },
 
