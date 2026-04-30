@@ -267,12 +267,31 @@ function renderMealSections(day, dk) {
     });
 }
 
+/* Lucide icon for each category — replaces "cheap" emojis on chrome pills */
+const CAT_LUCIDE = {
+    'Récents': 'clock',
+    'Favoris': 'star',
+    'Recettes': 'book-open',
+    'Protéines': 'beef',
+    'Féculents': 'wheat',
+    'Légumes': 'leaf',
+    'Fruits': 'apple',
+    'Laitiers/Autres': 'milk',
+};
+
 function renderCatTab(container, catName, mk) {
     const b = document.createElement('button');
     b.className = 'qcat-btn' + (catName === _activeCat ? ' active' : '');
-    b.textContent = catName;
+    const cleanName = catName.replace(/^[\p{Emoji_Presentation}\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}\s]+/u, '').trim() || catName;
+    const luc = CAT_LUCIDE[cleanName];
+    if (luc) {
+        b.innerHTML = `<i data-lucide="${luc}" class="qcat-ico"></i><span>${cleanName}</span>`;
+    } else {
+        b.textContent = cleanName;
+    }
     b.onclick = () => { _activeCat = catName; _qaSearch = ''; filterQuickAdd(mk, ''); };
     container.appendChild(b);
+    if (typeof refreshIcons === 'function') refreshIcons();
 }
 
 function toggleMeal(mk) {
@@ -350,8 +369,12 @@ function renderQuickGrid(mk) {
 
     foods.forEach(q => {
         const b = document.createElement('button');
-        b.className = 'qbtn';
-        b.textContent = q.k > 0 ? `${q.n} · ${q.k}` : q.n;
+        b.className = 'qbtn qbtn-row';
+        b.innerHTML = `
+            <span class="qbtn-name">${q.n}</span>
+            ${q.k > 0 ? `<span class="qbtn-kcal">${q.k}<small>kcal</small></span>` : ''}
+            <span class="qbtn-add" aria-hidden="true">+</span>
+        `;
         b.onclick = () => addFoodDirect(mk, q.n, q.k, q.p ?? null, q.l ?? null, q.g ?? null, 1, q);
         qg.appendChild(b);
     });

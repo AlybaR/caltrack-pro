@@ -1644,39 +1644,75 @@ html[data-theme="dark"] .goal-progress-bg { background: rgba(255,255,255,.06); }
   pointer-events: none;
 }
 
-.quick-cats { display: flex; gap: 5px; margin-bottom: 8px; flex-wrap: wrap; }
+/* =================================================================
+   QUICK CATS — pills horizontal scroll, no wrap (gain hauteur mobile)
+   Lucide icons inside. No wrap = 1 ligne, scroll horizontal naturel.
+   ================================================================= */
+.quick-cats {
+  display: flex; gap: 8px;
+  margin-bottom: 12px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  flex-wrap: nowrap;
+  padding-bottom: 4px;
+  scrollbar-width: none;        /* Firefox */
+  -ms-overflow-style: none;     /* Edge */
+  scroll-snap-type: x proximity;
+  -webkit-overflow-scrolling: touch;
+  /* Soft fade on right edge to hint scrollability */
+  mask-image: linear-gradient(to right, #000 calc(100% - 24px), transparent 100%);
+  -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 24px), transparent 100%);
+}
+.quick-cats::-webkit-scrollbar { display: none; }
 
 .qcat-btn {
-  padding: 5px 12px;
+  flex-shrink: 0;
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 8px 14px;
   border-radius: 999px;
   border: 1px solid var(--bdr);
   background: var(--bg);
-  color: var(--mut);
-  font-size: .75rem;
+  color: var(--txt2);
+  font-size: .82rem; font-weight: 600;
   cursor: pointer;
   transition: all var(--fast) var(--ease2);
   user-select: none;
+  scroll-snap-align: start;
+  white-space: nowrap;
 }
-
+.qcat-btn:hover {
+  border-color: var(--acc); color: var(--acc);
+}
 .qcat-btn.active {
-  border-color: var(--acc);
-  color: var(--acc);
-  background: var(--acc-bg);
-  font-weight: 600;
+  border-color: var(--acc); color: var(--acc);
+  background: var(--acc-bg); font-weight: 700;
+  box-shadow: 0 0 0 3px rgba(200,81,42,.10);
+}
+.qcat-btn .qcat-ico {
+  width: 16px; height: 16px;
+  stroke-width: 1.8;
+  flex-shrink: 0;
 }
 
+/* =================================================================
+   QUICK GRID — résultats list, vertical, dense + scrollable
+   Each item is a row: name | kcal | + add
+   ================================================================= */
 .quick-grid {
-  display: flex;
-  gap: 5px;
-  flex-wrap: wrap;
+  display: flex; flex-direction: column; gap: 4px;
   margin-bottom: 10px;
-  max-height: 130px;
+  max-height: 220px;
   overflow-y: auto;
   overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  padding: 2px;
 }
+.quick-grid::-webkit-scrollbar { width: 4px; }
+.quick-grid::-webkit-scrollbar-thumb { background: var(--bdr2); border-radius: 999px; }
 
-.qbtn {
-  padding: 5px 11px;
+/* Legacy pill style — kept for non-row qbtn usages */
+.qbtn:not(.qbtn-row) {
+  padding: 6px 12px;
   border-radius: 999px;
   border: 1px solid var(--bdr);
   background: var(--bg);
@@ -1688,11 +1724,65 @@ html[data-theme="dark"] .goal-progress-bg { background: rgba(255,255,255,.06); }
   user-select: none;
   touch-action: manipulation;
 }
+.qbtn:not(.qbtn-row):hover { border-color: var(--acc); background: var(--acc-bg); color: var(--acc); }
 
-.qbtn:hover {
-  border-color: var(--acc);
-  background: var(--acc-bg);
+/* New row-style qbtn — 1 row per food, name | kcal | + */
+.qbtn-row {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid var(--bdr);
+  background: var(--bg);
+  color: var(--txt);
+  font-size: .92rem;
+  cursor: pointer;
+  transition: background var(--fast) var(--ease2), border-color var(--fast) var(--ease2), transform var(--fast) var(--ease);
+  text-align: left;
+  font-family: inherit;
+  user-select: none;
+  touch-action: manipulation;
+  width: 100%;
+}
+.qbtn-row:hover { border-color: var(--acc); background: var(--acc-bg); }
+.qbtn-row:active { transform: scale(.98); }
+.qbtn-row .qbtn-name {
+  font-weight: 500;
+  color: var(--txt);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.qbtn-row .qbtn-kcal {
+  font-family: 'Outfit', sans-serif; font-weight: 700;
   color: var(--acc);
+  font-variant-numeric: tabular-nums;
+  font-size: 1rem;
+  display: inline-flex; align-items: baseline; gap: 3px;
+}
+.qbtn-row .qbtn-kcal small {
+  font-size: .65rem; color: var(--mut); font-weight: 500;
+  text-transform: uppercase; letter-spacing: .04em;
+}
+.qbtn-row .qbtn-add {
+  width: 28px; height: 28px;
+  display: inline-flex; align-items: center; justify-content: center;
+  border-radius: 50%;
+  background: var(--acc);
+  color: #fff;
+  font-size: 1.2rem; font-weight: 600;
+  line-height: 1;
+  transition: transform var(--fast) var(--ease);
+}
+.qbtn-row:hover .qbtn-add { transform: scale(1.1); }
+html[data-theme="dark"] .qbtn-row { background: rgba(255,255,255,.03); }
+html[data-theme="dark"] .qbtn-row:hover { background: rgba(224,107,61,.10); }
+
+/* Search bar — focus state plus visible */
+.qa-search-wrap input:focus,
+.qa-search-wrap input {
+  height: 44px;  /* Touch target WCAG */
+  font-size: .95rem;
 }
 
 /* Meal body tab system */
