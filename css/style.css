@@ -4935,3 +4935,32 @@ html[data-theme="dark"] .poids-hero {
     .poids-hero-num { font-size: 1.55rem !important; }
 }
 
+
+/* =================================================================
+   Mic button — dictée vocale (Web Speech API)
+   ================================================================= */
+.qa-search-wrap { position: relative; }
+.qa-search-wrap input { padding-right: 48px; }
+.qa-mic-btn {
+  position: absolute;
+  right: 6px; top: 50%; transform: translateY(-50%);
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: var(--bg);
+  color: var(--mut);
+  cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center;
+  transition: background 120ms ease, color 120ms ease, transform 120ms ease;
+}
+.qa-mic-btn:hover { background: var(--acc-bg); color: var(--acc); }
+.qa-mic-btn:active { transform: translateY(-50%) scale(.92); }
+.qa-mic-ico { width: 18px; height: 18px; }
+.qa-mic-btn.listening {
+  background: var(--acc); color: #fff;
+  animation: mic-pulse 1.2s ease-in-out infinite;
+}
+@keyframes mic-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(200,81,42,.5); }
+  50% { box-shadow: 0 0 0 10px rgba(200,81,42,0); }
+}

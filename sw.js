@@ -6,7 +6,7 @@
    - Install: allSettled so one missing asset doesn't break everything
    ==================================================== */
 
-const CACHE = 'meki-v43';
+const CACHE = 'meki-v44';
 const CORE_ASSETS = [
     './',
     './index.html',

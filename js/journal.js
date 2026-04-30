@@ -215,8 +215,12 @@ function renderMealSections(day, dk) {
           <div class="meal-tab-pane" data-pane="quick" style="display:${activeTab==='quick'?'':'none'}">
             <div class="qa-search-wrap" style="margin-bottom:8px;">
               <span class="qa-search-icon">🔍</span>
-              <input type="text" placeholder="Recherche rapide..." id="qa-search-${mk}"
+              <input type="text" placeholder="Recherche rapide ou dicte..." id="qa-search-${mk}"
                      oninput="filterQuickAdd('${mk}', this.value)"/>
+              <button type="button" class="qa-mic-btn" onclick="startVoiceDictation('qa-search-${mk}','${mk}')"
+                      aria-label="Dictée vocale" title="Dicter le nom de l'aliment">
+                <i data-lucide="mic" class="qa-mic-ico"></i>
+              </button>
             </div>
             <div class="quick-cats" id="qcats-${mk}"></div>
             <div class="quick-grid" id="qg-${mk}"></div>
@@ -378,6 +382,63 @@ function renderQuickGrid(mk) {
         b.onclick = () => addFoodDirect(mk, q.n, q.k, q.p ?? null, q.l ?? null, q.g ?? null, 1, q);
         qg.appendChild(b);
     });
+}
+
+/* ============================================================
+   Dictée vocale — Web Speech API (Chrome/Edge/Safari)
+   Click le bouton mic → écoute → transcrit → filtre les récents.
+   Si non supporté (Firefox), feedback toast.
+   ============================================================ */
+let _voiceRecognition = null;
+function startVoiceDictation(inputId, mk) {
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SR) {
+        showToast('🎤 Dictée non supportée sur ce navigateur. Essaie Chrome ou Safari.');
+        return;
+    }
+    const input = document.getElementById(inputId);
+    if (!input) return;
+
+    // If already recording, stop
+    if (_voiceRecognition) {
+        try { _voiceRecognition.stop(); } catch(e){}
+        _voiceRecognition = null;
+        return;
+    }
+
+    const rec = new SR();
+    rec.lang = 'fr-FR';
+    rec.continuous = false;
+    rec.interimResults = true;
+    rec.maxAlternatives = 1;
+
+    const btn = document.querySelector(`button[onclick*="${inputId}"]`);
+    if (btn) btn.classList.add('listening');
+    if (typeof haptic === 'function') haptic('tap');
+
+    rec.onresult = (e) => {
+        const transcript = Array.from(e.results)
+            .map(r => r[0].transcript)
+            .join('');
+        input.value = transcript;
+        input.dispatchEvent(new Event('input', { bubbles: true }));
+    };
+    rec.onerror = (e) => {
+        if (e.error === 'no-speech') {
+            showToast('🎤 Je n\'ai rien entendu, réessaie.');
+        } else if (e.error === 'not-allowed') {
+            showToast('🔒 Permission microphone refusée. Autorise dans les réglages.');
+        } else {
+            showToast('🎤 Erreur dictée : ' + e.error);
+        }
+    };
+    rec.onend = () => {
+        if (btn) btn.classList.remove('listening');
+        _voiceRecognition = null;
+        if (typeof haptic === 'function') haptic('success');
+    };
+    rec.start();
+    _voiceRecognition = rec;
 }
 
 function filterQuickAdd(mk, val) {
