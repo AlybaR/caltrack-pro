@@ -250,8 +250,7 @@
         <button class="side-nav-btn active" id="sn-dash" onclick="showPage('dash')"><span class="ico">📊</span>Dashboard</button>
         <button class="side-nav-btn" id="sn-journal" onclick="showPage('journal')"><span class="ico">📋</span>Journal</button>
         <button class="side-nav-btn" id="sn-sport" onclick="showPage('sport')"><span class="ico">🏋️</span>Sport</button>
-        <button class="side-nav-btn" id="sn-corps" onclick="showPage('corps')"><span class="ico">📏</span>Corps</button>
-        <button class="side-nav-btn" id="sn-poids" onclick="showPage('poids')"><span class="ico">⚖️</span>Poids</button>
+        <button class="side-nav-btn" id="sn-corps" onclick="showPage('corps')"><span class="ico">⚖️</span>Corps</button>
         <button class="side-nav-btn" id="sn-suivi" onclick="showPage('suivi')"><span class="ico">📅</span>Suivi</button>
         <button class="side-nav-btn" id="sn-settings" onclick="showPage('settings')"><span class="ico">⚙️</span>Profil</button>
     </nav>
@@ -265,8 +264,7 @@
         <button class="nav-btn" id="nb-journal" onclick="showPage('journal')" aria-label="Journal alimentaire"> <span
                 class="ico" aria-hidden="true">📋</span>Journal</button>
         <button class="nav-btn" id="nb-sport" onclick="showPage('sport')" aria-label="Sport"> <span class="ico" aria-hidden="true">🏋️</span>Sport</button>
-        <button class="nav-btn" id="nb-corps" onclick="showPage('corps')" aria-label="Mensurations"> <span class="ico" aria-hidden="true">📏</span>Corps</button>
-        <button class="nav-btn" id="nb-poids" onclick="showPage('poids')" aria-label="Poids"> <span class="ico" aria-hidden="true">⚖️</span>Poids</button>
+        <button class="nav-btn" id="nb-corps" onclick="showPage('corps')" aria-label="Corps et poids"> <span class="ico" aria-hidden="true">⚖️</span>Corps</button>
         <button class="nav-btn" id="nb-suivi" onclick="showPage('suivi')" aria-label="Suivi hebdomadaire"> <span class="ico" aria-hidden="true">📅</span>Suivi</button>
         <button class="nav-btn" id="nb-settings" onclick="showPage('settings')" aria-label="Profil et réglages"><span
                 class="ico" aria-hidden="true">⚙️</span>Profil</button>
@@ -437,17 +435,9 @@
      PAGE: CORPS (mensurations + photos + objectifs)
      ================================================================ -->
     <div class="page" id="page-corps">
-        <div class="page-hd"><h2>Corps & Objectifs</h2></div>
-        <div id="corps-section"></div>
-    </div>
+        <div class="page-hd"><h2>Corps</h2></div>
 
-    <!-- ================================================================
-     PAGE: POIDS
-     ================================================================ -->
-    <div class="page" id="page-poids">
-        <div class="page-hd">
-            <h2>Poids</h2>
-        </div>
+        <!-- ===== POIDS SECTION (hero, toujours visible) ===== -->
         <div class="stats-grid s3" id="poids-stats" style="margin-bottom:14px;"></div>
         <div class="card" style="margin-bottom:14px;">
             <div class="card-t">Enregistrer aujourd'hui</div>
@@ -465,10 +455,13 @@
             <div class="imc-display" id="imc-display"></div>
         </div>
         <div class="card eta-card" id="eta-card" style="display:none;margin-bottom:14px;"></div>
-        <div class="card">
+        <div class="card" style="margin-bottom:14px;">
             <div class="card-t">Historique</div>
             <div id="weight-history"></div>
         </div>
+
+        <!-- ===== MENSURATIONS / PHOTOS / OBJECTIFS (sous-sections via tabs) ===== -->
+        <div id="corps-section"></div>
     </div>
 
     <!-- ================================================================

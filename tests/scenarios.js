@@ -209,8 +209,8 @@ const SCENARIOS = [
         targetTaps: 3,
         seed: seedWith(),
         async run(ctx) {
-            await ctx.waitFor('#nb-poids');
-            await ctx.click('#nb-poids');
+            await ctx.waitFor('#nb-corps');
+            await ctx.click('#nb-corps');
             await ctx.waitFor('#w-today');
             const inp = ctx.$('#w-today');
             inp.focus();
@@ -293,8 +293,8 @@ const SCENARIOS = [
         target: 'élément visible',
         seed: seedWith(),
         async run(ctx) {
-            await ctx.waitFor('#nb-poids');
-            await ctx.click('#nb-poids');
+            await ctx.waitFor('#nb-corps');
+            await ctx.click('#nb-corps');
             await ctx.waitFor('#weight-history');
             await ctx.wait(300);
             const empty = ctx.$('#weight-history .empty-state');
@@ -312,7 +312,7 @@ const SCENARIOS = [
         seed: seedWith(),
         async run(ctx) {
             await ctx.waitFor('#nb-dash');
-            const pages = ['dash', 'journal', 'sport', 'corps', 'poids', 'suivi', 'settings'];
+            const pages = ['dash', 'journal', 'sport', 'corps', 'suivi', 'settings'];
             for (const p of pages) {
                 await ctx.click('#nb-' + p);
                 await ctx.wait(200);
@@ -400,7 +400,7 @@ const SCENARIOS = [
             await logMeal(2, 'Saumon riz légumes', 650);
 
             // ⚖️ 21h — Pesée du jour
-            await ctx.click('#nb-poids');
+            await ctx.click('#nb-corps');
             await ctx.waitFor('#w-today');
             const wInp = ctx.$('#w-today');
             wInp.value = '84.6';
@@ -482,7 +482,7 @@ const SCENARIOS = [
             ctx.assert(okCells.length > 0, `${okCells.length} cases vertes (jours dans l'objectif)`);
 
             // 3. Poids tab → courbe doit s'afficher (canvas non vide)
-            await ctx.click('#nb-poids');
+            await ctx.click('#nb-corps');
             await ctx.waitFor('#weight-canvas');
             await ctx.wait(500);
             const canvas = ctx.$('#weight-canvas');
@@ -666,7 +666,7 @@ const SCENARIOS = [
             ctx.assert(emptySport, 'Empty state sport visible');
 
             // Poids : empty history
-            await ctx.click('#nb-poids');
+            await ctx.click('#nb-corps');
             await ctx.wait(400);
             const emptyPoids = ctx.$('#weight-history .empty-state');
             ctx.assert(emptyPoids, 'Empty state poids visible');
@@ -756,7 +756,7 @@ SCENARIOS.push(
             const cells = ctx.$$('#month-heatmap .hmap-day');
             ctx.assert(cells.length > 30, `Heatmap : ${cells.length} cases rendues`);
             // Poids — courbe sur 90 jours
-            await ctx.click('#nb-poids');
+            await ctx.click('#nb-corps');
             await ctx.waitFor('#weight-canvas');
             await ctx.wait(400);
             const canvas = ctx.$('#weight-canvas');

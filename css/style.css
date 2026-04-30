@@ -4057,6 +4057,16 @@ button:focus-visible,
 /* ============================================================
    CORPS & OBJECTIFS (Phase 3)
    ============================================================ */
+/* Visual separator between Poids section and Mensurations/Photos/Objectifs in #page-corps */
+#page-corps #corps-section { padding-top:8px; border-top:1px solid var(--bdr); margin-top:8px; }
+#page-corps #corps-section::before {
+  content:'AUTRES SUIVIS';
+  display:block;
+  font-family:'Outfit',sans-serif; font-weight:700;
+  font-size:.7rem; letter-spacing:.12em; color:var(--mut);
+  text-transform:uppercase;
+  margin:8px 0 14px;
+}
 .corps-tabs { display:flex; gap:6px; margin-bottom:12px; background:rgba(0,0,0,.04); padding:4px; border-radius:12px; }
 .corps-tab { flex:1; background:transparent; border:none; padding:8px 10px; border-radius:9px; font-size:.82rem; font-weight:700; color:var(--mut); cursor:pointer; font-family:'Outfit',sans-serif; transition:all .15s ease; }
 .corps-tab.active { background:var(--acc); color:#fff; box-shadow:0 2px 6px rgba(200,81,42,.3); }

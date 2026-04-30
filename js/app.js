@@ -78,7 +78,9 @@ function calcNutrition() {
 
 // ---------- PAGE NAV ----------
 function showPage(name) {
-  ['dash', 'journal', 'sport', 'corps', 'poids', 'suivi', 'settings'].forEach(p => {
+  // 'poids' has been merged into 'corps' — redirect for backwards compat
+  if (name === 'poids') name = 'corps';
+  ['dash', 'journal', 'sport', 'corps', 'suivi', 'settings'].forEach(p => {
     const pg = document.getElementById('page-' + p); if (pg) pg.classList.toggle('active', p === name);
     const nb = document.getElementById('nb-' + p); if (nb) nb.classList.toggle('active', p === name);
     const sn = document.getElementById('sn-' + p); if (sn) sn.classList.toggle('active', p === name);
@@ -86,8 +88,12 @@ function showPage(name) {
   if (name === 'dash') renderDash();
   if (name === 'journal') renderJournal();
   if (name === 'sport' && typeof renderSport === 'function') renderSport();
-  if (name === 'corps' && typeof renderCorps === 'function') { renderCorps(); if (typeof checkMilestones === 'function') checkMilestones(); }
-  if (name === 'poids') renderPoids();
+  if (name === 'corps') {
+    // Corps now contains both Poids (weight tracking) AND Mensurations/Photos/Objectifs
+    if (typeof renderPoids === 'function') renderPoids();
+    if (typeof renderCorps === 'function') renderCorps();
+    if (typeof checkMilestones === 'function') checkMilestones();
+  }
   if (name === 'suivi') renderSuivi();
   if (name === 'settings') renderSettings();
   refreshNavBadges();
@@ -198,7 +204,7 @@ window.onload = () => {
   }
   // Resize weight graph
   window.addEventListener('resize', () => {
-    if (document.getElementById('page-poids').classList.contains('active')) renderPoids();
+    if (document.getElementById('page-corps')?.classList.contains('active')) renderPoids();
     if (document.getElementById('page-suivi').classList.contains('active')) renderSuivi();
   });
   // PWA — register service worker (auto-reload on new version)
