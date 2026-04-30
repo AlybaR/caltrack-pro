@@ -1,6 +1,6 @@
 {
-  "name": "Lyno — Calories, sport et poids",
-  "short_name": "Lyno",
+  "name": "Meki — Calories, sport et poids",
+  "short_name": "Meki",
   "description": "Suivi scientifique de calories, macros, poids et sport. Atteins ton objectif sans te prendre la tête.",
   "id": "/caltrack-pro/",
   "start_url": "./index.html",

@@ -1,4 +1,4 @@
-# 🎯 MASTER PLAN — Mise en marché Lyno
+# 🎯 MASTER PLAN — Mise en marché Meki
 
 > **Plan d'attaque que tu peux suivre seul** si tu n'as plus de crédits Claude.
 > Chaque action a ses pré-requis, instructions step-by-step, critère de complétion.
@@ -21,7 +21,7 @@
 | Screenshots | ⏳ 8 captures à prendre |
 | Play Console | ⏳ Compte à créer ($25) |
 | Performance | ⚠️ Lighthouse 59 → à optimiser |
-| Nom du projet | ⚠️ "Lyno" pris sur stores → renommer |
+| Nom du projet | ⚠️ "Meki" pris sur stores → renommer |
 | Design icônes | ⚠️ Trop d'emojis dans le chrome → Lucide |
 | Mobile UX food entry | ⚠️ À améliorer |
 
@@ -34,7 +34,7 @@
 Tu dois trancher AVANT toute action :
 
 #### 0.1 — Nouveau nom (à choisir)
-- [ ] **Caltria** / **MacroFlow** / **NutriRing** / **Lyno** / **Tracé** / autre ?
+- [ ] **Caltria** / **MacroFlow** / **NutriRing** / **Meki** / **Tracé** / autre ?
 - [ ] Une fois décidé : me dire et je remplace partout en 1 commit (ou tu fais sed manuellement)
 
 #### 0.2 — Stratégie hosting
@@ -83,8 +83,8 @@ Capture d'écran à fournir d'abord pour audit précis. Hypothèses :
 Une fois le nom choisi en Phase 0.1.
 
 #### 2.1 — Search & replace
-- [ ] Lyno → [Nouveau nom] dans : index.html, manifest.json, privacy/terms, PLAYSTORE-*, PRESS-KIT, MONETIZATION, README, ROADMAP, DESIGN-SYSTEM, landing.html
-- [ ] Bundle ID `io.github.alybar.lyno` → `io.github.alybar.[newname]`
+- [ ] Meki → [Nouveau nom] dans : index.html, manifest.json, privacy/terms, PLAYSTORE-*, PRESS-KIT, MONETIZATION, README, ROADMAP, DESIGN-SYSTEM, landing.html
+- [ ] Bundle ID `io.github.alybar.meki` → `io.github.alybar.[newname]`
 - [ ] Title meta tags
 - [ ] Couleur theme inchangée (terracotta reste)
 

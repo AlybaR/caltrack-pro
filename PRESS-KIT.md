@@ -1,4 +1,4 @@
-# 📰 Press Kit — Lyno
+# 📰 Press Kit — Meki
 
 > Tout ce dont tu as besoin pour annoncer le launch (réseaux, presse, communautés).
 > Copy-paste ready.
@@ -7,9 +7,9 @@
 
 ## 🪪 Identity
 
-- **Name** : Lyno
+- **Name** : Meki
 - **Tagline** : Suivi calories, sport et poids — sans pub, sans tracker
-- **Bundle ID** : `io.github.alybar.lyno`
+- **Bundle ID** : `io.github.alybar.meki`
 - **Website** : https://alybar.github.io/caltrack-pro/
 - **Privacy** : https://alybar.github.io/caltrack-pro/privacy.html
 - **Contact** : lyno.app1@gmail.com
@@ -31,7 +31,7 @@
 
 **Court (sous 280 chars)** :
 ```
-🎉 Lyno est live sur le Play Store.
+🎉 Meki est live sur le Play Store.
 
 Une app qui fait 3 choses :
 🍽️ Calories
@@ -48,11 +48,11 @@ Merci pour le soutien 🙏
 
 **Long thread** :
 ```
-1/ J'ai passé 6 mois à coder Lyno. C'est une app de tracking calories + sport + poids, et ça shippe AUJOURD'HUI sur le Play Store.
+1/ J'ai passé 6 mois à coder Meki. C'est une app de tracking calories + sport + poids, et ça shippe AUJOURD'HUI sur le Play Store.
 
 2/ Pourquoi une autre app ? Parce que les existantes te bombardent de pubs, te demandent un abonnement à 80€/an, vendent tes données, et cachent les vraies fonctions derrière un paywall.
 
-3/ Lyno fait 3 choses, vraiment bien :
+3/ Meki fait 3 choses, vraiment bien :
 🍽️ Calories : scanner code-barres, macros, micros, hydratation
 🏋️ Sport : cardio + muscu (séries/reps/charges, calcul 1RM)
 ⚖️ Poids : courbe, ETA, mensurations
@@ -79,14 +79,14 @@ Code → https://github.com/AlybaR/caltrack-pro
 
 **Title** :
 ```
-[App] Lyno — calorie + sport tracker, 100% free, no ads, no trackers, GDPR, made by an indie dev
+[App] Meki — calorie + sport tracker, 100% free, no ads, no trackers, GDPR, made by an indie dev
 ```
 
 **Body** :
 ```
 Hey everyone,
 
-Just shipped my app Lyno on Play Store today after 6 months of work. Posting here in case it's useful for anyone.
+Just shipped my app Meki on Play Store today after 6 months of work. Posting here in case it's useful for anyone.
 
 **What it does** (3 things only):
 1. **Calorie tracking** — barcode scanner (OpenFoodFacts, 2M+ products), macros, micros, hydration
@@ -121,7 +121,7 @@ Feedback welcome. Brutal honesty preferred — I'd rather fix issues now than 6 
 ### LinkedIn — long-form
 
 ```
-Aujourd'hui, je publie Lyno sur le Play Store. 🚀
+Aujourd'hui, je publie Meki sur le Play Store. 🚀
 
 Pendant 6 mois, j'ai construit une app de suivi nutrition + sport + poids parce que les apps existantes me frustraient.
 
@@ -159,7 +159,7 @@ Honest calorie + sport tracker. No ads, no trackers, no BS.
 
 **Description**:
 ```
-Lyno is the calorie tracker I wish existed.
+Meki is the calorie tracker I wish existed.
 
 3 promises, kept:
 🍽️ Track calories — barcode scan, macros, hydration
@@ -180,7 +180,7 @@ Made solo, in France 🇫🇷
 ### TikTok — script 30s
 
 ```
-[0:00] Plan ouvert : fade-in Lyno icon
+[0:00] Plan ouvert : fade-in Meki icon
 "J'en avais marre."
 
 [0:03] Cut sur MyFitnessPal avec pubs
@@ -189,7 +189,7 @@ Made solo, in France 🇫🇷
 [0:06] Cut sur Yazio paywall
 "De cette autre qui me demande 80€ par an pour voir mes macros."
 
-[0:10] Cut sur ton dashboard Lyno v3
+[0:10] Cut sur ton dashboard Meki v3
 "Alors j'ai codé la mienne."
 
 [0:14] Démo rapide :
@@ -202,7 +202,7 @@ Made solo, in France 🇫🇷
 "Pas de pub. Pas de tracker. Pas de paywall."
 
 [0:25] Logo + tagline
-"Lyno. Sur Play Store. Gratuit."
+"Meki. Sur Play Store. Gratuit."
 
 [0:28] CTA + link in bio
 "Lien en bio."
@@ -229,7 +229,7 @@ Hashtags : #fitness #pertedepoids #calorietracker #app #indiedev #playstore
 - r/getfit (300k)
 - r/fitness (12M — strict mod, post on Sunday Sunday Mod-approved)
 - r/PWA (small but engaged)
-- HackerNews "Show HN: Lyno — privacy-first calorie tracker"
+- HackerNews "Show HN: Meki — privacy-first calorie tracker"
 - Indie Hackers
 - Product Hunt (Tuesday-Thursday best days)
 
@@ -243,7 +243,7 @@ Hashtags : #fitness #pertedepoids #calorietracker #app #indiedev #playstore
 ## 📅 Launch sequence (suggested)
 
 ### J-7 — Teaser
-- X/Twitter: "Lyno arrive sur Play Store dans 1 semaine. Voici un avant-goût" + 2 screenshots
+- X/Twitter: "Meki arrive sur Play Store dans 1 semaine. Voici un avant-goût" + 2 screenshots
 - LinkedIn: post sur le "pourquoi" du projet
 
 ### J-3 — Build hype
@@ -305,7 +305,7 @@ Cible J+30 : 5-15k installs si bonne traction.
 ```
 Salut [nom],
 
-Je viens de publier mon app Lyno sur Play Store aujourd'hui. C'est une app de suivi calories + sport + poids que j'ai codée tout seul ces derniers mois.
+Je viens de publier mon app Meki sur Play Store aujourd'hui. C'est une app de suivi calories + sport + poids que j'ai codée tout seul ces derniers mois.
 
 Si t'as 2 min :
 1. Télécharge sur Play Store : [LIEN]
@@ -322,7 +322,7 @@ Merci !
 ```
 Bonjour,
 
-Je viens de lancer Lyno, une PWA de suivi calories/sport/poids 100% gratuite, sans pub, sans tracker, sans paywall — pensée comme alternative aux MyFitnessPal et Yazio.
+Je viens de lancer Meki, une PWA de suivi calories/sport/poids 100% gratuite, sans pub, sans tracker, sans paywall — pensée comme alternative aux MyFitnessPal et Yazio.
 
 Différences clés :
 - 0 pub vs 5+ pubs/session sur MFP
@@ -338,7 +338,7 @@ Privacy : https://alybar.github.io/caltrack-pro/privacy.html
 
 Ouvert à interview / article. Merci pour votre temps.
 
-Lyno
+Meki
 lyno.app1@gmail.com
 ```
 

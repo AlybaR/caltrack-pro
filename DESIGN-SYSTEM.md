@@ -1,4 +1,4 @@
-# 🎨 Lyno — Design System v2
+# 🎨 Meki — Design System v2
 
 > **Direction : "Bien-être × Performance"**
 > Inspirations : Oura · Apple Fitness · Linear · MacroFactor

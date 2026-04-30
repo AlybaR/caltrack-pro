@@ -60,7 +60,12 @@ function totalMacros(day) {
 
 // ---------- NUTRITION ----------
 function calcNutrition() {
-  const { age, h, w, bf, sexe, act, rythme } = S;
+  const { age, h, w, bf, sexe, act } = S;
+  // Defensive: ensure rythme is a valid deficit. Fallback 500 if 0/null/undefined.
+  // 'rythme' = quotidien deficit kcal (ex: 500 → perdre ~0.5kg/sem).
+  // Without rythme, target = tdee (maintenance only — bug visible if rythme missing).
+  const rythme = parseInt(S.rythme, 10) || 500;
+  S.rythme = rythme;
   let bmr;
   if (bf !== null && !isNaN(bf)) {
     bmr = 370 + 21.6 * (w * (1 - bf / 100));
@@ -70,6 +75,8 @@ function calcNutrition() {
   const tef = bmr * 0.10;
   const tdee = Math.round((bmr + tef) * act);
   const minCal = sexe === 'h' ? 1500 : 1200;
+  // target = TDEE moins le déficit visé (= budget calorique journalier pour perdre du poids)
+  // Plancher de sécurité : minCal selon sexe pour éviter sous-alimentation.
   const target = Math.max(tdee - rythme, minCal);
   const water = Math.round(w * 35 / 250);
   S.bmr = Math.round(bmr); S.tdee = tdee; S.target = target; S.water = water;

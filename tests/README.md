@@ -1,4 +1,4 @@
-# 🧪 Test Runner — Lyno
+# 🧪 Test Runner — Meki
 
 Simulation E2E auto-hébergée. Aucune installation requise.
 

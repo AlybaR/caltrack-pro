@@ -569,12 +569,12 @@ function trackRecentFood(food, mk) {
     lsSave('recent_foods', recents);
 }
 
-/** Get recent foods, optionally filtered by current meal slot.
- *  - mk provided → meal-specific count weighted ×3, total count ×0.5
- *  - mk null → fall back to total count (legacy behaviour)
- *  - All scores multiplied by recency weight. */
+/** Get recent foods, STRICT cloisonnement par meal slot quand mk fourni.
+ *  - mk provided → ONLY items previously logged in this meal slot (strict)
+ *  - mk null → all recents (legacy behaviour for global searches)
+ *  Backwards-compatible legacy entries (no `mks` field) treated as universal:
+ *  they appear in every slot until the user logs them in a specific slot. */
 function getRecentFoods(mk, limit = 12) {
-    // Backwards compat: if first arg is a number, treat it as limit (old signature)
     if (typeof mk === 'number') { limit = mk; mk = null; }
     const recents = lsLoad('recent_foods') || [];
     const now = Date.now();
@@ -585,12 +585,19 @@ function getRecentFoods(mk, limit = 12) {
             const recencyW = Math.max(0.1, 1 - ageDays / 30);
             const totalCount = r.count || 1;
             const mealCount = (r.mks && mk) ? (r.mks[mk] || 0) : 0;
-            const baseScore = mk
-                ? (mealCount * 3 + totalCount * 0.5)
-                : totalCount;
+            // STRICT: si mk fourni ET l'item a un mks, il doit avoir mealCount > 0.
+            // Si l'item n'a pas de mks (legacy), on le garde universel.
+            let baseScore;
+            if (mk && r.mks) {
+                baseScore = mealCount > 0 ? mealCount * 3 : 0;  // strict
+            } else if (mk) {
+                baseScore = totalCount * 0.5;  // legacy item, half score in any slot
+            } else {
+                baseScore = totalCount;
+            }
             return { ...r, score: baseScore * recencyW };
         })
-        .filter(r => r.score > 0)  // exclude items never used in this slot when mk provided
+        .filter(r => r.score > 0)
         .sort((a, b) => b.score - a.score)
         .slice(0, limit);
 }

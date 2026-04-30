@@ -1,12 +1,12 @@
 /* ====================================================
-   sw.js — Service Worker  |  Lyno v3.1
+   sw.js — Service Worker  |  Meki v3.1
    Strategy:
    - Core app assets: stale-while-revalidate
    - External fonts: cache-first (opaque OK)
    - Install: allSettled so one missing asset doesn't break everything
    ==================================================== */
 
-const CACHE = 'lyno-v42';
+const CACHE = 'meki-v43';
 const CORE_ASSETS = [
     './',
     './index.html',

@@ -1,4 +1,4 @@
-# 💰 Stratégie de monétisation — Lyno
+# 💰 Stratégie de monétisation — Meki
 
 > **Posture** : un dev solo qui veut **une app qui rapporte sans gérer de gens**.
 > Zero customer support live. Zero community management. Zero B2B sales call.

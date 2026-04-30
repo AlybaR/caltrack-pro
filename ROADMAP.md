@@ -1,4 +1,4 @@
-# 🗺️ Roadmap — Lyno
+# 🗺️ Roadmap — Meki
 
 **Objectif final :** vraie app de tracking complète — nourriture, sport, poids, objectifs.
 
