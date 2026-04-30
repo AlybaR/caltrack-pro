@@ -108,7 +108,7 @@ async function renderProgression() {
 
     container.innerHTML = `
         <div class="prog-header">
-            <div class="card-t" style="margin-bottom:0;">🏋️ Progression sport</div>
+            <div class="card-t" style="margin-bottom:0;">Progression</div>
             <div class="prog-period-btns">
                 <button class="prog-p-btn ${_progMode === '7' ? 'active' : ''}" onclick="setProgMode('7')">7j</button>
                 <button class="prog-p-btn ${_progMode === '30' ? 'active' : ''}" onclick="setProgMode('30')">30j</button>
@@ -116,25 +116,26 @@ async function renderProgression() {
         </div>
 
         ${!hasData ? `
-            <div class="empty-state meal-empty">
-                🏋️ Aucune séance encore<br>
-                <small>Ajoute des exercices dans le journal pour voir ta progression</small>
+            <div class="empty-state empty-state-compact">
+                <i data-lucide="bar-chart-3" class="empty-state-ico"></i>
+                <div class="empty-state-title">Pas encore de progression</div>
+                <div class="empty-state-desc">Ajoute des exercices ci-dessus pour voir tes statistiques.</div>
             </div>
         ` : `
             <div class="prog-stats-row">
                 <div class="prog-stat"><div class="prog-stat-v">${sessionsCount}</div><div class="prog-stat-l">Séances</div></div>
                 <div class="prog-stat"><div class="prog-stat-v">${totalKcalBurned}</div><div class="prog-stat-l">kcal brûlées</div></div>
-                ${totalVolume > 0 ? `<div class="prog-stat"><div class="prog-stat-v">${(totalVolume / 1000).toFixed(1)}<small>T</small></div><div class="prog-stat-l">Volume</div></div>` : ''}
-                ${totalDist > 0 ? `<div class="prog-stat"><div class="prog-stat-v">${totalDist.toFixed(1)}<small>km</small></div><div class="prog-stat-l">Distance</div></div>` : ''}
+                ${totalVolume > 0 ? `<div class="prog-stat"><div class="prog-stat-v">${(totalVolume / 1000).toFixed(1)}<small>T</small></div><div class="prog-stat-l">Volume</div></div>` :
+                  totalDist > 0 ? `<div class="prog-stat"><div class="prog-stat-v">${totalDist.toFixed(1)}<small>km</small></div><div class="prog-stat-l">Distance</div></div>` :
+                  `<div class="prog-stat"><div class="prog-stat-v">${days.filter(({day}) => (day.exercises||[]).length>0).length}</div><div class="prog-stat-l">Jours actifs</div></div>`}
             </div>
 
             <div class="prog-chart-wrap"><canvas id="prog-kcal-chart"></canvas></div>
-            ${totalVolume > 0 ? `<div class="prog-chart-wrap"><canvas id="prog-volume-chart"></canvas></div>` : ''}
-            ${totalDist > 0 ? `<div class="prog-chart-wrap"><canvas id="prog-distance-chart"></canvas></div>` : ''}
 
             <div id="prog-prs"></div>
         `}
     `;
+    if (typeof refreshIcons === 'function') refreshIcons();
 
     if (!hasData) return;
 
@@ -183,57 +184,8 @@ async function renderProgression() {
         }
     });
 
-    if (totalVolume > 0) {
-        _progCharts.volume = new Chart(document.getElementById('prog-volume-chart'), {
-            type: 'line',
-            data: {
-                labels,
-                datasets: [{
-                    label: 'Volume (kg)',
-                    data: volume,
-                    borderColor: '#B47420',
-                    backgroundColor: 'rgba(180,116,32,0.18)',
-                    fill: true,
-                    tension: 0.35,
-                    pointRadius: 3,
-                    pointBackgroundColor: '#B47420',
-                }]
-            },
-            options: {
-                ...baseOpts,
-                plugins: {
-                    ...baseOpts.plugins,
-                    title: { display: true, text: '🏋️ Volume musculation (kg)', color: '#3B2F26', font: { size: 12, weight: 'bold' }, align: 'start' }
-                }
-            }
-        });
-    }
-
-    if (totalDist > 0) {
-        _progCharts.distance = new Chart(document.getElementById('prog-distance-chart'), {
-            type: 'line',
-            data: {
-                labels,
-                datasets: [{
-                    label: 'Distance (km)',
-                    data: distance,
-                    borderColor: '#0E7C66',
-                    backgroundColor: 'rgba(14,124,102,0.18)',
-                    fill: true,
-                    tension: 0.35,
-                    pointRadius: 3,
-                    pointBackgroundColor: '#0E7C66',
-                }]
-            },
-            options: {
-                ...baseOpts,
-                plugins: {
-                    ...baseOpts.plugins,
-                    title: { display: true, text: '🏃 Distance cardio (km)', color: '#3B2F26', font: { size: 12, weight: 'bold' }, align: 'start' }
-                }
-            }
-        });
-    }
+    // Volume + distance charts removed — info already in stats row.
+    // 1 chart only (kcal brûlées) = page plus simple, focus sur l'essentiel.
 
     renderPRs();
 }

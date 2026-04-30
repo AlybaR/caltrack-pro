@@ -6,7 +6,7 @@
    - Install: allSettled so one missing asset doesn't break everything
    ==================================================== */
 
-const CACHE = 'lyno-v40';
+const CACHE = 'lyno-v41';
 const CORE_ASSETS = [
     './',
     './index.html',

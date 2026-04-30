@@ -217,17 +217,31 @@ function renderExercice() {
     // If on Récents but no recents → fall back to Cardio
     if (_exActiveCat === '🕒 Récents' && recents.length === 0) _exActiveCat = '🏃 Cardio';
     const allCats = ['🕒 Récents', ...Object.keys(EX_CATS)];
+    // Lucide icon per category — chrome propre (no cheap emoji)
+    const EX_CAT_LUCIDE = {
+        'Récents': 'clock',
+        'Cardio': 'activity',
+        'Muscu détaillée': 'dumbbell',
+        'Muscu globale': 'flame',
+        'Sport': 'trophy',
+        'Bien-être': 'flower',
+    };
     allCats.forEach(cat => {
-        if (cat === '🕒 Récents' && recents.length === 0) return; // hide if empty
+        if (cat === '🕒 Récents' && recents.length === 0) return;
         const b = document.createElement('button');
         b.className = 'ex-cat-btn' + (cat === _exActiveCat ? ' active' : '');
-        b.textContent = cat;
+        const cleanName = cat.replace(/^[\p{Emoji_Presentation}\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}\s]+/u, '').trim() || cat;
+        const luc = EX_CAT_LUCIDE[cleanName];
+        b.innerHTML = luc
+            ? `<i data-lucide="${luc}" class="ex-cat-ico"></i><span>${cleanName}</span>`
+            : cleanName;
         b.onclick = () => { _exActiveCat = cat; renderExerciceGrid(); };
         catsEl.appendChild(b);
     });
 
     renderExerciceGrid();
     renderExList(exList);
+    if (typeof refreshIcons === 'function') refreshIcons();
 }
 
 function renderExerciceGrid() {

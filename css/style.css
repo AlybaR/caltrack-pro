@@ -2565,32 +2565,55 @@ button:focus-visible,
 }
 
 /* Category tabs */
+/* Sport pills — horizontal scroll, no wrap, Lucide icons (cohérent avec Journal) */
 .ex-cats {
   display: flex;
-  gap: 6px;
-  flex-wrap: wrap;
+  gap: 8px;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
   padding: 14px 0 10px;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  scroll-snap-type: x proximity;
+  -webkit-overflow-scrolling: touch;
+  mask-image: linear-gradient(to right, #000 calc(100% - 24px), transparent 100%);
+  -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 24px), transparent 100%);
 }
+.ex-cats::-webkit-scrollbar { display: none; }
 
 .ex-cat-btn {
+  flex-shrink: 0;
+  display: inline-flex; align-items: center; gap: 6px;
   background: var(--bg);
-  border: 1.5px solid var(--bdr);
+  border: 1px solid var(--bdr);
   color: var(--txt2);
   border-radius: 999px;
-  padding: 5px 13px;
-  font-size: .75rem;
+  padding: 8px 14px;
+  font-size: .82rem;
   font-weight: 600;
   cursor: pointer;
   transition: all var(--fast) var(--ease2);
+  scroll-snap-align: start;
+  white-space: nowrap;
+  font-family: inherit;
 }
 
 .ex-cat-btn.active {
-  background: var(--acc);
+  background: var(--acc-bg);
   border-color: var(--acc);
-  color: #fff;
+  color: var(--acc);
+  font-weight: 700;
+  box-shadow: 0 0 0 3px rgba(200,81,42,.10);
 }
 
 .ex-cat-btn:hover:not(.active) { border-color: var(--acc); color: var(--acc); }
+
+.ex-cat-btn .ex-cat-ico {
+  width: 16px; height: 16px;
+  stroke-width: 1.8;
+  flex-shrink: 0;
+}
 
 /* Preset grid */
 .ex-preset-grid {
