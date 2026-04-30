@@ -56,7 +56,19 @@ body {
 .wrap { max-width:1200px; margin:0 auto; padding:0 24px; }
 
 /* ============================================================
-   STICKY NAV (apparaît au scroll)
+   ICON SYSTEM (inline SVG, gradient-fillable)
+   ============================================================ */
+.icn {
+  width:1em; height:1em;
+  display:inline-block; vertical-align:middle;
+  flex-shrink:0;
+  fill:none; stroke:currentColor;
+  stroke-width:2; stroke-linecap:round; stroke-linejoin:round;
+}
+.icn-fill { fill:currentColor; stroke:none; }
+
+/* ============================================================
+   STICKY NAV
    ============================================================ */
 .nav {
   position:fixed; top:0; left:0; right:0; z-index:100;
@@ -69,26 +81,23 @@ body {
   transform:translateY(-100%);
 }
 html[data-theme="dark"] .nav { background:rgba(14,12,10,.85); }
-.nav.scrolled {
-  transform:translateY(0);
-  border-bottom-color:var(--bdr);
-}
+.nav.scrolled { transform:translateY(0); border-bottom-color:var(--bdr); }
 .nav-inner {
   max-width:1200px; margin:0 auto;
   display:flex; align-items:center; justify-content:space-between; gap:16px;
 }
 .nav-brand {
   font-family:'Outfit',sans-serif; font-weight:800; font-size:1.15rem;
-  display:flex; align-items:center; gap:8px;
-  letter-spacing:-.01em;
+  display:flex; align-items:center; gap:10px;
+  letter-spacing:-.01em; text-decoration:none; color:inherit;
 }
 .nav-brand-mark {
-  width:28px; height:28px; border-radius:8px;
+  width:34px; height:34px; border-radius:10px;
   background:linear-gradient(135deg,var(--acc),var(--acc3));
   display:flex; align-items:center; justify-content:center;
-  font-size:.95rem;
-  box-shadow:0 4px 12px rgba(200,81,42,.35);
+  box-shadow:0 6px 16px rgba(200,81,42,.4);
 }
+.nav-brand-mark svg { width:18px; height:18px; color:#fff; }
 .nav-actions { display:flex; align-items:center; gap:10px; }
 .nav-link { color:var(--txt2); text-decoration:none; font-weight:500; font-size:.92rem; padding:6px 12px; border-radius:8px; transition:color .15s; }
 .nav-link:hover { color:var(--acc); }
@@ -105,19 +114,15 @@ html[data-theme="dark"] .nav { background:rgba(14,12,10,.85); }
   transition:all .2s var(--ease); white-space:nowrap;
   position:relative; overflow:hidden;
 }
+.btn .icn { width:18px; height:18px; }
 .btn-acc {
   background:linear-gradient(135deg,var(--acc),var(--acc2));
   color:#fff;
   box-shadow:0 12px 32px -8px rgba(200,81,42,.45);
 }
-.btn-acc:hover {
-  transform:translateY(-2px);
-  box-shadow:0 20px 48px -8px rgba(200,81,42,.55);
-}
+.btn-acc:hover { transform:translateY(-2px); box-shadow:0 20px 48px -8px rgba(200,81,42,.55); }
 .btn-acc:active { transform:translateY(0); }
-.btn-ghost {
-  background:var(--bg2); color:var(--txt); border:1.5px solid var(--bdr2);
-}
+.btn-ghost { background:var(--bg2); color:var(--txt); border:1.5px solid var(--bdr2); }
 .btn-ghost:hover { border-color:var(--acc); color:var(--acc); transform:translateY(-1px); }
 .btn-sm { padding:9px 18px; font-size:.88rem; }
 
@@ -125,9 +130,8 @@ html[data-theme="dark"] .nav { background:rgba(14,12,10,.85); }
    HERO
    ============================================================ */
 .hero {
-  position:relative; padding:120px 0 80px;
-  overflow:hidden;
-  text-align:center;
+  position:relative; padding:120px 0 60px;
+  overflow:hidden; text-align:center;
 }
 .hero-orb {
   position:absolute; border-radius:50%; filter:blur(80px);
@@ -160,9 +164,10 @@ html[data-theme="dark"] .nav { background:rgba(14,12,10,.85); }
   border-radius:28px;
   background:linear-gradient(135deg,var(--acc) 0%,var(--acc2) 50%,var(--acc3) 100%);
   display:flex; align-items:center; justify-content:center;
-  font-size:3.4rem; box-shadow:0 24px 60px -12px rgba(200,81,42,.55);
+  box-shadow:0 24px 60px -12px rgba(200,81,42,.55);
   animation:fadeInUp .8s var(--ease) .1s both, mark-breathe 6s ease-in-out infinite;
 }
+.hero-mark svg { width:54px; height:54px; color:#fff; }
 @keyframes mark-breathe { 0%,100% { transform:scale(1); } 50% { transform:scale(1.04); } }
 
 .hero h1 {
@@ -186,7 +191,7 @@ html[data-theme="dark"] .nav { background:rgba(14,12,10,.85); }
 }
 .hero-cta {
   display:flex; gap:14px; justify-content:center; flex-wrap:wrap;
-  margin-bottom:48px;
+  margin-bottom:40px;
   animation:fadeInUp .8s var(--ease) .4s both;
 }
 .hero-trust {
@@ -194,12 +199,13 @@ html[data-theme="dark"] .nav { background:rgba(14,12,10,.85); }
   font-size:.85rem; color:var(--mut);
   animation:fadeInUp .8s var(--ease) .5s both;
 }
-.hero-trust span { display:flex; align-items:center; gap:6px; }
+.hero-trust span { display:inline-flex; align-items:center; gap:6px; }
+.hero-trust .icn { width:14px; height:14px; color:var(--well); }
 
 @keyframes fadeInUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
 
 /* ============================================================
-   STATS BAR (counters animés)
+   STATS BAR
    ============================================================ */
 .stats-bar {
   display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:16px;
@@ -252,7 +258,6 @@ html[data-theme="dark"] .nav { background:rgba(14,12,10,.85); }
 .section.center .sub { text-align:center; }
 .section.center .sub { margin-left:auto; margin-right:auto; }
 
-/* Reveal on scroll */
 .reveal { opacity:0; transform:translateY(28px); transition:opacity .9s var(--ease), transform .9s var(--ease); will-change:opacity, transform; }
 .reveal.in { opacity:1; transform:translateY(0); }
 .reveal-stagger > * { opacity:0; transform:translateY(20px); transition:opacity .7s var(--ease), transform .7s var(--ease); }
@@ -260,6 +265,202 @@ html[data-theme="dark"] .nav { background:rgba(14,12,10,.85); }
 .reveal-stagger.in > *:nth-child(2) { opacity:1; transform:translateY(0); transition-delay:.12s; }
 .reveal-stagger.in > *:nth-child(3) { opacity:1; transform:translateY(0); transition-delay:.24s; }
 .reveal-stagger.in > *:nth-child(4) { opacity:1; transform:translateY(0); transition-delay:.36s; }
+
+/* ============================================================
+   ANIMATED PHONE MOCKUP DEMO
+   ============================================================ */
+.demo-section {
+  position:relative;
+  background:linear-gradient(180deg, var(--bg) 0%, var(--bg2) 50%, var(--bg) 100%);
+  padding:100px 0;
+  overflow:hidden;
+}
+.demo-grid {
+  display:grid; grid-template-columns:1fr 1fr; gap:64px;
+  align-items:center; max-width:1100px; margin:0 auto;
+}
+@media (max-width:880px) {
+  .demo-grid { grid-template-columns:1fr; gap:40px; text-align:center; }
+}
+.demo-text h2 { font-size:clamp(1.6rem,4vw,2.8rem); margin-bottom:18px; }
+.demo-features {
+  list-style:none; margin-top:28px; display:grid; gap:18px;
+}
+.demo-features li {
+  display:flex; gap:14px; align-items:flex-start;
+}
+.demo-features .icn-wrap {
+  width:40px; height:40px; flex-shrink:0;
+  border-radius:12px;
+  background:linear-gradient(135deg,rgba(200,81,42,.12),rgba(200,81,42,.04));
+  display:flex; align-items:center; justify-content:center;
+}
+.demo-features .icn-wrap .icn { width:20px; height:20px; color:var(--acc); }
+.demo-features .feat-name { font-family:'Outfit',sans-serif; font-weight:700; font-size:1rem; margin-bottom:2px; }
+.demo-features .feat-desc { font-size:.9rem; color:var(--mut); }
+
+/* Phone frame */
+.phone {
+  width:300px; height:620px; max-width:90vw;
+  margin:0 auto;
+  background:#0A0A0A;
+  border-radius:42px;
+  padding:14px;
+  position:relative;
+  box-shadow:
+    0 0 0 2px #2A2A2A,
+    0 40px 80px -20px rgba(20,8,0,.5),
+    0 12px 32px rgba(200,81,42,.18);
+}
+.phone::before {
+  content:''; position:absolute; top:18px; left:50%; transform:translateX(-50%);
+  width:90px; height:24px; background:#0A0A0A; border-radius:0 0 14px 14px;
+  z-index:3;
+}
+.phone-screen {
+  width:100%; height:100%;
+  background:var(--bg);
+  border-radius:30px;
+  overflow:hidden;
+  position:relative;
+}
+
+/* Animated screens cycling */
+.frame {
+  position:absolute; inset:0;
+  padding:48px 18px 18px;
+  opacity:0;
+  animation:frameCycle 16s infinite;
+}
+.frame-1 { animation-delay:0s; }
+.frame-2 { animation-delay:4s; }
+.frame-3 { animation-delay:8s; }
+.frame-4 { animation-delay:12s; }
+@keyframes frameCycle {
+  0%, 22% { opacity:0; transform:translateY(20px); }
+  3%, 22% { opacity:1; transform:translateY(0); }
+  25%, 100% { opacity:0; transform:translateY(-20px); }
+}
+
+.frame-greeting {
+  font-family:'Outfit',sans-serif; font-weight:800;
+  font-size:1.1rem; color:var(--txt); margin-bottom:6px;
+}
+.frame-sub { font-size:.78rem; color:var(--mut); margin-bottom:20px; }
+
+/* Frame 1 — Hero ring */
+.demo-ring-wrap { position:relative; display:flex; justify-content:center; margin:8px 0 16px; }
+.demo-ring-svg { width:170px; height:170px; }
+.demo-ring-track { stroke:rgba(200,81,42,.10); }
+.demo-ring-arc {
+  stroke:url(#demoGrad);
+  stroke-dasharray:534;
+  stroke-dashoffset:160;
+  animation:ringFill 2s var(--ease) forwards;
+}
+@keyframes ringFill { from { stroke-dashoffset:534; } to { stroke-dashoffset:160; } }
+
+.demo-ring-num {
+  position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+  text-align:center;
+}
+.demo-ring-big {
+  font-family:'Outfit',sans-serif; font-weight:900; font-size:2.2rem;
+  letter-spacing:-.04em; color:var(--txt);
+  font-variant-numeric:tabular-nums;
+  animation:numCount 2s var(--ease) forwards;
+}
+@keyframes numCount {
+  0% { content:'0'; }
+  100% { content:'1247'; }
+}
+.demo-ring-lbl { font-size:.62rem; color:var(--mut); font-weight:600; }
+
+.demo-stats { display:grid; grid-template-columns:repeat(3,1fr); gap:6px; padding:0 4px; }
+.demo-stat {
+  background:var(--card); border:1px solid var(--bdr);
+  border-radius:10px; padding:8px 4px; text-align:center;
+}
+.demo-stat-v { font-family:'Outfit',sans-serif; font-weight:800; font-size:.85rem; color:var(--txt); }
+.demo-stat-l { font-size:.55rem; color:var(--mut); margin-top:2px; }
+
+/* Frame 2 — Add meal */
+.demo-meal-card {
+  background:var(--card); border:1px solid var(--bdr);
+  border-radius:14px; padding:14px; margin-bottom:10px;
+}
+.demo-meal-h { display:flex; justify-content:space-between; align-items:center; font-family:'Outfit',sans-serif; font-weight:700; font-size:.85rem; }
+.demo-meal-h .acc-text { color:var(--acc); }
+.demo-meal-cta {
+  background:linear-gradient(135deg,var(--acc),var(--acc2));
+  color:#fff; padding:10px 14px; border-radius:10px;
+  font-family:'Outfit',sans-serif; font-weight:700; font-size:.78rem;
+  text-align:center; margin-top:10px;
+  animation:ctaPulse 1.5s ease-in-out infinite;
+}
+@keyframes ctaPulse { 0%,100% { box-shadow:0 4px 12px rgba(200,81,42,.3); } 50% { box-shadow:0 6px 24px rgba(200,81,42,.6); } }
+.demo-recents { display:flex; gap:6px; flex-wrap:wrap; margin-top:10px; }
+.demo-recent {
+  background:var(--bg); border:1px solid var(--bdr);
+  border-radius:999px; padding:6px 10px;
+  font-size:.7rem; color:var(--txt); font-weight:600;
+}
+
+/* Frame 3 — Sport */
+.demo-sport-icon {
+  width:46px; height:46px; border-radius:14px;
+  background:linear-gradient(135deg,var(--well),var(--well-deep));
+  display:flex; align-items:center; justify-content:center;
+  margin-bottom:14px;
+  box-shadow:0 8px 20px rgba(132,169,140,.35);
+}
+.demo-sport-icon svg { width:24px; height:24px; color:#fff; }
+.demo-sport-num { font-family:'Outfit',sans-serif; font-weight:900; font-size:2rem; letter-spacing:-.03em; color:var(--well-deep); }
+.demo-sport-num .unit { font-size:.55em; color:var(--mut); }
+.demo-sport-list { margin-top:14px; }
+.demo-sport-item {
+  display:flex; justify-content:space-between; align-items:center;
+  padding:8px 12px; background:var(--card); border:1px solid var(--bdr);
+  border-radius:10px; margin-bottom:6px;
+  font-size:.75rem;
+}
+.demo-sport-item .sub { color:var(--mut); font-size:.65rem; }
+
+/* Frame 4 — Weight curve */
+.demo-weight-stat {
+  display:flex; align-items:baseline; gap:8px;
+  margin-bottom:14px;
+}
+.demo-weight-big {
+  font-family:'Outfit',sans-serif; font-weight:900; font-size:2.2rem;
+  letter-spacing:-.04em; color:var(--txt);
+}
+.demo-weight-delta {
+  font-family:'Outfit',sans-serif; font-weight:700;
+  background:rgba(132,169,140,.15); color:var(--well-deep);
+  padding:3px 10px; border-radius:999px; font-size:.78rem;
+}
+.demo-curve-svg { width:100%; height:80px; }
+.demo-curve-path {
+  stroke:url(#weightGrad); stroke-width:3; fill:none;
+  stroke-linecap:round; stroke-linejoin:round;
+  stroke-dasharray:300; stroke-dashoffset:300;
+  animation:curveDraw 2s var(--ease) .3s forwards;
+}
+@keyframes curveDraw { to { stroke-dashoffset:0; } }
+.demo-curve-area {
+  fill:url(#weightAreaGrad); opacity:0;
+  animation:areaShow 1.5s var(--ease) 1.5s forwards;
+}
+@keyframes areaShow { to { opacity:.5; } }
+
+/* Frame indicators */
+.frame-dots {
+  position:absolute; bottom:18px; left:50%; transform:translateX(-50%);
+  display:flex; gap:6px;
+}
+.frame-dot { width:6px; height:6px; border-radius:50%; background:rgba(200,81,42,.2); }
+.frame-dot.active { background:var(--acc); width:18px; border-radius:3px; transition:all .3s; }
 
 /* ============================================================
    3 PROMESSES
@@ -272,7 +473,6 @@ html[data-theme="dark"] .nav { background:rgba(14,12,10,.85); }
   border-radius:var(--r-xl); padding:36px 28px;
   position:relative; overflow:hidden;
   transition:all .3s var(--ease);
-  cursor:default;
 }
 .promise-card::before {
   content:''; position:absolute; top:-50%; right:-50%; width:200%; height:200%;
@@ -289,13 +489,17 @@ html[data-theme="dark"] .nav { background:rgba(14,12,10,.85); }
 .promise-icon {
   width:64px; height:64px;
   display:flex; align-items:center; justify-content:center;
-  font-size:2.2rem;
-  background:linear-gradient(135deg,rgba(200,81,42,.10),rgba(200,81,42,.04));
+  background:linear-gradient(135deg,var(--acc),var(--acc2));
   border-radius:18px;
   margin-bottom:22px;
+  box-shadow:0 10px 24px -8px rgba(200,81,42,.5);
   transition:transform .4s var(--ease-spring);
 }
+.promise-icon svg { width:30px; height:30px; color:#fff; }
 .promise-card:hover .promise-icon { transform:scale(1.1) rotate(-5deg); }
+.promise-card.well .promise-icon { background:linear-gradient(135deg,var(--well),var(--well-deep)); box-shadow:0 10px 24px -8px rgba(132,169,140,.5); }
+.promise-card.info .promise-icon { background:linear-gradient(135deg,var(--info),#3F6F8E); box-shadow:0 10px 24px -8px rgba(91,141,172,.5); }
+
 .promise-name {
   font-family:'Outfit',sans-serif;
   font-weight:800; font-size:1.4rem;
@@ -318,98 +522,31 @@ html[data-theme="dark"] .nav { background:rgba(14,12,10,.85); }
 }
 
 /* ============================================================
-   COMMENT ÇA MARCHE — 3 ÉTAPES
+   PRINCIPES — what we stand for (positive framing, no comparison)
    ============================================================ */
-.steps { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:28px; }
-.step {
+.values-grid {
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:18px;
+  max-width:1000px; margin:0 auto;
+}
+.value-item {
+  text-align:center; padding:28px 20px;
   background:var(--card); border:1px solid var(--bdr);
-  border-radius:var(--r-xl); padding:32px 28px;
-  position:relative;
+  border-radius:var(--r-lg);
+  transition:all .25s var(--ease);
 }
-.step-num {
-  position:absolute; top:-20px; left:28px;
-  width:48px; height:48px; border-radius:14px;
-  background:linear-gradient(135deg,var(--acc),var(--acc2));
-  color:#fff; display:flex; align-items:center; justify-content:center;
-  font-family:'Outfit',sans-serif; font-weight:900; font-size:1.4rem;
-  box-shadow:0 8px 24px -6px rgba(200,81,42,.55);
-}
-.step-mockup {
-  width:100%; aspect-ratio:9/16;
-  max-height:280px;
-  background:linear-gradient(135deg,var(--bg),var(--bg2));
-  border:1.5px solid var(--bdr);
-  border-radius:18px; margin:24px 0 18px;
-  position:relative; overflow:hidden;
+.value-item:hover { border-color:var(--well); transform:translateY(-3px); }
+.value-icn {
+  width:52px; height:52px; margin:0 auto 14px;
+  border-radius:14px;
+  background:linear-gradient(135deg, rgba(132,169,140,.15), rgba(132,169,140,.05));
   display:flex; align-items:center; justify-content:center;
 }
-.step-mockup-content {
-  text-align:center; padding:18px;
+.value-icn svg { width:26px; height:26px; color:var(--well-deep); }
+.value-name {
+  font-family:'Outfit',sans-serif; font-weight:700; font-size:1rem;
+  margin-bottom:6px;
 }
-.step-mockup-emoji { font-size:3.5rem; line-height:1; margin-bottom:10px; display:block; animation:bounce-soft 3s ease-in-out infinite; }
-@keyframes bounce-soft { 0%,100% { transform:translateY(0); } 50% { transform:translateY(-8px); } }
-.step-mockup-text {
-  font-family:'Outfit',sans-serif; font-weight:700; color:var(--txt);
-  font-size:.95rem;
-}
-.step-mockup-num {
-  font-family:'Outfit',sans-serif; font-weight:800;
-  font-size:2.2rem; color:var(--acc);
-  font-variant-numeric:tabular-nums;
-}
-.step-mockup-num .small { font-size:.5em; color:var(--mut); }
-.step h3 { font-family:'Outfit',sans-serif; font-weight:800; font-size:1.15rem; margin-bottom:8px; letter-spacing:-.01em; }
-.step p { color:var(--txt2); font-size:.92rem; line-height:1.5; }
-
-/* ============================================================
-   COMPARISON — vs concurrents
-   ============================================================ */
-.compare-grid {
-  display:grid; grid-template-columns:1fr 1fr; gap:20px;
-  max-width:920px; margin:0 auto;
-}
-@media (max-width:680px) { .compare-grid { grid-template-columns:1fr; } }
-.compare-col {
-  background:var(--card); border-radius:var(--r-xl);
-  padding:32px 28px;
-  position:relative;
-  transition:transform .3s var(--ease);
-}
-.compare-col.bad {
-  border:1.5px solid rgba(188,53,53,.20);
-  background:linear-gradient(180deg,rgba(188,53,53,.03),transparent);
-}
-.compare-col.good {
-  border:1.5px solid rgba(132,169,140,.30);
-  background:linear-gradient(180deg,rgba(132,169,140,.06),transparent);
-  box-shadow:var(--shadow-md);
-  transform:scale(1.02);
-}
-.compare-col.good:hover { transform:scale(1.04) translateY(-4px); box-shadow:var(--shadow-lg); }
-.compare-h {
-  font-family:'Outfit',sans-serif; font-weight:800; font-size:1.2rem;
-  margin-bottom:18px; display:flex; align-items:center; gap:10px;
-}
-.compare-h.bad { color:var(--mut); }
-.compare-h.bad em { text-decoration:line-through; font-style:normal; }
-.compare-h.good { color:var(--well-deep); }
-.compare-list { list-style:none; padding:0; }
-.compare-list li {
-  font-size:.94rem; padding:9px 0;
-  display:flex; align-items:flex-start; gap:10px;
-  border-bottom:1px dashed var(--bdr);
-}
-.compare-list li:last-child { border-bottom:none; }
-.compare-col.bad li { color:var(--txt2); }
-.compare-col.bad li::before {
-  content:'✗'; color:#BC3535; font-weight:900; font-size:1rem;
-  width:18px; flex-shrink:0;
-}
-.compare-col.good li { color:var(--txt); font-weight:500; }
-.compare-col.good li::before {
-  content:'✓'; color:var(--well-deep); font-weight:900; font-size:1rem;
-  width:18px; flex-shrink:0;
-}
+.value-desc { color:var(--mut); font-size:.85rem; }
 
 /* ============================================================
    FAQ
@@ -431,16 +568,13 @@ html[data-theme="dark"] .nav { background:rgba(14,12,10,.85); }
 .faq-q::-webkit-details-marker { display:none; }
 .faq-q::after {
   content:''; width:22px; height:22px; flex-shrink:0;
-  border-radius:50%; background:var(--acc-bg,rgba(200,81,42,.1));
+  border-radius:50%; background:rgba(200,81,42,.1);
   background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg' fill='none' stroke='%23C8512A' stroke-width='2.5' stroke-linecap='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
   background-size:14px; background-position:center; background-repeat:no-repeat;
   transition:transform .3s var(--ease);
 }
 .faq-item[open] .faq-q::after { transform:rotate(180deg); }
-.faq-a {
-  padding-top:14px; color:var(--txt2);
-  font-size:.94rem; line-height:1.65;
-}
+.faq-a { padding-top:14px; color:var(--txt2); font-size:.94rem; line-height:1.65; }
 .faq-a a { color:var(--acc); }
 
 /* ============================================================
@@ -458,10 +592,7 @@ html[data-theme="dark"] .nav { background:rgba(14,12,10,.85); }
 .cta-final * { position:relative; z-index:1; }
 .cta-final h2 { color:#fff; margin-bottom:14px; }
 .cta-final .sub { color:rgba(255,255,255,.92); margin-bottom:36px; max-width:600px; margin-left:auto; margin-right:auto; }
-.cta-final .btn {
-  background:#fff; color:var(--acc); font-weight:800;
-  box-shadow:0 16px 40px -8px rgba(0,0,0,.3);
-}
+.cta-final .btn { background:#fff; color:var(--acc); font-weight:800; box-shadow:0 16px 40px -8px rgba(0,0,0,.3); }
 .cta-final .btn:hover { background:#FFF8F2; transform:translateY(-3px); }
 
 /* ============================================================
@@ -473,17 +604,14 @@ footer { padding:48px 24px 64px; background:var(--bg2); border-top:1px solid var
   display:flex; justify-content:space-between; align-items:center;
   flex-wrap:wrap; gap:20px;
 }
-.foot-brand {
-  font-family:'Outfit',sans-serif; font-weight:800; font-size:1rem;
-  display:flex; align-items:center; gap:10px;
-}
+.foot-brand { font-family:'Outfit',sans-serif; font-weight:800; font-size:1rem; display:flex; align-items:center; gap:10px; }
 .foot-brand small { color:var(--mut); font-weight:400; font-size:.78rem; }
 .foot-links { display:flex; gap:22px; flex-wrap:wrap; }
 .foot-links a { color:var(--mut); font-size:.86rem; text-decoration:none; transition:color .15s; }
 .foot-links a:hover { color:var(--acc); }
 
 /* ============================================================
-   STICKY BOTTOM CTA (mobile only)
+   STICKY BOTTOM CTA (mobile)
    ============================================================ */
 .sticky-cta {
   position:fixed; bottom:0; left:0; right:0; z-index:99;
@@ -499,14 +627,8 @@ html[data-theme="dark"] .sticky-cta { background:rgba(14,12,10,.95); }
 .sticky-cta.show { transform:translateY(0); }
 .sticky-cta-inner { display:flex; gap:10px; align-items:center; max-width:600px; margin:0 auto; }
 .sticky-cta .btn { flex:1; padding:14px 18px; font-size:.92rem; justify-content:center; }
+@media (max-width:680px) { body.has-sticky-cta { padding-bottom:88px; } }
 
-@media (max-width:680px) {
-  body.has-sticky-cta { padding-bottom:88px; }
-}
-
-/* ============================================================
-   MOTION-REDUCED
-   ============================================================ */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration:.01ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important; }
 }
@@ -515,19 +637,112 @@ html[data-theme="dark"] .sticky-cta { background:rgba(14,12,10,.95); }
 <body>
 
 <!-- ============================================================
+     SVG ICON SPRITE (defined once, used many times)
+     ============================================================ -->
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none">
+  <defs>
+    <linearGradient id="demoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#D97553"/>
+      <stop offset="55%" stop-color="#C8512A"/>
+      <stop offset="100%" stop-color="#7A2A12"/>
+    </linearGradient>
+    <linearGradient id="weightGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#84A98C"/>
+      <stop offset="100%" stop-color="#5C7F66"/>
+    </linearGradient>
+    <linearGradient id="weightAreaGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#84A98C" stop-opacity=".5"/>
+      <stop offset="100%" stop-color="#84A98C" stop-opacity="0"/>
+    </linearGradient>
+
+    <!-- Symbols (icons) -->
+    <symbol id="i-leaf" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19.2 2.96c1.3 7.5-1.6 13.7-8.2 17.04Z"/>
+      <path d="M2 21c0-3 1.85-5.36 5.08-6"/>
+    </symbol>
+    <symbol id="i-utensils" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/>
+      <path d="M7 2v20"/>
+      <path d="M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/>
+    </symbol>
+    <symbol id="i-dumbbell" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M14.4 14.4 9.6 9.6"/>
+      <path d="M18.657 21.485a2 2 0 1 1-2.829-2.828l-1.767 1.768a2 2 0 1 1-2.829-2.829l6.364-6.364a2 2 0 1 1 2.829 2.829l-1.768 1.767a2 2 0 1 1 2.828 2.829Z"/>
+      <path d="m21.5 21.5-1.4-1.4"/>
+      <path d="M3.9 3.9 2.5 2.5"/>
+      <path d="M6.404 12.768a2 2 0 1 1-2.829-2.829l1.768-1.767a2 2 0 1 1-2.828-2.829l2.828-2.828a2 2 0 1 1 2.829 2.828l1.767-1.768a2 2 0 1 1 2.829 2.829z"/>
+    </symbol>
+    <symbol id="i-target" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="10"/>
+      <circle cx="12" cy="12" r="6"/>
+      <circle cx="12" cy="12" r="2"/>
+    </symbol>
+    <symbol id="i-scan" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M3 7V5a2 2 0 0 1 2-2h2"/>
+      <path d="M17 3h2a2 2 0 0 1 2 2v2"/>
+      <path d="M21 17v2a2 2 0 0 1-2 2h-2"/>
+      <path d="M7 21H5a2 2 0 0 1-2-2v-2"/>
+      <path d="M7 12h10"/>
+    </symbol>
+    <symbol id="i-zap" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/>
+    </symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/>
+      <path d="m9 12 2 2 4-4"/>
+    </symbol>
+    <symbol id="i-heart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
+    </symbol>
+    <symbol id="i-sparkle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/>
+    </symbol>
+    <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M20 6 9 17l-5-5"/>
+    </symbol>
+    <symbol id="i-eye-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"/>
+      <path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"/>
+      <path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"/>
+      <line x1="2" x2="22" y1="2" y2="22"/>
+    </symbol>
+    <symbol id="i-globe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="10"/>
+      <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/>
+      <path d="M2 12h20"/>
+    </symbol>
+    <symbol id="i-code" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="16 18 22 12 16 6"/>
+      <polyline points="8 6 2 12 8 18"/>
+    </symbol>
+    <symbol id="i-arrow-right" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M5 12h14"/>
+      <path d="m12 5 7 7-7 7"/>
+    </symbol>
+    <symbol id="i-flame" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/>
+    </symbol>
+    <symbol id="i-trending" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/>
+      <polyline points="16 7 22 7 22 13"/>
+    </symbol>
+  </defs>
+</svg>
+
+<!-- ============================================================
      STICKY NAV
      ============================================================ -->
 <nav class="nav" id="nav">
   <div class="nav-inner">
     <a href="#" class="nav-brand">
-      <span class="nav-brand-mark">🌿</span>
+      <span class="nav-brand-mark"><svg><use href="#i-leaf"/></svg></span>
       <span>Lyno</span>
     </a>
     <div class="nav-actions">
       <a href="#features" class="nav-link hide-sm">Features</a>
-      <a href="#how" class="nav-link hide-sm">Comment ça marche</a>
+      <a href="#how" class="nav-link hide-sm">Demo</a>
       <a href="#faq" class="nav-link hide-sm">FAQ</a>
-      <a href="./index.html" class="btn btn-acc btn-sm">Essayer →</a>
+      <a href="./index.html" class="btn btn-acc btn-sm">Essayer <svg class="icn"><use href="#i-arrow-right"/></svg></a>
     </div>
   </div>
 </nav>
@@ -546,7 +761,7 @@ html[data-theme="dark"] .sticky-cta { background:rgba(14,12,10,.95); }
       <span>Bientôt sur Play Store</span>
     </div>
 
-    <div class="hero-mark">🌿</div>
+    <div class="hero-mark"><svg><use href="#i-leaf"/></svg></div>
 
     <h1>
       Atteins ton objectif,<br>
@@ -560,21 +775,20 @@ html[data-theme="dark"] .sticky-cta { background:rgba(14,12,10,.95); }
 
     <div class="hero-cta">
       <a href="https://play.google.com/store/apps/details?id=io.github.alybar.lyno" class="btn btn-acc">
-        📱 Bientôt sur Play Store
+        Bientôt sur Play Store <svg class="icn"><use href="#i-arrow-right"/></svg>
       </a>
       <a href="./index.html" class="btn btn-ghost">
-        🌐 Essayer dans le navigateur
+        Essayer dans le navigateur
       </a>
     </div>
 
     <div class="hero-trust">
-      <span>🔒 RGPD strict</span>
-      <span>🇪🇺 Serveurs UE</span>
-      <span>📂 Code source ouvert</span>
-      <span>💛 100% gratuit</span>
+      <span><svg class="icn"><use href="#i-shield"/></svg> RGPD strict</span>
+      <span><svg class="icn"><use href="#i-globe"/></svg> Serveurs UE</span>
+      <span><svg class="icn"><use href="#i-code"/></svg> Code source ouvert</span>
+      <span><svg class="icn"><use href="#i-heart"/></svg> 100% gratuit</span>
     </div>
 
-    <!-- Counters animés -->
     <div class="stats-bar reveal" id="statsBar">
       <div class="stat-item">
         <div class="stat-num" data-counter="2000000">0<span class="unit">+</span></div>
@@ -597,6 +811,167 @@ html[data-theme="dark"] .sticky-cta { background:rgba(14,12,10,.95); }
 </section>
 
 <!-- ============================================================
+     ANIMATED DEMO — phone mockup with 4 cycling frames
+     ============================================================ -->
+<section class="demo-section" id="how">
+  <div class="wrap">
+    <div class="demo-grid">
+      <div class="demo-text reveal">
+        <span class="eyebrow">Voir Lyno en action</span>
+        <h2>Suis ton quotidien<br><span style="background:linear-gradient(135deg,var(--acc),var(--acc2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">en quelques secondes</span></h2>
+        <p class="sub">Les bons écrans au bon moment. L'app reste simple même quand tu en demandes plus.</p>
+
+        <ul class="demo-features">
+          <li>
+            <div class="icn-wrap"><svg class="icn"><use href="#i-target"/></svg></div>
+            <div>
+              <div class="feat-name">Anneau de calories</div>
+              <div class="feat-desc">Combien tu peux encore manger aujourd'hui — d'un coup d'œil.</div>
+            </div>
+          </li>
+          <li>
+            <div class="icn-wrap"><svg class="icn"><use href="#i-scan"/></svg></div>
+            <div>
+              <div class="feat-name">Scan code-barres + Récents</div>
+              <div class="feat-desc">L'app apprend ce que tu manges et propose ce qu'il te faut au bon repas.</div>
+            </div>
+          </li>
+          <li>
+            <div class="icn-wrap"><svg class="icn"><use href="#i-dumbbell"/></svg></div>
+            <div>
+              <div class="feat-name">Sport intégré</div>
+              <div class="feat-desc">Cardio + muscu détaillée. Les calories brûlées s'ajoutent à ton budget.</div>
+            </div>
+          </li>
+          <li>
+            <div class="icn-wrap"><svg class="icn"><use href="#i-trending"/></svg></div>
+            <div>
+              <div class="feat-name">Trajectoire visible</div>
+              <div class="feat-desc">Courbe de poids, prédiction ETA, alerte plateau. Tu sais où tu vas.</div>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="reveal" style="display:flex; justify-content:center;">
+        <div class="phone">
+          <div class="phone-screen">
+
+            <!-- FRAME 1 — Dashboard hero ring -->
+            <div class="frame frame-1">
+              <div class="frame-greeting">Bonjour <span style="color:var(--acc)">Thomas</span></div>
+              <div class="frame-sub">Il te reste <b style="color:var(--txt)">1 247 kcal</b> et 2 repas</div>
+
+              <div class="demo-ring-wrap">
+                <svg class="demo-ring-svg" viewBox="0 0 200 200">
+                  <circle class="demo-ring-track" cx="100" cy="100" r="85" stroke-width="14" fill="none"/>
+                  <circle class="demo-ring-arc" cx="100" cy="100" r="85" stroke-width="14" fill="none"
+                          stroke-linecap="round" transform="rotate(-90 100 100)"/>
+                </svg>
+                <div class="demo-ring-num">
+                  <div class="demo-ring-big" id="demoRingNum">1247</div>
+                  <div class="demo-ring-lbl">kcal restantes</div>
+                </div>
+              </div>
+
+              <div class="demo-stats">
+                <div class="demo-stat"><div class="demo-stat-v">2200</div><div class="demo-stat-l">Objectif</div></div>
+                <div class="demo-stat"><div class="demo-stat-v">953</div><div class="demo-stat-l">Mangé</div></div>
+                <div class="demo-stat"><div class="demo-stat-v" style="color:var(--well-deep)">+412</div><div class="demo-stat-l">Brûlé</div></div>
+              </div>
+            </div>
+
+            <!-- FRAME 2 — Add meal via récents -->
+            <div class="frame frame-2">
+              <div class="frame-greeting">Journal</div>
+              <div class="frame-sub">Petit-déjeuner — <b style="color:var(--txt)">320 kcal</b></div>
+
+              <div class="demo-meal-card">
+                <div class="demo-meal-h">
+                  <span><svg class="icn" style="width:14px;height:14px;color:var(--acc);"><use href="#i-utensils"/></svg> Récents</span>
+                  <span class="acc-text">Top 3</span>
+                </div>
+                <div class="demo-recents">
+                  <span class="demo-recent">Café · 5</span>
+                  <span class="demo-recent">Croissant · 230</span>
+                  <span class="demo-recent">Banane · 89</span>
+                </div>
+              </div>
+
+              <div class="demo-meal-card" style="margin-top:14px;">
+                <div class="demo-meal-h">
+                  <span><svg class="icn" style="width:14px;height:14px;color:var(--well-deep);"><use href="#i-scan"/></svg> Scanner</span>
+                </div>
+                <div class="demo-meal-cta">📷 Scanner un code-barres</div>
+              </div>
+            </div>
+
+            <!-- FRAME 3 — Sport -->
+            <div class="frame frame-3">
+              <div class="frame-greeting">Sport aujourd'hui</div>
+              <div class="frame-sub">1 séance · <b style="color:var(--well-deep)">412 kcal brûlées</b></div>
+
+              <div class="demo-sport-icon">
+                <svg><use href="#i-dumbbell"/></svg>
+              </div>
+              <div class="demo-sport-num">412<span class="unit"> kcal</span></div>
+              <div style="font-size:.7rem;color:var(--mut);margin-top:2px;">en 30 min</div>
+
+              <div class="demo-sport-list">
+                <div class="demo-sport-item">
+                  <span><b>Course à pied</b><div class="sub">30 min · 5 km</div></span>
+                  <span style="color:var(--well-deep);font-weight:700;">+412</span>
+                </div>
+                <div class="demo-sport-item">
+                  <span><b>Squat</b><div class="sub">3×8 · 80 kg</div></span>
+                  <span style="color:var(--mut);font-size:.65rem;">PR</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- FRAME 4 — Weight curve -->
+            <div class="frame frame-4">
+              <div class="frame-greeting">Poids</div>
+              <div class="frame-sub">7 derniers jours</div>
+
+              <div class="demo-weight-stat">
+                <div class="demo-weight-big">82,4<span style="font-size:.55em;color:var(--mut);"> kg</span></div>
+                <div class="demo-weight-delta">−0,8 kg cette semaine</div>
+              </div>
+
+              <svg class="demo-curve-svg" viewBox="0 0 240 80" preserveAspectRatio="none">
+                <path class="demo-curve-area" d="M0,30 Q40,20 80,28 T160,40 T240,55 L240,80 L0,80 Z"/>
+                <path class="demo-curve-path" d="M0,30 Q40,20 80,28 T160,40 T240,55"/>
+                <circle cx="240" cy="55" r="4" fill="#5C7F66"/>
+              </svg>
+
+              <div style="display:flex;justify-content:space-between;font-size:.6rem;color:var(--mut);margin-top:6px;">
+                <span>Lun</span><span>Mer</span><span>Ven</span><span>Dim</span>
+              </div>
+
+              <div class="demo-meal-card" style="margin-top:14px;">
+                <div class="demo-meal-h">
+                  <span><svg class="icn" style="width:14px;height:14px;color:var(--well-deep);"><use href="#i-target"/></svg> Objectif</span>
+                  <span style="color:var(--well-deep);font-weight:700;font-size:.72rem;">12 août</span>
+                </div>
+                <div style="font-size:.72rem;color:var(--mut);margin-top:6px;">Plus que <b style="color:var(--txt)">4,4 kg</b> · ~6 semaines</div>
+              </div>
+            </div>
+
+            <div class="frame-dots">
+              <span class="frame-dot active" id="dot1"></span>
+              <span class="frame-dot" id="dot2"></span>
+              <span class="frame-dot" id="dot3"></span>
+              <span class="frame-dot" id="dot4"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
      3 PROMESSES
      ============================================================ -->
 <section class="section section-tinted center" id="features">
@@ -609,21 +984,21 @@ html[data-theme="dark"] .sticky-cta { background:rgba(14,12,10,.95); }
 
     <div class="promise-grid reveal-stagger">
       <div class="promise-card">
-        <div class="promise-icon">🍽️</div>
+        <div class="promise-icon"><svg><use href="#i-utensils"/></svg></div>
         <div class="promise-name">Suivre tes calories</div>
-        <p class="promise-desc">Scanner code-barres, recherche OpenFoodFacts (2M+ produits), favoris, récents intelligents.</p>
+        <p class="promise-desc">Scanner code-barres, recherche OpenFoodFacts (2M+ produits), favoris, récents intelligents pondérés par repas.</p>
         <ul class="promise-list">
           <li>Macros auto (P/L/G)</li>
           <li>Hydratation</li>
           <li>Micronutriments</li>
-          <li>4 répartitions : Std, Low-Carb, Keto, High-Protein</li>
+          <li>Standard, Low-Carb, Keto, High-Protein</li>
         </ul>
       </div>
 
-      <div class="promise-card">
-        <div class="promise-icon">🏋️</div>
+      <div class="promise-card well">
+        <div class="promise-icon"><svg><use href="#i-dumbbell"/></svg></div>
         <div class="promise-name">Suivre ton sport</div>
-        <p class="promise-desc">Cardio, muscu détaillée, séance globale. Tracking précis par exercice.</p>
+        <p class="promise-desc">Cardio, muscu détaillée, séance globale. Tracking précis par exercice avec progression dans le temps.</p>
         <ul class="promise-list">
           <li>Séries × reps × charges</li>
           <li>Calcul 1RM (Epley/Brzycki)</li>
@@ -632,12 +1007,12 @@ html[data-theme="dark"] .sticky-cta { background:rgba(14,12,10,.95); }
         </ul>
       </div>
 
-      <div class="promise-card">
-        <div class="promise-icon">⚖️</div>
+      <div class="promise-card info">
+        <div class="promise-icon"><svg><use href="#i-target"/></svg></div>
         <div class="promise-name">Atteindre ton poids</div>
-        <p class="promise-desc">Wizard scientifique (Mifflin-St Jeor), courbe de poids lissée, mensurations.</p>
+        <p class="promise-desc">Wizard scientifique (Mifflin-St Jeor), courbe de poids lissée, prédiction ETA temps réel.</p>
         <ul class="promise-list">
-          <li>Prédiction ETA personnalisée</li>
+          <li>ETA personnalisée et continue</li>
           <li>Détection de plateau</li>
           <li>% Masse grasse (formule Navy)</li>
           <li>Jalons motivants</li>
@@ -648,92 +1023,36 @@ html[data-theme="dark"] .sticky-cta { background:rgba(14,12,10,.95); }
 </section>
 
 <!-- ============================================================
-     COMMENT ÇA MARCHE
+     VALEURS — what we stand for (positive, no comparison)
      ============================================================ -->
-<section class="section center" id="how">
+<section class="section center">
   <div class="wrap">
     <div class="reveal">
-      <span class="eyebrow">En 3 étapes</span>
-      <h2>Comment ça marche</h2>
-      <p class="sub">Du téléchargement à ta première pesée — moins de 5 minutes.</p>
+      <span class="eyebrow">Ce qu'on défend</span>
+      <h2>Une app qui te respecte</h2>
+      <p class="sub">Ce que tu ne verras jamais dans Lyno. C'est un engagement, pas une promesse marketing.</p>
     </div>
 
-    <div class="steps reveal-stagger">
-      <div class="step">
-        <div class="step-num">1</div>
-        <div class="step-mockup">
-          <div class="step-mockup-content">
-            <span class="step-mockup-emoji">👤</span>
-            <div class="step-mockup-text">Wizard scientifique<br>30 secondes</div>
-          </div>
-        </div>
-        <h3>Ton profil</h3>
-        <p>Quelques infos (âge, taille, poids, objectif) → on calcule ton métabolisme et ton budget calorique optimal.</p>
+    <div class="values-grid reveal-stagger">
+      <div class="value-item">
+        <div class="value-icn"><svg><use href="#i-eye-off"/></svg></div>
+        <div class="value-name">Aucune pub</div>
+        <div class="value-desc">Ni bannière, ni interstitielle, ni native. Jamais.</div>
       </div>
-
-      <div class="step">
-        <div class="step-num">2</div>
-        <div class="step-mockup">
-          <div class="step-mockup-content">
-            <span class="step-mockup-emoji">📷</span>
-            <div class="step-mockup-text">Scan ou Récents<br>3 secondes par repas</div>
-          </div>
-        </div>
-        <h3>Logger ton quotidien</h3>
-        <p>Code-barres, recherche, ou récents pondérés par repas. L'app apprend ce que tu manges.</p>
+      <div class="value-item">
+        <div class="value-icn"><svg><use href="#i-shield"/></svg></div>
+        <div class="value-name">Aucun tracker</div>
+        <div class="value-desc">Pas de Facebook Pixel, pas de Google Analytics, rien.</div>
       </div>
-
-      <div class="step">
-        <div class="step-num">3</div>
-        <div class="step-mockup">
-          <div class="step-mockup-content">
-            <div class="step-mockup-num">−5,2<span class="small"> kg</span></div>
-            <div class="step-mockup-text" style="margin-top:8px">Suivre ta progression</div>
-          </div>
-        </div>
-        <h3>Atteindre ton objectif</h3>
-        <p>Courbe de poids, ETA en temps réel, alertes plateau. Tu sais où tu vas, tu sais quand tu y arrives.</p>
+      <div class="value-item">
+        <div class="value-icn"><svg><use href="#i-heart"/></svg></div>
+        <div class="value-name">Aucun paywall</div>
+        <div class="value-desc">Les 3 promesses restent gratuites pour toujours.</div>
       </div>
-    </div>
-  </div>
-</section>
-
-<!-- ============================================================
-     COMPARAISON CONCURRENTS
-     ============================================================ -->
-<section class="section section-tinted center">
-  <div class="wrap">
-    <div class="reveal">
-      <span class="eyebrow">La différence</span>
-      <h2>Ce qu'on ne fait <em style="font-style:normal;color:var(--acc)">pas</em></h2>
-      <p class="sub">Comparé aux apps "freemium" classiques (MyFitnessPal, Yazio, Lifesum…)</p>
-    </div>
-
-    <div class="compare-grid reveal-stagger">
-      <div class="compare-col bad">
-        <div class="compare-h bad">😬 <em>Les autres apps</em></div>
-        <ul class="compare-list">
-          <li>Pubs entre chaque action</li>
-          <li>Paywall caché à 60-80€/an</li>
-          <li>Trackers tiers (Facebook, Google)</li>
-          <li>Vente de données nutritionnelles</li>
-          <li>Inscription obligatoire dès l'ouverture</li>
-          <li>Coach virtuel culpabilisant</li>
-          <li>Code propriétaire fermé</li>
-        </ul>
-      </div>
-
-      <div class="compare-col good">
-        <div class="compare-h good">🌿 Lyno</div>
-        <ul class="compare-list">
-          <li>Aucune pub. Jamais.</li>
-          <li>100% gratuit. Aucun paywall.</li>
-          <li>Aucun tracker tiers</li>
-          <li>Tes données sont à toi (RGPD strict)</li>
-          <li>Mode local sans inscription complet</li>
-          <li>Ton, pas culpabilisant — encourageant</li>
-          <li>Code source public sur GitHub</li>
-        </ul>
+      <div class="value-item">
+        <div class="value-icn"><svg><use href="#i-code"/></svg></div>
+        <div class="value-name">Code ouvert</div>
+        <div class="value-desc">Source publique sur GitHub. Audit possible par tous.</div>
       </div>
     </div>
   </div>
@@ -742,12 +1061,12 @@ html[data-theme="dark"] .sticky-cta { background:rgba(14,12,10,.95); }
 <!-- ============================================================
      FAQ
      ============================================================ -->
-<section class="section center" id="faq">
+<section class="section section-tinted center" id="faq">
   <div class="wrap">
     <div class="reveal">
       <span class="eyebrow">FAQ</span>
       <h2>Les bonnes questions</h2>
-      <p class="sub">Si la réponse n'y est pas, écris-moi : <a href="mailto:lyno.app1@gmail.com" style="color:var(--acc);font-weight:600">lyno.app1@gmail.com</a></p>
+      <p class="sub">Si la réponse n'y est pas, écris-nous : <a href="mailto:lyno.app1@gmail.com" style="color:var(--acc);font-weight:600">lyno.app1@gmail.com</a></p>
     </div>
 
     <div class="faq-list">
@@ -764,11 +1083,6 @@ html[data-theme="dark"] .sticky-cta { background:rgba(14,12,10,.95); }
       <details class="faq-item">
         <summary class="faq-q">Comment vous protégez mes données ?</summary>
         <div class="faq-a">Mode local-only par défaut : tes données ne quittent jamais ton appareil. Si tu crées un compte (optionnel) : chiffrement HTTPS, stockage Google Firebase serveurs UE, tu es le seul à y accéder. RGPD strict, droit d'effacement à tout moment. <a href="privacy.html">Politique complète →</a></div>
-      </details>
-
-      <details class="faq-item">
-        <summary class="faq-q">Comparaison MyFitnessPal / Yazio / Lifesum ?</summary>
-        <div class="faq-a">Lyno est plus simple, plus rapide, plus honnête. Pas de feed social, pas de coach virtuel qui culpabilise. Plus orienté privacy. Idéale si tu cherches un tracker direct et neutre.</div>
       </details>
 
       <details class="faq-item">
@@ -795,7 +1109,7 @@ html[data-theme="dark"] .sticky-cta { background:rgba(14,12,10,.95); }
 <section class="cta-final">
   <h2>Prêt à commencer ?</h2>
   <p class="sub">2 minutes pour le wizard. Aucune inscription requise.</p>
-  <a href="./index.html" class="btn">Démarrer maintenant →</a>
+  <a href="./index.html" class="btn">Démarrer maintenant <svg class="icn" style="color:var(--acc);"><use href="#i-arrow-right"/></svg></a>
 </section>
 
 <!-- ============================================================
@@ -804,30 +1118,29 @@ html[data-theme="dark"] .sticky-cta { background:rgba(14,12,10,.95); }
 <footer>
   <div class="foot">
     <div class="foot-brand">
-      🌿 Lyno
-      <small>Made in France 🇫🇷</small>
+      <span style="display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:7px;background:linear-gradient(135deg,var(--acc),var(--acc2));"><svg class="icn" style="width:14px;height:14px;color:#fff;"><use href="#i-leaf"/></svg></span>
+      Lyno
+      <small>· Made in France 🇫🇷</small>
     </div>
     <div class="foot-links">
       <a href="privacy.html">Confidentialité</a>
       <a href="terms.html">Conditions</a>
       <a href="https://github.com/AlybaR/caltrack-pro">GitHub</a>
-      <a href="https://buymeacoffee.com/lyno" target="_blank" rel="noopener">☕ Soutenir</a>
+      <a href="https://buymeacoffee.com/lyno" target="_blank" rel="noopener">Soutenir</a>
       <a href="mailto:lyno.app1@gmail.com">Contact</a>
     </div>
   </div>
 </footer>
 
-<!-- ============================================================
-     STICKY BOTTOM CTA (mobile)
-     ============================================================ -->
+<!-- Sticky bottom CTA mobile -->
 <div class="sticky-cta" id="stickyCta">
   <div class="sticky-cta-inner">
-    <a href="./index.html" class="btn btn-acc">Essayer Lyno →</a>
+    <a href="./index.html" class="btn btn-acc">Essayer Lyno <svg class="icn"><use href="#i-arrow-right"/></svg></a>
   </div>
 </div>
 
 <script>
-// Auto dark mode au 1er load
+// Auto dark mode
 (function() {
   const saved = localStorage.getItem('theme');
   if (saved === 'dark' || (!saved && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
@@ -835,25 +1148,20 @@ html[data-theme="dark"] .sticky-cta { background:rgba(14,12,10,.95); }
   }
 })();
 
-// Reveal sections au scroll
+// Reveal on scroll
 const io = new IntersectionObserver((entries) => {
   entries.forEach(e => {
-    if (e.isIntersecting) {
-      e.target.classList.add('in');
-      io.unobserve(e.target);
-    }
+    if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
   });
 }, { threshold: 0.15, rootMargin: '0px 0px -50px 0px' });
-
 document.querySelectorAll('.reveal, .reveal-stagger').forEach(el => io.observe(el));
 
-// Sticky nav + sticky CTA mobile
+// Sticky nav
 const nav = document.getElementById('nav');
 const sticky = document.getElementById('stickyCta');
-let scrollY = 0;
-function onScroll() {
-  scrollY = window.scrollY;
-  if (scrollY > 200) {
+window.addEventListener('scroll', () => {
+  const y = window.scrollY;
+  if (y > 200) {
     nav.classList.add('scrolled');
     if (window.innerWidth <= 680) {
       sticky.classList.add('show');
@@ -864,19 +1172,14 @@ function onScroll() {
     sticky.classList.remove('show');
     document.body.classList.remove('has-sticky-cta');
   }
-}
-window.addEventListener('scroll', onScroll, { passive: true });
+}, { passive: true });
 
-// Counters animés
+// Counters
 const counterIO = new IntersectionObserver((entries) => {
   entries.forEach(e => {
-    if (e.isIntersecting) {
-      animateCounter(e.target);
-      counterIO.unobserve(e.target);
-    }
+    if (e.isIntersecting) { animateCounter(e.target); counterIO.unobserve(e.target); }
   });
 }, { threshold: 0.5 });
-
 function animateCounter(el) {
   const target = parseInt(el.dataset.counter, 10);
   const duration = 1800;
@@ -891,31 +1194,35 @@ function animateCounter(el) {
   function step(now) {
     const t = Math.min((now - start) / duration, 1);
     const eased = 1 - Math.pow(1 - t, 3);
-    const v = target * eased;
-    el.innerHTML = fmt(v) + unit;
+    el.innerHTML = fmt(target * eased) + unit;
     if (t < 1) requestAnimationFrame(step);
   }
   requestAnimationFrame(step);
 }
-
 document.querySelectorAll('.stat-num[data-counter]').forEach(el => counterIO.observe(el));
 
-// Parallax orbs (subtle, perf-friendly)
+// Parallax orbs
 const orbs = document.querySelectorAll('.hero-orb');
 let ticking = false;
 window.addEventListener('scroll', () => {
   if (!ticking) {
     requestAnimationFrame(() => {
       const y = window.scrollY;
-      orbs.forEach((orb, i) => {
-        const speed = 0.15 + i * 0.05;
-        orb.style.transform = `translateY(${y * speed}px)`;
-      });
+      orbs.forEach((orb, i) => { orb.style.transform = `translateY(${y * (0.15 + i * 0.05)}px)`; });
       ticking = false;
     });
     ticking = true;
   }
 }, { passive: true });
+
+// Frame dots animation (sync with the cycling frames — 16s loop, 4 frames)
+const dots = ['dot1','dot2','dot3','dot4'].map(id => document.getElementById(id));
+let activeDot = 0;
+setInterval(() => {
+  dots.forEach(d => d && d.classList.remove('active'));
+  if (dots[activeDot]) dots[activeDot].classList.add('active');
+  activeDot = (activeDot + 1) % 4;
+}, 4000);
 </script>
 
 </body>
